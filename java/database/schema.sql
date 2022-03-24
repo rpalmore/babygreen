@@ -32,7 +32,12 @@ CREATE TABLE profiles (
 );
 
 CREATE TABLE plants (
-
+    plant_id serial,
+    user_id int NOT NULL,
+    plant_img varchar(500),
+    plant_name varchar(200),
+    CONSTRAINT PK_plant PRIMARY KEY (plant_id),
+    CONSTRAINT FK_user FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
 INSERT INTO users (username,password_hash,role) VALUES ('user','$2a$08$UkVvwpULis18S19S5pZFn.YHPZt3oaqHZnDwqbCW9pft6uFtkXKDC','ROLE_USER');

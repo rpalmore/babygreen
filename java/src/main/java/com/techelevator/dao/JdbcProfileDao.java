@@ -12,11 +12,12 @@ public class JdbcProfileDao implements ProfileDao {
 
     private JdbcTemplate template;
 
-    public JdbcProfileDao(DataSource dataSource) { template = new JdbcTemplate(dataSource); }
+    public JdbcProfileDao(DataSource dataSource) {
+        template = new JdbcTemplate(dataSource);
+    }
 
     @Override
     public Profile getProfile(String username) {
-
         String sql = "SELECT profile_id, username, profile_img, fave_plant, skill_level, num_plants " +
                 "FROM profiles " +
                 "JOIN users ON users.user_id = profiles.user_id " +
@@ -39,7 +40,6 @@ public class JdbcProfileDao implements ProfileDao {
     public Profile createProfile(Profile newProfile) {
         String sql = "INSERT INTO profiles(user_id, profile_img, fave_plant, skill_level, num_plants) " +
                 "VALUES ((SELECT user_id FROM users WHERE username = ?), ?, ?, ?, ?) RETURNING profile_id";
-
         int profileId = template.queryForObject(sql, Integer.class, newProfile.getUsername(), newProfile.getProfileImg(),
                 newProfile.getFavePlant(), newProfile.getSkillLevel(), newProfile.getNumPlants());
         newProfile.setProfileId(profileId);
@@ -48,11 +48,16 @@ public class JdbcProfileDao implements ProfileDao {
 
     @Override
     public void deleteProfile(String username) {
-
+        String sql = "DELETE FROM profiles WHERE user_id IN (SELECT user_id FROM users WHERE username = ?)";
+        template.update(sql, username);
     }
 
     @Override
     public void updateProfile(Profile updatedProfile) {
-
+        String sql = "UPDATE profiles " +
+                "SET profile_img = ?, fave_plant = ?, skill_level = ?, num_plants = ? " +
+                "WHERE user_id IN (SELECT user_id FROM users WHERE username = ?)";
+        template.update(sql, updatedProfile.getProfileImg(), updatedProfile.getFavePlant(), updatedProfile.getSkillLevel(),
+                updatedProfile.getNumPlants(), updatedProfile.getUsername());
     }
 }

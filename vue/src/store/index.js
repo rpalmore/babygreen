@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import axios from 'axios'
 
 Vue.use(Vuex)
+Vue.config.devtools = true
 
 /*
  * The authorization header is set for axios when you login but what happens when you come back or
@@ -19,7 +20,9 @@ if(currentToken != null) {
 export default new Vuex.Store({
   state: {
     token: currentToken || '',
-    user: currentUser || {}
+    user: currentUser || {},
+    profile: JSON.parse(localStorage.getItem('profile') || '{}'),
+    plants: JSON.parse(localStorage.getItem('plants') || '{}'),
   },
   mutations: {
     SET_AUTH_TOKEN(state, token) {
@@ -30,6 +33,26 @@ export default new Vuex.Store({
     SET_USER(state, user) {
       state.user = user;
       localStorage.setItem('user',JSON.stringify(user));
+    },
+    SET_PROFILE(state, payload) {
+      state.profile = payload;
+      localStorage.setItem('profile', JSON.stringify(state.profile));
+    },
+    ADD_PLANT(state, list) {
+      state.plants.push(list);
+      localStorage.setItem('plants', JSON.stringify(state.plants));
+    },
+    SET_PLANTS(state, payload) {
+      state.plants = payload;
+      localStorage.setItem('plants', JSON.stringify(state.plants));
+    },
+    EDIT_PLANT(state, plant) {
+      state.plants = state.plants.map(p => p.plantId != plant.plantId ? p : plant);
+      localStorage.setItem('plants', JSON.stringify(state.plants));
+    },
+    DELETE_PLANT(state, plantId) {
+      state.plants = state.plants.filter((plant) => plant.plantId != plantId);
+      localStorage.setItem('plants', JSON.stringify(state.plants));
     },
     LOGOUT(state) {
       localStorage.removeItem('token');
