@@ -1,12 +1,12 @@
 <template>
   <div id="profile">
-    <h1>My profile</h1>
+    <h1>Welcome, {{ profile.username }}</h1>
     <div class="profile-details">
     <p>{{ profile.username }}</p>
-    <p>{{ this.$store.state.user.id }}</p>
-    <p>{{ this.$store.state.profile.favePlant }}</p>
-    <p>{{ this.$store.state.profile.skillLevel }}</p>
-    <p>{{ this.$store.state.profile.numPlants }}</p>
+    <p>My id: {{ this.$store.state.user.id }}</p>
+    <p>My favorite plant: {{ this.$store.state.profile.favePlant }}</p>
+    <p>My skill level: {{ this.$store.state.profile.skillLevel }}</p>
+    <p>I have {{ this.$store.state.plants.length }} plants!</p>
     </div>
     <h1>Create a profile</h1>
     <form v-on:submit.prevent="saveProfile" id="profile-form">
@@ -14,8 +14,6 @@
       <input type="text" class="profile-form" v-model="profile.favePlant" />
       <label for="skillLevel" class="profile-form">Skill level</label>
       <input type="text" class="profile-form" v-model="profile.skillLevel" />
-      <label for="numPlants" class="profile-form">Number of plants</label>
-      <input type="text" class="profile-form" v-model="profile.numPlants" />
       <button class="submit">Save</button>
     </form>
     <button v-on:click="deleteProfile(profile.username)" class="delete">Delete</button>
@@ -42,6 +40,7 @@ export default {
             if (response.status === 201) {
               this.$store.commit("SET_PROFILE", this.profile);
             }
+            this.profile = {};
           })
           .catch((err) => {
             alert(err + " problem creating profile!");

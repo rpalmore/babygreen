@@ -6,7 +6,6 @@ public class Profile {
     private String profileImg;
     private String favePlant;
     private String skillLevel;
-    private String numPlants;
 
     public int getProfileId() {
         return profileId;
@@ -48,11 +47,4 @@ public class Profile {
         this.skillLevel = skillLevel;
     }
 
-    public String getNumPlants() {
-        return numPlants;
-    }
-
-    public void setNumPlants(String numPlants) {
-        this.numPlants = numPlants;
-    }
 }
