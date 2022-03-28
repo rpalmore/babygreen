@@ -23,6 +23,7 @@ export default new Vuex.Store({
     user: currentUser || {},
     profile: JSON.parse(localStorage.getItem('profile') || '{}'),
     plants: JSON.parse(localStorage.getItem('plants') || '{}'),
+    notes: JSON.parse(localStorage.getItem('notes') || '{}'),
   },
   mutations: {
     SET_AUTH_TOKEN(state, token) {
@@ -38,8 +39,8 @@ export default new Vuex.Store({
       state.profile = payload;
       localStorage.setItem('profile', JSON.stringify(state.profile));
     },
-    ADD_PLANT(state, list) {
-      state.plants.push(list);
+    ADD_PLANT(state, plant) {
+      state.plants.unshift(plant);
       localStorage.setItem('plants', JSON.stringify(state.plants));
     },
     SET_PLANTS(state, payload) {
@@ -53,6 +54,22 @@ export default new Vuex.Store({
     DELETE_PLANT(state, plantId) {
       state.plants = state.plants.filter((plant) => plant.plantId != plantId);
       localStorage.setItem('plants', JSON.stringify(state.plants));
+    },
+    SET_NOTES(state, notes) {
+      state.notes = notes;
+      localStorage.setItem("notes", JSON.stringify(state.notes));
+    },
+    ADD_NOTE(state, note) {
+      state.notes.unshift(note);
+      localStorage.setItem('notes', JSON.stringify(state.notes));
+    },
+    EDIT_NOTE(state, note) {
+      state.notes = state.notes.map(n => n.noteId != note.noteId ? n : note);
+      localStorage.setItem('notes', JSON.stringify(state.notes));
+    },
+    DELETE_NOTE(state, noteId) {
+      state.notes = state.notes.filter((note) => note.noteId != noteId);
+      localStorage.setItem('notes', JSON.stringify(state.notes));
     },
     LOGOUT(state) {
       localStorage.removeItem('token');

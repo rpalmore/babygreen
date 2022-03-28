@@ -1,6 +1,13 @@
 <template>
   <div id="plant-view">
-    <h1>My plants</h1>
+    <h1>{{ this.$store.state.user.username }}&#8217;s plants</h1>
+    <p>
+      This page lists all plants associated with user. Features to add: sort by
+      indoor/outdoor; select plants to record that you watered them, defaulting
+      to today but with the option to select a different date. List could show
+      thumbnail of each plant at left (in circle) or a placeholder image if no
+      photo has been uploaded -- including for plants just added, for example.
+    </p>
     <p id="select-all">
       <input type="checkbox" v-model="checkAll" v-on:change="selectAll" />
       Select all
@@ -21,23 +28,34 @@
         {{ plant.plantName }}
       </router-link>
       <a v-on:click="deletePlant(plant.plantId)">&#10006;</a> |
-      <a v-on:click.prevent="toggleForm">{{
+      <a v-on:click.prevent="toggleForm(plant)">{{
         showForm === true ? "cancel" : "edit"
-      }}</a> |
-      {{ plant.indoor === true ? "indoor" : "outdoor" }}
-      <form v-on:submit.prevent="editPlant(plant)" v-show="showForm === true">
+      }}</a>
+      |
+      {{ plant.indoor == "true" ? "indoor" : "outdoor" }}
+    </div>
+    <div id="form-container">
+      <form
+        v-on:submit.prevent="editPlant(newPlant)"
+        v-show="showForm === true"
+      >
         <label for="newName">New name:</label>
-        <input type="text" v-model="plant.plantName" />
-        <input type="radio" name="indoor" value="true" v-model="plant.indoor" />
+        <input type="text" v-model="newPlant.plantName" />
+        <input
+          type="radio"
+          name="indoor"
+          value="true"
+          v-model="newPlant.indoor"
+        />
         <label for="indoor">Indoor</label>
         <input
           type="radio"
           name="indoor"
           value="false"
-          v-model="plant.indoor"
+          v-model="newPlant.indoor"
         />
-        <label for="indoor">Outdoor</label>
-        <button id="save">Save</button>
+        <label for="outdoor">Outdoor</label>
+        <button id="submit">Save</button>
       </form>
     </div>
     <button v-bind:disabled="btnDisabled" v-on:click="logAction" id="submit">
@@ -47,10 +65,22 @@
     <form v-on:submit.prevent="addPlant" id="plant-form">
       <label for="plantName">Name of plant:</label>
       <input type="text" class="plant-form" v-model="plant.plantName" />
-      <input required type="radio" name="indoor" value="true" v-model="plant.indoor" />
+      <input
+        required
+        type="radio"
+        name="indoor"
+        value="true"
+        v-model="plant.indoor"
+      />
       <label for="indoor">Indoor</label>
-      <input required type="radio" name="indoor" value="false" v-model="plant.indoor" />
-      <label for="indoor">Outdoor</label>
+      <input
+        required
+        type="radio"
+        name="indoor"
+        value="false"
+        v-model="plant.indoor"
+      />
+      <label for="outdoor">Outdoor</label>
       <button id="submit">Save</button>
     </form>
   </div>
@@ -65,6 +95,7 @@ export default {
       plant: {
         userId: this.$store.state.user.id,
       },
+      newPlant: {},
       showForm: false,
       selectedPlantIds: [],
       checkAll: false,
@@ -89,7 +120,8 @@ export default {
       this.selectedPlantIds = [];
       this.checkAll = false;
     },
-    toggleForm() {
+    toggleForm(plant) {
+      this.newPlant = plant;
       if (this.showForm === true) {
         this.showForm = false;
       } else {
@@ -115,7 +147,9 @@ export default {
           if (response.status == 201) {
             this.$store.commit("ADD_PLANT", response.data);
           }
-          this.plant = {};
+          this.plant = {
+            userId: this.$store.state.user.id,
+          };
         })
         .catch((err) => {
           alert(err + " problem creating plant!");
@@ -135,12 +169,12 @@ export default {
           });
       }
     },
-    editPlant(plant) {
+    editPlant(newPlant) {
       plantService
-        .editPlant(plant)
+        .editPlant(newPlant)
         .then((response) => {
           if (response.status == 200) {
-            this.$store.commit("EDIT_PLANT", this.plant);
+            this.$store.commit("EDIT_PLANT", newPlant);
             this.showForm = false;
           }
         })

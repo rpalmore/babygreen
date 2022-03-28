@@ -70,8 +70,6 @@ export default {
             plantService.getAllPlants().then((response) => {
               if (response.status == 200) {
                 this.$store.commit("SET_PLANTS", response.data);
-                // eslint-disable-next-line no-console
-                console.log(response.data);
               }
             })
             this.$router.push("/");
@@ -79,7 +77,6 @@ export default {
         })
         .catch(error => {
           const response = error.response;
-
           if (response.status === 401) {
             this.invalidCredentials = true;
           }

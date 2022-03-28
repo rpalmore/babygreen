@@ -23,8 +23,9 @@ public class JdbcPlantDao implements PlantDao {
 
         List<Plant> plantList = new ArrayList<>();
 
-        String sql = "SELECT plant_id, user_id, plant_img, plant_name, indoor, info_url, plant_age " +
-                "FROM plants WHERE user_id = ?";
+        String sql = "SELECT plant_id, plant_img, plant_name, indoor, info_url, plant_age " +
+                "FROM plants WHERE user_id = ? " +
+                "ORDER BY plant_id DESC";
         SqlRowSet results = template.queryForRowSet(sql, userId);
 
         while (results.next()) {
@@ -34,8 +35,8 @@ public class JdbcPlantDao implements PlantDao {
             plant.setPlantImg(results.getString("plant_img"));
             plant.setPlantName(results.getString("plant_name"));
             plant.setIndoor(results.getBoolean("indoor"));
-            plant.setInfo_url(results.getString("info_url"));
-            plant.setPlant_age(results.getInt("plant_age"));
+            plant.setInfoUrl(results.getString("info_url"));
+            plant.setPlantAge(results.getInt("plant_age"));
 
             plantList.add(plant);
         }
@@ -59,8 +60,8 @@ public class JdbcPlantDao implements PlantDao {
             selectedPlant.setPlantImg(result.getString("plant_img"));
             selectedPlant.setPlantName(result.getString("plant_name"));
             selectedPlant.setIndoor(result.getBoolean("indoor"));
-            selectedPlant.setInfo_url(result.getString("info_url"));
-            selectedPlant.setPlant_age(result.getInt("plant_age"));
+            selectedPlant.setInfoUrl(result.getString("info_url"));
+            selectedPlant.setPlantAge(result.getInt("plant_age"));
         }
 
         return selectedPlant;
@@ -72,20 +73,20 @@ public class JdbcPlantDao implements PlantDao {
         String sql = "INSERT INTO plants(user_id, plant_img, plant_name, indoor, info_url, plant_age) " +
                 "VALUES(?, ?, ?, ?, ?, ?) RETURNING plant_id";
         int plantId = template.queryForObject(sql, Integer.class, newPlant.getUserId(), newPlant.getPlantImg(),
-                newPlant.getPlantName(), newPlant.getIndoor(), newPlant.getInfo_url(), newPlant.getPlant_age());
+                newPlant.getPlantName(), newPlant.getIndoor(), newPlant.getInfoUrl(), newPlant.getPlantAge());
 
         newPlant.setPlantId(plantId);
         return newPlant;
     }
 
     @Override
-    public void updatePlant(Plant updatedPlant) {
+    public void editPlant(Plant updatedPlant) {
 
         String sql = "UPDATE plants " +
                 "SET plant_img = ?, plant_name = ?, indoor = ?, info_url = ?, plant_age = ? " +
                 "WHERE plant_id = ?";
         template.update(sql, updatedPlant.getPlantImg(), updatedPlant.getPlantName(),
-                updatedPlant.getIndoor(), updatedPlant.getInfo_url(), updatedPlant.getPlant_age(), updatedPlant.getPlantId());
+                updatedPlant.getIndoor(), updatedPlant.getInfoUrl(), updatedPlant.getPlantAge(),updatedPlant.getPlantId());
     }
 
     @Override

@@ -10,6 +10,6 @@ public interface ProfileDao {
 
     void deleteProfile(String username);
 
-    void updateProfile(Profile updatedProfile);
+    void editProfile(Profile updatedProfile);
 
 }

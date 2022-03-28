@@ -6,8 +6,8 @@ public class Plant {
     private String plantImg;
     private String plantName;
     private Boolean indoor;
-    private String info_url;
-    private int plant_age;
+    private String infoUrl;
+    private int plantAge;
 
     public int getPlantId() {
         return plantId;
@@ -49,19 +49,20 @@ public class Plant {
         this.indoor = indoor;
     }
 
-    public String getInfo_url() {
-        return info_url;
+    public String getInfoUrl() {
+        return infoUrl;
     }
 
-    public void setInfo_url(String info_url) {
-        this.info_url = info_url;
+    public void setInfoUrl(String infoUrl) {
+        this.infoUrl = infoUrl;
     }
 
-    public int getPlant_age() {
-        return plant_age;
+    public int getPlantAge() {
+        return plantAge;
     }
 
-    public void setPlant_age(int plant_age) {
-        this.plant_age = plant_age;
+    public void setPlantAge(int plantAge) {
+        this.plantAge = plantAge;
     }
+
 }

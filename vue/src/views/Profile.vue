@@ -1,14 +1,20 @@
 <template>
   <div id="profile">
-    <h1>Welcome, {{ profile.username }}</h1>
+    <h1>You look great in green, {{ profile.username }}!</h1>
     <div class="profile-details">
-    <p>{{ profile.username }}</p>
-    <p>My id: {{ this.$store.state.user.id }}</p>
-    <p>My favorite plant: {{ this.$store.state.profile.favePlant }}</p>
-    <p>My skill level: {{ this.$store.state.profile.skillLevel }}</p>
-    <p>I have {{ this.$store.state.plants.length }} plants!</p>
+      <p>{{ profile.username }}</p>
+      <p>My id: {{ this.$store.state.user.id }}</p>
+      <p>My favorite plant: {{ this.$store.state.profile.favePlant }}</p>
+      <p>My skill level: {{ this.$store.state.profile.skillLevel }}</p>
+      <p>I have {{ this.$store.state.plants.length }} plants!</p>
     </div>
-    <h1>Create a profile</h1>
+    <h2>
+      {{
+        this.$store.state.profile.favePlant === undefined
+          ? "Create a profile"
+          : "Edit your profile"
+      }}
+    </h2>
     <form v-on:submit.prevent="saveProfile" id="profile-form">
       <label for="favePlant" class="profile-form">Favorite plant</label>
       <input type="text" class="profile-form" v-model="profile.favePlant" />
@@ -16,7 +22,9 @@
       <input type="text" class="profile-form" v-model="profile.skillLevel" />
       <button class="submit">Save</button>
     </form>
-    <button v-on:click="deleteProfile(profile.username)" class="delete">Delete</button>
+    <button v-on:click="deleteProfile(profile.username)" class="delete">
+      Delete
+    </button>
   </div>
 </template>
 
@@ -40,7 +48,9 @@ export default {
             if (response.status === 201) {
               this.$store.commit("SET_PROFILE", this.profile);
             }
-            this.profile = {};
+            this.profile = {
+              username: this.$store.state.user.username,
+            };
           })
           .catch((err) => {
             alert(err + " problem creating profile!");

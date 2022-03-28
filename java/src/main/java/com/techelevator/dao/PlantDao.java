@@ -12,7 +12,7 @@ public interface PlantDao {
 
     Plant createPlant(Plant newPlant);
 
-    void updatePlant(Plant updatedPlant);
+    void editPlant(Plant updatedPlant);
 
     void deletePlant(int plantId);
 

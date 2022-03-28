@@ -52,7 +52,7 @@ public class JdbcProfileDao implements ProfileDao {
     }
 
     @Override
-    public void updateProfile(Profile updatedProfile) {
+    public void editProfile(Profile updatedProfile) {
         String sql = "UPDATE profiles " +
                 "SET profile_img = ?, fave_plant = ?, skill_level = ? " +
                 "WHERE user_id IN (SELECT user_id FROM users WHERE username = ?)";

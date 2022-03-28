@@ -46,11 +46,13 @@ CREATE TABLE plants (
 CREATE TABLE plant_notes (
     note_id serial,
     plant_id int NOT NULL,
-    notes varchar(5000),
+    note varchar(5000),
     note_img varchar(500),
-    created_on DATE DEFAULT CURRENT_DATE,
+    created_on DATE DEFAULT CURRENT_DATE NOT NULL,
     CONSTRAINT PK_note PRIMARY KEY (note_id),
-    CONSTRAINT FK_plant FOREIGN KEY (plant_id) REFERENCES plants(plant_id)
+    CONSTRAINT FK_plant FOREIGN KEY (plant_id)
+    REFERENCES plants(plant_id)
+    ON DELETE CASCADE
 );
 
 CREATE TABLE plant_waterings (

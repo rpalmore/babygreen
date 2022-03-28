@@ -7,6 +7,7 @@ import Register from '../views/Register.vue'
 import Profile from '../views/Profile.vue'
 import Plants from '../views/Plants.vue'
 import PlantDetail from '../components/PlantDetail.vue'
+import Care from '../views/Care.vue'
 import store from '../store/index'
 
 Vue.use(Router)
@@ -76,6 +77,14 @@ const router = new Router({
       path: "/plants/:plantId",
       name: "plant-detail",
       component: PlantDetail,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: "/care",
+      name: "care",
+      component: Care,
       meta: {
         requiresAuth: true
       }

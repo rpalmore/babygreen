@@ -36,15 +36,13 @@ public class PlantController {
 
     @RequestMapping(path="/createPlant", method=RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
-    public Plant createPlant(@RequestBody Plant newPlant, Principal principal) {
-        int userId = userDao.findIdByUsername(principal.getName());
-        newPlant.setUserId(userId);
+    public Plant createPlant(@RequestBody Plant newPlant) {
         return plantDao.createPlant(newPlant);
     }
 
     @RequestMapping(path="/editPlant", method=RequestMethod.PUT)
     public void editPlant(@RequestBody Plant editedPlant) {
-        plantDao.updatePlant(editedPlant);
+        plantDao.editPlant(editedPlant);
     }
 
     @RequestMapping(path="/deletePlant/{plantId}", method=RequestMethod.DELETE)

@@ -35,7 +35,7 @@ public class ProfileController {
 
     @RequestMapping(path="/editProfile", method=RequestMethod.PUT)
     public void editProfile(@RequestBody Profile updatedProfile) {
-        profileDao.updateProfile(updatedProfile);
+        profileDao.editProfile(updatedProfile);
     }
 
     @RequestMapping(path="/deleteProfile/{username}", method=RequestMethod.DELETE)
@@ -43,6 +43,5 @@ public class ProfileController {
     public void deleteProfile(@PathVariable String username) {
         profileDao.deleteProfile(username);
     }
-
 
 }
