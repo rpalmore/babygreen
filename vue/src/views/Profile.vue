@@ -1,9 +1,8 @@
 <template>
   <div id="profile">
-    <h1>You look great in green, {{ profile.username }}!</h1>
+    <h1>You look great in green, {{ this.$store.state.user.username }}!</h1>
     <div class="profile-details">
-      <p>{{ profile.username }}</p>
-      <p>My id: {{ this.$store.state.user.id }}</p>
+      <p>My id: {{ profile.userId }}</p>
       <p>My favorite plant: {{ this.$store.state.profile.favePlant }}</p>
       <p>My skill level: {{ this.$store.state.profile.skillLevel }}</p>
       <p>I have {{ this.$store.state.plants.length }} plants!</p>
@@ -22,7 +21,7 @@
       <input type="text" class="profile-form" v-model="profile.skillLevel" />
       <button class="submit">Save</button>
     </form>
-    <button v-on:click="deleteProfile(profile.username)" class="delete">
+    <button v-on:click="deleteProfile(profile.userId)" class="delete">
       Delete
     </button>
   </div>
@@ -35,7 +34,7 @@ export default {
   data() {
     return {
       profile: {
-        username: this.$store.state.user.username,
+        userId: this.$store.state.user.id,
       },
     };
   },
@@ -49,7 +48,7 @@ export default {
               this.$store.commit("SET_PROFILE", this.profile);
             }
             this.profile = {
-              username: this.$store.state.user.username,
+              userId: this.$store.state.user.id,
             };
           })
           .catch((err) => {
@@ -68,11 +67,11 @@ export default {
           });
       }
     },
-    deleteProfile(username) {
+    deleteProfile(userId) {
       if (confirm("Are you sure you want to delete this profile?")) {
-        profileService.deleteProfile(username).then((response) => {
+        profileService.deleteProfile(userId).then((response) => {
           if (response.status == 204) {
-            this.$store.commit("SET_PROFILE", username);
+            this.$store.commit("SET_PROFILE", userId);
           }
         });
       }

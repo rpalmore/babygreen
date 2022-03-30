@@ -1,6 +1,16 @@
 <template>
   <div id="plant-detail">
     <h2>{{ plant.plantName }}</h2>
+    {{ plant.infoUrl }}
+    <a v-on:click="toggleInfoForm">{{
+      plant.infoUrl == null ? "Add link" : "(edit link)"
+    }}</a>
+    <form v-on:submit.prevent="editPlant" v-show="showInfoForm === true">
+      <label for="infoUrl">Add an external link: </label>
+      <input type="text" v-model="plant.infoUrl" />
+      <button id="submit">Save</button>
+      <button v-on:click.prevent="cancelForm($event)" id="cancelInfoForm">Cancel</button>
+    </form>
     <p>
       This page offers more details about a plant and the option to add dated
       notes and additional information, such as a link to resources and a field
@@ -12,26 +22,40 @@
     <p>Enhance this listing by adding a link, age of plant.</p>
     <p>[Plant image placeholder with option to add/edit.]</p>
     <h3>About this plant</h3>
-    <p>I am an {{ plant.indoor == "true" ? "indoor" : "outdoor" }} plant.</p>
+    <p>
+      I am an {{ plant.indoor == true ? "indoor" : "outdoor" }} plant and have
+      been in {{ this.$store.state.user.username }}&#8217;s care since
+      <a v-on:click="toggleDateForm">{{ plant.plantAge == null ? "today" : plant.plantAge }}</a
+      >.
+    </p>
+    <form v-on:submit.prevent="editPlant" v-show="showDateForm === true">
+      <label for="plantAge">Plant cared for since: </label>
+      <input type="date" v-model="plant.plantAge" />
+      <button id="submit">Update</button>
+      <button v-on:click.prevent="cancelForm($event)" id="cancelDateForm">Cancel</button>
+    </form>
     <p>Add notes about this plant via some kind of notes form.</p>
     <form v-on:submit.prevent="saveNote" id="note-form">
       <label for="note">Notes:</label>
-      <input type="text" class="note-form" v-model="note.note" />
+      <input required type="text" class="note-form" v-model="note.note" />
       <button id="submit">Save</button>
     </form>
     <div id="note-container" v-for="note in notes" v-bind:key="note.noteId">
       {{ note.note }}
       {{ note.createdOn }}&nbsp;
       <a v-on:click="deleteNote(note.noteId)">&#10006;</a>&nbsp;
-      <a v-on:click.prevent="toggleForm(note)">{{
-        showForm === true ? "cancel" : "edit"
+      <a v-on:click.prevent="toggleNoteForm(note)">{{
+        showNoteForm === true ? "cancel" : "edit"
       }}</a>
     </div>
     <div id="form-container">
-      <form v-on:submit.prevent="editNote(newNote)" v-show="showForm === true">
+      <form
+        v-on:submit.prevent="editNote(editedNote)"
+        v-show="showNoteForm === true"
+      >
         <label for="note">Edited note:</label>
-        <input type="text" v-model="newNote.note" />
-        <button id="submit">Save</button>
+        <input type="text" v-model="editedNote.note" />
+        <button id="submit">Update</button>
       </form>
     </div>
   </div>
@@ -39,6 +63,7 @@
 
 <script>
 import plantNoteService from "../services/PlantNoteService";
+import plantService from "../services/PlantService";
 export default {
   name: "plant-detail",
   data() {
@@ -47,8 +72,10 @@ export default {
         plantId: this.$route.params.plantId,
       },
       // this new object might not be needed if the update function is moved into a new component.
-      newNote: {},
-      showForm: false,
+      editedNote: {},
+      showNoteForm: false,
+      showDateForm: false,
+      showInfoForm: false,
     };
   },
   computed: {
@@ -66,13 +93,38 @@ export default {
     },
   },
   methods: {
-    toggleForm(note) {
-      this.newNote = note;
-      if (this.showForm === true) {
-        this.showForm = false;
-      } else {
-        this.showForm = true;
-      }
+    toggleInfoForm() {
+      this.showInfoForm === true
+        ? (this.showInfoForm = false)
+        : (this.showInfoForm = true);
+    },
+    toggleDateForm() {
+      this.showDateForm === true
+        ? (this.showDateForm = false)
+        : (this.showDateForm = true);
+    },
+    toggleNoteForm(note) {
+      this.editedNote = note;
+      this.showNoteForm === true
+        ? (this.showNoteForm = false)
+        : (this.showNoteForm = true);
+    },
+    cancelForm(event) {
+      event.target.id === "cancelInfoForm" ? this.toggleInfoForm() : this.toggleDateForm();
+    },
+    editPlant() {
+      plantService
+        .editPlant(this.plant)
+        .then((response) => {
+          if (response.status == 200) {
+            this.$store.commit("EDIT_PLANT", this.plant);
+            this.showDateForm = false;
+            this.showInfoForm = false;
+          }
+        })
+        .catch((err) => {
+          alert(err + " problem editing plant!");
+        });
     },
     saveNote() {
       plantNoteService
@@ -89,15 +141,15 @@ export default {
           alert(err + " problem creating note!");
         });
     },
-    editNote(newNote) {
+    editNote(editedNote) {
       plantNoteService
-        .editNote(newNote)
+        .editNote(editedNote)
         .then((response) => {
           if (response.status == 200) {
-            this.$store.commit("EDIT_NOTE", newNote);
-            this.showForm = false;
+            this.$store.commit("EDIT_NOTE", editedNote);
+            this.showNoteForm = false;
           }
-          this.newNote = {};
+          this.editedNote = {};
         })
         .catch((err) => {
           alert(err + " problem updating note!");

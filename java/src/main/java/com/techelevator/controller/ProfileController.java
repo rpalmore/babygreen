@@ -38,10 +38,10 @@ public class ProfileController {
         profileDao.editProfile(updatedProfile);
     }
 
-    @RequestMapping(path="/deleteProfile/{username}", method=RequestMethod.DELETE)
+    @RequestMapping(path="/deleteProfile/{userId}", method=RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteProfile(@PathVariable String username) {
-        profileDao.deleteProfile(username);
+    public void deleteProfile(@PathVariable int userId) {
+        profileDao.deleteProfile(userId);
     }
 
 }

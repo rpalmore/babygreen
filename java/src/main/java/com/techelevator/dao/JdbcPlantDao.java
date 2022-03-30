@@ -36,7 +36,7 @@ public class JdbcPlantDao implements PlantDao {
             plant.setPlantName(results.getString("plant_name"));
             plant.setIndoor(results.getBoolean("indoor"));
             plant.setInfoUrl(results.getString("info_url"));
-            plant.setPlantAge(results.getInt("plant_age"));
+            plant.setPlantAge(results.getDate("plant_age").toLocalDate());
 
             plantList.add(plant);
         }
@@ -61,7 +61,7 @@ public class JdbcPlantDao implements PlantDao {
             selectedPlant.setPlantName(result.getString("plant_name"));
             selectedPlant.setIndoor(result.getBoolean("indoor"));
             selectedPlant.setInfoUrl(result.getString("info_url"));
-            selectedPlant.setPlantAge(result.getInt("plant_age"));
+            selectedPlant.setPlantAge(result.getDate("plant_age").toLocalDate());
         }
 
         return selectedPlant;
@@ -71,9 +71,9 @@ public class JdbcPlantDao implements PlantDao {
     public Plant createPlant(Plant newPlant) {
 
         String sql = "INSERT INTO plants(user_id, plant_img, plant_name, indoor, info_url, plant_age) " +
-                "VALUES(?, ?, ?, ?, ?, ?) RETURNING plant_id";
+                "VALUES(?, ?, ?, ?, ?, DEFAULT) RETURNING plant_id";
         int plantId = template.queryForObject(sql, Integer.class, newPlant.getUserId(), newPlant.getPlantImg(),
-                newPlant.getPlantName(), newPlant.getIndoor(), newPlant.getInfoUrl(), newPlant.getPlantAge());
+                newPlant.getPlantName(), newPlant.getIndoor(), newPlant.getInfoUrl());
 
         newPlant.setPlantId(plantId);
         return newPlant;

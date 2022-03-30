@@ -18,7 +18,7 @@ public class JdbcProfileDao implements ProfileDao {
 
     @Override
     public Profile getProfile(String username) {
-        String sql = "SELECT profile_id, username, profile_img, fave_plant, skill_level " +
+        String sql = "SELECT profile_id, profiles.user_id, profile_img, fave_plant, skill_level " +
                 "FROM profiles " +
                 "JOIN users ON users.user_id = profiles.user_id " +
                 "WHERE username = ?";
@@ -27,7 +27,7 @@ public class JdbcProfileDao implements ProfileDao {
         if (result.next()) {
             profile = new Profile();
             profile.setProfileId(result.getInt("profile_id"));
-            profile.setUsername(username);
+            profile.setUserId(result.getInt("user_id"));
             profile.setProfileImg(result.getString("profile_img"));
             profile.setFavePlant(result.getString("fave_plant"));
             profile.setSkillLevel(result.getString("skill_level"));
@@ -38,25 +38,25 @@ public class JdbcProfileDao implements ProfileDao {
     @Override
     public Profile createProfile(Profile newProfile) {
         String sql = "INSERT INTO profiles(user_id, profile_img, fave_plant, skill_level) " +
-                "VALUES ((SELECT user_id FROM users WHERE username = ?), ?, ?, ?) RETURNING profile_id";
-        int profileId = template.queryForObject(sql, Integer.class, newProfile.getUsername(), newProfile.getProfileImg(),
+                "VALUES (?, ?, ?, ?) RETURNING profile_id";
+        int profileId = template.queryForObject(sql, Integer.class, newProfile.getUserId(), newProfile.getProfileImg(),
                 newProfile.getFavePlant(), newProfile.getSkillLevel());
         newProfile.setProfileId(profileId);
         return newProfile;
     }
 
     @Override
-    public void deleteProfile(String username) {
-        String sql = "DELETE FROM profiles WHERE user_id IN (SELECT user_id FROM users WHERE username = ?)";
-        template.update(sql, username);
+    public void deleteProfile(int userId) {
+        String sql = "DELETE FROM profiles WHERE user_id = ?";
+        template.update(sql, userId);
     }
 
     @Override
     public void editProfile(Profile updatedProfile) {
         String sql = "UPDATE profiles " +
                 "SET profile_img = ?, fave_plant = ?, skill_level = ? " +
-                "WHERE user_id IN (SELECT user_id FROM users WHERE username = ?)";
+                "WHERE user_id = ?";
         template.update(sql, updatedProfile.getProfileImg(), updatedProfile.getFavePlant(),
-                updatedProfile.getSkillLevel(), updatedProfile.getUsername());
+                updatedProfile.getSkillLevel(), updatedProfile.getUserId());
     }
 }

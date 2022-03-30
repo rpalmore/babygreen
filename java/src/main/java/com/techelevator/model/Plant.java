@@ -1,5 +1,9 @@
 package com.techelevator.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import java.time.LocalDate;
+
 public class Plant {
     private int plantId;
     private int userId;
@@ -7,7 +11,8 @@ public class Plant {
     private String plantName;
     private Boolean indoor;
     private String infoUrl;
-    private int plantAge;
+    @JsonFormat(pattern="yyyy-MM-dd")
+    private LocalDate plantAge;
 
     public int getPlantId() {
         return plantId;
@@ -57,12 +62,11 @@ public class Plant {
         this.infoUrl = infoUrl;
     }
 
-    public int getPlantAge() {
+    public LocalDate getPlantAge() {
         return plantAge;
     }
 
-    public void setPlantAge(int plantAge) {
+    public void setPlantAge(LocalDate plantAge) {
         this.plantAge = plantAge;
     }
-
 }

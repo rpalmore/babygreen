@@ -10,7 +10,7 @@ export default {
     editProfile(profile) {
         return axios.put('/editProfile', profile);
     },
-    deleteProfile(username) {
-        return axios.delete('/deleteProfile/' + username);
+    deleteProfile(userId) {
+        return axios.delete('/deleteProfile/' + userId);
     }
 }

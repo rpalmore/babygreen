@@ -1,8 +1,8 @@
 package com.techelevator.controller;
 
-import com.techelevator.dao.PlantNoteDao;
+import com.techelevator.dao.NoteDao;
 import com.techelevator.dao.UserDao;
-import com.techelevator.model.PlantNote;
+import com.techelevator.model.Note;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -13,34 +13,34 @@ import java.util.List;
 @RestController
 @CrossOrigin
 @PreAuthorize("isAuthenticated()")
-public class PlantNoteController {
+public class NoteController {
 
     @Autowired
-    PlantNoteDao plantNoteDao;
+    NoteDao noteDao;
 
     @Autowired
     UserDao userDao;
 
     @RequestMapping(path="/plants/{plantId}/notes", method=RequestMethod.GET)
-    public List<PlantNote> getNotes(@PathVariable int plantId) {
-        return plantNoteDao.getAllNotes(plantId);
+    public List<Note> getNotes(@PathVariable int plantId) {
+        return noteDao.getAllNotes(plantId);
     }
 
     @RequestMapping(path="/createNote", method=RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
-    public PlantNote createNote(@RequestBody PlantNote newNote) {
-        return plantNoteDao.createNote(newNote);
+    public Note createNote(@RequestBody Note newNote) {
+        return noteDao.createNote(newNote);
     }
 
     @RequestMapping(path="/editNote", method=RequestMethod.PUT)
-    public void editNote(@RequestBody PlantNote editedNote) {
-        plantNoteDao.editNote(editedNote);
+    public void editNote(@RequestBody Note editedNote) {
+        noteDao.editNote(editedNote);
     }
 
     @RequestMapping(path="/deleteNote/{noteId}", method=RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeNote(@PathVariable int noteId) {
-        plantNoteDao.deleteNote(noteId);
+        noteDao.deleteNote(noteId);
     }
 
 }

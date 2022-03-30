@@ -4,13 +4,12 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDate;
 
-public class PlantNote {
+public class Note {
     private int noteId;
     private int plantId;
     private String note;
     private String noteImg;
     @JsonFormat(pattern="dd-MM-yyyy")
-//    @JsonFormat(pattern="dddd-MMM-yyyy")
     private LocalDate createdOn;
 
     public int getNoteId() {

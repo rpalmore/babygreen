@@ -1,6 +1,6 @@
 <template>
   <div id="plant-view">
-    <h1>{{ this.$store.state.user.username }}&#8217;s plants</h1>
+    <h2>{{ this.$store.state.user.username }}&#8217;s plants</h2>
     <p>
       This page lists all plants associated with user. Features to add: sort by
       indoor/outdoor; select plants to record that you watered them, defaulting
@@ -8,6 +8,7 @@
       thumbnail of each plant at left (in circle) or a placeholder image if no
       photo has been uploaded -- including for plants just added, for example.
     </p>
+    <p>To do: Filter by indoor/outdoor.</p>
     <p id="select-all">
       <input type="checkbox" v-model="checkAll" v-on:change="selectAll" />
       Select all
@@ -32,7 +33,7 @@
         showForm === true ? "cancel" : "edit"
       }}</a>
       |
-      {{ plant.indoor == "true" ? "indoor" : "outdoor" }}
+      {{ plant.indoor == true ? "indoor" : "outdoor" }}
     </div>
     <div id="form-container">
       <form
@@ -58,10 +59,63 @@
         <button id="submit">Save</button>
       </form>
     </div>
-    <button v-bind:disabled="btnDisabled" v-on:click="logAction" id="submit">
+    <!-- <button v-bind:disabled="btnDisabled" v-on:click="logAction" id="submit">
       Watered
-    </button>
-    <h1>Add a plant</h1>
+    </button> -->
+    <form v-on:submit.prevent="logCare">
+      <label for="watered">Watered</label>
+      <input
+        v-bind:disabled="btnDisabled"
+        type="checkbox"
+        name="watered"
+        id="watered"
+        value="watered"
+      />
+      <label for="sprayed">Sprayed</label>
+      <input
+        v-bind:disabled="btnDisabled"
+        type="checkbox"
+        name="sprayed"
+        id="sprayed"
+        value="sprayed"
+      />
+      <label for="repotted">Repotted</label>
+      <input
+        v-bind:disabled="btnDisabled"
+        type="checkbox"
+        name="repotted"
+        id="repotted"
+        value="repotted"
+      />
+      <label for="treated">Pest Treatment</label>
+      <input
+        v-bind:disabled="btnDisabled"
+        type="checkbox"
+        name="treated"
+        id="treated"
+        value="treated"
+      />
+      <label for="treated">Fertilized</label>
+      <input
+        v-bind:disabled="btnDisabled"
+        type="checkbox"
+        name="fertilized"
+        id="fertilized"
+        value="fertilized"
+      />
+      <p>
+        <label for="careDate">Date of care: </label>
+        <input
+          v-bind:disabled="btnDisabled"
+          required
+          name="careDate"
+          id="careDate"
+          type="date"
+        />
+      </p>
+      <button id="submit">Log</button>
+    </form>
+    <h3>Add a plant</h3>
     <form v-on:submit.prevent="addPlant" id="plant-form">
       <label for="plantName">Name of plant:</label>
       <input type="text" class="plant-form" v-model="plant.plantName" />
@@ -114,8 +168,10 @@ export default {
     },
   },
   methods: {
-    logAction() {
-      alert("Watered " + this.selectedPlantIds.length + " plants!");
+    logCare() {
+      // eslint-disable-next-line no-console
+      console.log(this.selectedPlantIds);
+      //console.log(this.selectedPlantIds.length + " plants!");
       // todo: write method for getting this data back to db
       this.selectedPlantIds = [];
       this.checkAll = false;
