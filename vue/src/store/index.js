@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
@@ -62,6 +63,12 @@ export default new Vuex.Store({
     },
     SET_TREATMENTS(state, payload) {
       state.treatments = payload;
+      localStorage.setItem('treatments', JSON.stringify(state.treatments));
+    },
+    // having some issues here with updating the store on the plant-care.vue page
+    // things working consistently in db and also plant-detail.vue
+    DELETE_TREATMENT(state, treatment) {
+      state.treatments = state.treatments.filter((t) => t.plantId != treatment.plantId && t.careId != treatment.careId);
       localStorage.setItem('treatments', JSON.stringify(state.treatments));
     },
     ADD_NOTE(state, note) {

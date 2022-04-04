@@ -11,5 +11,10 @@ export default {
 
     getSinglePlantTreatments(plantId) {
         return axios.get('/plants/' + plantId + '/care');
+    },
+
+    deleteTreatment(plantId, careId) {
+        return axios.delete('/deleteTreatment/' + plantId + '/' + careId)
     }
+
 }

@@ -1,6 +1,5 @@
 package com.techelevator.dao;
 
-import com.techelevator.model.PlantTreatment;
 import com.techelevator.model.Treatment;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
@@ -18,29 +17,6 @@ public class JdbcTreatmentDao implements TreatmentDao {
     public JdbcTreatmentDao(DataSource dataSource) {
         template = new JdbcTemplate(dataSource);
     }
-
-//    @Override
-//    public List<Treatment> getAllTreats(int userId) {
-//
-//        List<Treatment> treatments = new ArrayList<>();
-//
-//        String sql = "SELECT * FROM treatments " +
-//                "JOIN plants_treatments ON plants_treatments.care_id = treatments.care_id " +
-//                "JOIN plants on plants.plant_id = plants_treatments.plant_id " +
-//                "WHERE user_id = ?";
-//        SqlRowSet results = template.queryForRowSet(sql, userId);
-//
-//        while(results.next()) {
-//            Treatment treatment = new Treatment();
-//            treatment.setCareId(results.getInt("care_id"));
-//            treatment.setCareDate(results.getDate("care_date").toLocalDate());
-//            treatment.setCareType(results.getString("care_type"));
-//
-//            treatments.add(treatment);
-//        }
-//
-//        return treatments;
-//    }
 
     @Override
     public List<Treatment> getSinglePlantEvents(int plantId) {

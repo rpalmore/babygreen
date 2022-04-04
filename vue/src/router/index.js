@@ -7,7 +7,7 @@ import Register from '../views/Register.vue'
 import Profile from '../views/Profile.vue'
 import Plants from '../views/Plants.vue'
 import PlantDetail from '../components/PlantDetail.vue'
-import Care from '../views/Care.vue'
+import PlantCare from '../views/PlantCare.vue'
 import store from '../store/index'
 
 Vue.use(Router)
@@ -82,9 +82,9 @@ const router = new Router({
       }
     },
     {
-      path: "/care",
-      name: "care",
-      component: Care,
+      path: "/plant-care",
+      name: "plant-care",
+      component: PlantCare,
       meta: {
         requiresAuth: true
       }

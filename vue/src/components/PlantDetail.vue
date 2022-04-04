@@ -13,6 +13,14 @@
         Cancel
       </button>
     </form>
+    <div
+    v-bind:treatment="treatment"
+    v-for="treatment in treatments"
+    v-bind:key="treatment.treatmentId"
+    >
+      I was {{ treatment.careType }} on {{ treatment.careDate }}
+      <a v-on:click="deleteTreatment(treatment)">&#10006;</a>
+    </div>
     <p>
       This page offers more details about a plant and the option to add dated
       notes and additional information, such as a link to resources and a field
@@ -40,6 +48,7 @@
         Cancel
       </button>
     </form>
+
     <p>Add notes about this plant via some kind of notes form.</p>
     <form v-on:submit.prevent="saveNote" id="note-form">
       <label for="note">Notes:</label>
@@ -75,10 +84,12 @@ export default {
   name: "plant-detail",
   data() {
     return {
+      // todo: set the date of the note object to "today" so it is sent to store and immediately available
       note: {
         plantId: this.$route.params.plantId,
       },
-      // this new object might not be needed if the update function is moved into a new component.
+      //treatments: {},
+      // note: this new object "editedNote" might not be needed if the update function is moved into a new component.
       editedNote: {},
       showNoteForm: false,
       showDateForm: false,
@@ -98,9 +109,9 @@ export default {
     notes() {
       return this.$store.state.notes;
     },
-    // treatments() {
-    //   return ?????
-    // }
+    treatments() {
+      return this.$store.state.treatments;
+    }
   },
   methods: {
     toggleInfoForm() {
@@ -181,6 +192,18 @@ export default {
           });
       }
     },
+    deleteTreatment(treatment) {
+      treatment.plantId = this.$route.params.plantId;
+      if(confirm("Are you sure you want to delete this treatment?")) {
+        treatmentService.deleteTreatment(treatment.plantId, treatment.careId).then((response) => {
+          if (response.status == 204) {
+            this.$store.commit("DELETE_TREATMENT", treatment);
+          }
+        }).catch((err) => {
+          alert(err + " problem deleting treatment!")
+        });
+      }
+    },
   },
   created() {
     plantNoteService.getNotes(this.plantId).then((response) => {
@@ -190,8 +213,8 @@ export default {
       .getSinglePlantTreatments(this.plantId)
       .then((response) => {
         if (response.status == 200) {
-          // eslint-disable-next-line no-console
-          console.log(response.data);
+          //this.treatments = response.data;
+          this.$store.commit("SET_TREATMENTS", response.data);
         }
       })
       .catch((err) => {

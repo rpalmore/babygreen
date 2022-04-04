@@ -6,10 +6,10 @@ import java.time.LocalDate;
 
 public class TreatmentDetails {
 
-    // @JsonFormat(pattern="yyyy-MM-dd")
     private LocalDate careDate;
     private String careType;
     private String plantName;
+    private int plantId;
     private int careId;
 
     public LocalDate getCareDate() {
@@ -34,6 +34,14 @@ public class TreatmentDetails {
 
     public void setPlantName(String plantName) {
         this.plantName = plantName;
+    }
+
+    public int getPlantId() {
+        return plantId;
+    }
+
+    public void setPlantId(int plantId) {
+        this.plantId = plantId;
     }
 
     public int getCareId() {

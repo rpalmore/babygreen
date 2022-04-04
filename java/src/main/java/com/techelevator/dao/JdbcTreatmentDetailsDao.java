@@ -23,7 +23,7 @@ public class JdbcTreatmentDetailsDao implements TreatmentDetailsDao {
 
         List<TreatmentDetails> treatmentDetails = new ArrayList<>();
 
-        String sql = "SELECT care_date, care_type, plant_name, treatments.care_id " +
+        String sql = "SELECT care_date, care_type, plant_name, plants.plant_id, treatments.care_id " +
                 "FROM treatments " +
                 "JOIN plants_treatments ON plants_treatments.care_id = treatments.care_id " +
                 "JOIN plants on plants.plant_id = plants_treatments.plant_id " +
@@ -36,6 +36,7 @@ public class JdbcTreatmentDetailsDao implements TreatmentDetailsDao {
             details.setCareDate(results.getDate("care_date").toLocalDate());
             details.setCareType(results.getString("care_type"));
             details.setPlantName(results.getString("plant_name"));
+            details.setPlantId(results.getInt("plant_id"));
             details.setCareId(results.getInt("care_id"));
 
             treatmentDetails.add(details);

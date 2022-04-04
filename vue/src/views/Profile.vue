@@ -1,6 +1,7 @@
 <template>
   <div id="profile">
     <h1>You look great in green, {{ this.$store.state.user.username }}!</h1>
+    <p>Consider adding a profile display name.</p>
     <div class="profile-details">
       <p>My id: {{ profile.userId }}</p>
       <p>My favorite plant: {{ this.$store.state.profile.favePlant }}</p>

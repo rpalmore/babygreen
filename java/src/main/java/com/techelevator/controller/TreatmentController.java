@@ -1,5 +1,6 @@
 package com.techelevator.controller;
 
+import com.techelevator.dao.PlantTreatmentDao;
 import com.techelevator.dao.TreatmentDao;
 import com.techelevator.dao.TreatmentDetailsDao;
 import com.techelevator.dao.UserDao;
@@ -26,6 +27,9 @@ public class TreatmentController {
     TreatmentDetailsDao treatmentDetailsDao;
 
     @Autowired
+    PlantTreatmentDao plantTreatmentDao;
+
+    @Autowired
     UserDao userDao;
 
     @RequestMapping(path="/createTreatment", method=RequestMethod.POST)
@@ -33,13 +37,6 @@ public class TreatmentController {
     public Treatment createTreatment(@RequestBody Treatment newTreatment) {
         return treatmentDao.createCareEvent(newTreatment);
     }
-
-//    @RequestMapping(path="/care", method=RequestMethod.GET)
-//    public List<Treatment> getTreatmentDetails(Principal principal) {
-//        String username = principal.getName();
-//        int userId = userDao.findIdByUsername(username);
-//        return treatmentDao.getAllTreats(userId);
-//    }
 
     @RequestMapping(path="/plants/{plantId}/care", method=RequestMethod.GET)
     public List<Treatment> getPlantTreatments(@PathVariable int plantId) {
@@ -51,6 +48,12 @@ public class TreatmentController {
         String username = principal.getName();
         int userId = userDao.findIdByUsername(username);
         return treatmentDetailsDao.getAllTreatments(userId);
+    }
+
+    @RequestMapping(path="/deleteTreatment/{plantId}/{careId}", method=RequestMethod.DELETE)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteTreatment(@PathVariable int plantId, @PathVariable int careId) {
+        plantTreatmentDao.deletePlantTreatment(plantId, careId);
     }
 
 

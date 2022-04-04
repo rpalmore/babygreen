@@ -17,7 +17,7 @@
         v-if="$store.state.token != ''"
         >&nbsp;My Plants</router-link
       >&nbsp;
-      <router-link v-bind:to="{ name: 'care' }" v-if="$store.state.token != ''"
+      <router-link v-bind:to="{ name: 'plant-care' }" v-if="$store.state.token != ''"
         >&nbsp;Plant Care</router-link
       >
     </div>
