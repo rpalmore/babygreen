@@ -9,7 +9,9 @@
       <label for="infoUrl">Add an external link: </label>
       <input type="text" v-model="plant.infoUrl" />
       <button id="submit">Save</button>
-      <button v-on:click.prevent="cancelForm($event)" id="cancelInfoForm">Cancel</button>
+      <button v-on:click.prevent="cancelForm($event)" id="cancelInfoForm">
+        Cancel
+      </button>
     </form>
     <p>
       This page offers more details about a plant and the option to add dated
@@ -25,14 +27,18 @@
     <p>
       I am an {{ plant.indoor == true ? "indoor" : "outdoor" }} plant and have
       been in {{ this.$store.state.user.username }}&#8217;s care since
-      <a v-on:click="toggleDateForm">{{ plant.plantAge == null ? "today" : plant.plantAge }}</a
+      <a v-on:click="toggleDateForm">{{
+        plant.plantAge == null ? "today" : plant.plantAge
+      }}</a
       >.
     </p>
     <form v-on:submit.prevent="editPlant" v-show="showDateForm === true">
       <label for="plantAge">Plant cared for since: </label>
       <input type="date" v-model="plant.plantAge" />
       <button id="submit">Update</button>
-      <button v-on:click.prevent="cancelForm($event)" id="cancelDateForm">Cancel</button>
+      <button v-on:click.prevent="cancelForm($event)" id="cancelDateForm">
+        Cancel
+      </button>
     </form>
     <p>Add notes about this plant via some kind of notes form.</p>
     <form v-on:submit.prevent="saveNote" id="note-form">
@@ -64,6 +70,7 @@
 <script>
 import plantNoteService from "../services/PlantNoteService";
 import plantService from "../services/PlantService";
+import treatmentService from "../services/TreatmentService";
 export default {
   name: "plant-detail",
   data() {
@@ -91,6 +98,9 @@ export default {
     notes() {
       return this.$store.state.notes;
     },
+    // treatments() {
+    //   return ?????
+    // }
   },
   methods: {
     toggleInfoForm() {
@@ -110,7 +120,9 @@ export default {
         : (this.showNoteForm = true);
     },
     cancelForm(event) {
-      event.target.id === "cancelInfoForm" ? this.toggleInfoForm() : this.toggleDateForm();
+      event.target.id === "cancelInfoForm"
+        ? this.toggleInfoForm()
+        : this.toggleDateForm();
     },
     editPlant() {
       plantService
@@ -174,6 +186,17 @@ export default {
     plantNoteService.getNotes(this.plantId).then((response) => {
       this.$store.commit("SET_NOTES", response.data);
     });
+    treatmentService
+      .getSinglePlantTreatments(this.plantId)
+      .then((response) => {
+        if (response.status == 200) {
+          // eslint-disable-next-line no-console
+          console.log(response.data);
+        }
+      })
+      .catch((err) => {
+        alert(err + " problem retrieving treatments!");
+      });
   },
 };
 </script>

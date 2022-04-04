@@ -70,7 +70,8 @@ CREATE TABLE plants_treatments (
     care_id int NOT NULL,
     CONSTRAINT PK_plants_treatments PRIMARY KEY(plant_id, care_id),
     CONSTRAINT FK_plants_treatments_plant FOREIGN KEY(plant_id)
-    REFERENCES plants(plant_id),
+    REFERENCES plants(plant_id)
+    ON DELETE CASCADE,
     CONSTRAINT FK_plants_treatments_care FOREIGN KEY(care_id)
     REFERENCES treatments(care_id)
 );

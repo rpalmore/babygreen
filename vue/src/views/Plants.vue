@@ -59,49 +59,56 @@
         <button id="submit">Save</button>
       </form>
     </div>
-    <!-- <button v-bind:disabled="btnDisabled" v-on:click="logAction" id="submit">
-      Watered
-    </button> -->
     <form v-on:submit.prevent="logCare">
       <label for="watered">Watered</label>
       <input
         v-bind:disabled="btnDisabled"
-        type="checkbox"
-        name="watered"
+        required
+        type="radio"
+        name="type"
         id="watered"
         value="watered"
+        v-model="treatment.careType"
       />
       <label for="sprayed">Sprayed</label>
       <input
         v-bind:disabled="btnDisabled"
-        type="checkbox"
-        name="sprayed"
+        required
+        type="radio"
+        name="type"
         id="sprayed"
         value="sprayed"
+        v-model="treatment.careType"
       />
       <label for="repotted">Repotted</label>
       <input
         v-bind:disabled="btnDisabled"
-        type="checkbox"
-        name="repotted"
+        required
+        type="radio"
+        name="type"
         id="repotted"
         value="repotted"
+        v-model="treatment.careType"
       />
       <label for="treated">Pest Treatment</label>
       <input
         v-bind:disabled="btnDisabled"
-        type="checkbox"
-        name="treated"
-        id="treated"
-        value="treated"
+        required
+        type="radio"
+        name="type"
+        id="pest-treatment"
+        value="pest-treatment"
+        v-model="treatment.careType"
       />
       <label for="treated">Fertilized</label>
       <input
         v-bind:disabled="btnDisabled"
-        type="checkbox"
-        name="fertilized"
+        required
+        type="radio"
+        name="type"
         id="fertilized"
         value="fertilized"
+        v-model="treatment.careType"
       />
       <p>
         <label for="careDate">Date of care: </label>
@@ -111,6 +118,7 @@
           name="careDate"
           id="careDate"
           type="date"
+          v-model="treatment.careDate"
         />
       </p>
       <button id="submit">Log</button>
@@ -142,6 +150,7 @@
 
 <script>
 import plantService from "../services/PlantService";
+import treatmentService from "../services/TreatmentService";
 export default {
   name: "plants",
   data() {
@@ -153,6 +162,9 @@ export default {
       showForm: false,
       selectedPlantIds: [],
       checkAll: false,
+      treatment: {
+        plantId: [],
+      },
     };
   },
   computed: {
@@ -169,12 +181,20 @@ export default {
   },
   methods: {
     logCare() {
-      // eslint-disable-next-line no-console
-      console.log(this.selectedPlantIds);
-      //console.log(this.selectedPlantIds.length + " plants!");
-      // todo: write method for getting this data back to db
-      this.selectedPlantIds = [];
-      this.checkAll = false;
+      this.treatment.plantId = this.selectedPlantIds;
+      treatmentService
+        .createTreatment(this.treatment)
+        .then((response) => {
+          if (response.status == 201) {
+            this.$store.commit("ADD_TREATMENT", response.data);
+          }
+          this.selectedPlantIds = [];
+          this.checkAll = false;
+          this.treatment = {};
+        })
+        .catch((err) => {
+          alert(err + " problem creating treatment!");
+        });
     },
     toggleForm(plant) {
       this.newPlant = plant;

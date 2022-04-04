@@ -23,6 +23,7 @@ export default new Vuex.Store({
     user: currentUser || {},
     profile: JSON.parse(localStorage.getItem('profile') || '{}'),
     plants: JSON.parse(localStorage.getItem('plants') || '{}'),
+    treatments: JSON.parse(localStorage.getItem('treatments') || '{}'),
     notes: JSON.parse(localStorage.getItem('notes') || '{}'),
   },
   mutations: {
@@ -55,13 +56,21 @@ export default new Vuex.Store({
       state.plants = state.plants.filter((plant) => plant.plantId != plantId);
       localStorage.setItem('plants', JSON.stringify(state.plants));
     },
-    SET_NOTES(state, notes) {
-      state.notes = notes;
-      localStorage.setItem("notes", JSON.stringify(state.notes));
+    ADD_TREATMENT(state, treatment) {
+      state.treatments.unshift(treatment);
+      localStorage.setItem('treatments', JSON.stringify(state.treatments));
+    },
+    SET_TREATMENTS(state, payload) {
+      state.treatments = payload;
+      localStorage.setItem('treatments', JSON.stringify(state.treatments));
     },
     ADD_NOTE(state, note) {
       state.notes.unshift(note);
       localStorage.setItem('notes', JSON.stringify(state.notes));
+    },
+    SET_NOTES(state, notes) {
+      state.notes = notes;
+      localStorage.setItem("notes", JSON.stringify(state.notes));
     },
     EDIT_NOTE(state, note) {
       state.notes = state.notes.map(n => n.noteId != note.noteId ? n : note);

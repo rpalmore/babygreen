@@ -16,9 +16,6 @@ import java.security.Principal;
 public class ProfileController {
 
     @Autowired
-    UserDao userDao;
-
-    @Autowired
     ProfileDao profileDao;
 
     @RequestMapping(path="/profile", method=RequestMethod.GET)

@@ -4,20 +4,13 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDate;
 
-public class Treatment {
-    private int careId;
-    @JsonFormat(pattern="yyyy-MM-dd")
+public class TreatmentDetails {
+
+    // @JsonFormat(pattern="yyyy-MM-dd")
     private LocalDate careDate;
     private String careType;
-    private int[] plantId;
-
-    public int getCareId() {
-        return careId;
-    }
-
-    public void setCareId(int careId) {
-        this.careId = careId;
-    }
+    private String plantName;
+    private int careId;
 
     public LocalDate getCareDate() {
         return careDate;
@@ -35,12 +28,20 @@ public class Treatment {
         this.careType = careType;
     }
 
-    public int[] getPlantId() {
-        return plantId;
+    public String getPlantName() {
+        return plantName;
     }
 
-    public void setPlantId(int[] plantId) {
-        this.plantId = plantId;
+    public void setPlantName(String plantName) {
+        this.plantName = plantName;
     }
 
+    public int getCareId() {
+        return careId;
+    }
+
+    public void setCareId(int careId) {
+        this.careId = careId;
+    }
 }
+
