@@ -14,9 +14,9 @@
       </button>
     </form>
     <div
-    v-bind:treatment="treatment"
-    v-for="treatment in treatments"
-    v-bind:key="treatment.treatmentId"
+      v-bind:treatment="treatment"
+      v-for="treatment in treatments"
+      v-bind:key="treatment.treatmentId"
     >
       I was {{ treatment.careType }} on {{ treatment.careDate }}
       <a v-on:click="deleteTreatment(treatment)">&#10006;</a>
@@ -34,7 +34,12 @@
     <h3>About this plant</h3>
     <p>
       I am an {{ plant.indoor == true ? "indoor" : "outdoor" }} plant and have
-      been in {{ this.$store.state.user.username }}&#8217;s care since
+      been in
+      {{
+        this.$store.state.profile.displayName === undefined
+          ? this.$store.state.user.username
+          : this.$store.state.profile.displayName
+      }}&#8217;s care since
       <a v-on:click="toggleDateForm">{{
         plant.plantAge == null ? "today" : plant.plantAge
       }}</a
@@ -94,6 +99,7 @@ export default {
       showNoteForm: false,
       showDateForm: false,
       showInfoForm: false,
+      modal: "",
     };
   },
   computed: {
@@ -111,7 +117,7 @@ export default {
     },
     treatments() {
       return this.$store.state.treatments;
-    }
+    },
   },
   methods: {
     toggleInfoForm() {
@@ -179,30 +185,43 @@ export default {
         });
     },
     deleteNote(noteId) {
-      if (confirm("Are you sure you want to delete this note?")) {
-        plantNoteService
-          .deleteNote(noteId)
+      this.modal = '';
+      this.$bvModal.msgBoxConfirm(
+        "Are you sure you want to delete this note?"
+      ).then((value) => {
+        this.modal = value;
+        if (value === true) {
+          plantNoteService
+            .deleteNote(noteId)
+            .then((response) => {
+              if (response.status == 204) {
+                this.$store.commit("DELETE_NOTE", noteId);
+              }
+            })
+            .catch((err) => {
+              alert(err + " problem deleting note!");
+            });
+        }
+      });
+    },
+    deleteTreatment(treatment) {
+      this.modal = '';
+      this.$bvModal.msgBoxConfirm('Are you sure you want to delete this treatment?').then((value) => {
+        this.modal = value;
+        if (value === true) {
+      treatment.plantId = this.$route.params.plantId;
+        treatmentService
+          .deleteTreatment(treatment.plantId, treatment.careId)
           .then((response) => {
             if (response.status == 204) {
-              this.$store.commit("DELETE_NOTE", noteId);
+              this.$store.commit("DELETE_TREATMENT", treatment);
             }
           })
           .catch((err) => {
-            alert(err + " problem deleting note!");
+            alert(err + " problem deleting treatment!");
           });
-      }
-    },
-    deleteTreatment(treatment) {
-      treatment.plantId = this.$route.params.plantId;
-      if(confirm("Are you sure you want to delete this treatment?")) {
-        treatmentService.deleteTreatment(treatment.plantId, treatment.careId).then((response) => {
-          if (response.status == 204) {
-            this.$store.commit("DELETE_TREATMENT", treatment);
-          }
-        }).catch((err) => {
-          alert(err + " problem deleting treatment!")
-        });
-      }
+        }
+      });
     },
   },
   created() {

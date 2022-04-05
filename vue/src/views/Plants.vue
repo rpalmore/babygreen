@@ -1,6 +1,12 @@
 <template>
   <div id="plant-view">
-    <h2>{{ this.$store.state.user.username }}&#8217;s plants</h2>
+    <h2>
+      {{
+        this.$store.state.profile.displayName === undefined
+          ? this.$store.state.user.username
+          : this.$store.state.profile.displayName
+      }}&#8217;s plants
+    </h2>
     <p>
       This page lists all plants associated with user. Features to add: sort by
       indoor/outdoor; select plants to record that you watered them, defaulting
@@ -165,6 +171,7 @@ export default {
       treatment: {
         plantId: [],
       },
+      modal: '',
     };
   },
   computed: {
@@ -232,18 +239,24 @@ export default {
         });
     },
     deletePlant(plantId) {
-      if (confirm("Are you sure you want to delete this plant?")) {
-        plantService
-          .deletePlant(plantId)
-          .then((response) => {
-            if (response.status == 204) {
-              this.$store.commit("DELETE_PLANT", plantId);
-            }
-          })
-          .catch((err) => {
-            alert(err + " problem deleting plant!");
-          });
-      }
+      this.modal = '';
+      this.$bvModal
+        .msgBoxConfirm("Are you sure you want to delete this plant?")
+        .then((value) => {
+          this.modal = value;
+          if (value === true) {
+            plantService
+              .deletePlant(plantId)
+              .then((response) => {
+                if (response.status == 204) {
+                  this.$store.commit("DELETE_PLANT", plantId);
+                }
+              })
+              .catch((err) => {
+                alert(err + " problem deleting plant!");
+              });
+          }
+        });
     },
     editPlant(newPlant) {
       plantService

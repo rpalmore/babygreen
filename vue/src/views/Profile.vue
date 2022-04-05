@@ -8,7 +8,6 @@
           : this.$store.state.profile.displayName
       }}!
     </h1>
-    <p>Consider adding a profile display name.</p>
     <div class="profile-details">
       <p>My id: {{ profile.userId }}</p>
       <p>My display name: {{ this.$store.state.profile.displayName }}</p>
@@ -47,6 +46,7 @@ export default {
       profile: {
         userId: this.$store.state.user.id,
       },
+      modal: '',
     };
   },
   methods: {
@@ -79,13 +79,24 @@ export default {
       }
     },
     deleteProfile(userId) {
-      if (confirm("Are you sure you want to delete this profile?")) {
-        profileService.deleteProfile(userId).then((response) => {
-          if (response.status == 204) {
-            this.$store.commit("SET_PROFILE", userId);
-          }
-        });
-      }
+      this.modal = '';
+        this.$bvModal
+          .msgBoxConfirm("Are you sure you want to delete this profile?")
+          .then((value) => {
+            this.modal = value;
+            if (value === true) {
+              profileService
+                .deleteProfile(userId)
+                .then((response) => {
+                  if (response.status == 204) {
+                    this.$store.commit("SET_PROFILE", userId);
+                  }
+                })
+                .catch((err) => {
+                  alert(err + " problem deleting profile!");
+                });
+            }
+          });
     },
   },
 };

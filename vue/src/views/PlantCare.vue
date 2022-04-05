@@ -36,24 +36,32 @@ export default {
     treatments() {
       return this.$store.state.treatments;
     },
+    data() {
+      return {
+        modal: "",
+      };
+    },
   },
   methods: {
     deleteTreatment(treatment) {
-      // // eslint-disable-next-line no-console
-      // console.log(treatment);
-      if(confirm("Are you sure you want to delete this treatment?")) {
-        treatmentService.deleteTreatment(treatment.plantId, treatment.careId).then((response) => {
-          if (response.status == 204) {
-            this.$store.commit("DELETE_TREATMENT", treatment);
-            // // eslint-disable-next-line no-console
-            // console.log(treatment.plantId);
-            // // eslint-disable-next-line no-console
-            // console.log(treatment.careId);
+      this.modal = "";
+      this.$bvModal
+        .msgBoxConfirm("Are you sure you want to delete this treatment?")
+        .then((value) => {
+          this.modal = value;
+          if (value === true) {
+            treatmentService
+              .deleteTreatment(treatment.plantId, treatment.careId)
+              .then((response) => {
+                if (response.status == 204) {
+                  this.$store.commit("DELETE_TREATMENT", treatment);
+                }
+              })
+              .catch((err) => {
+                alert(err + " problem deleting treatment!");
+              });
           }
-        }).catch((err) => {
-          alert(err + " problem deleting treatment!")
         });
-      }
     },
   },
   created() {
