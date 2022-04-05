@@ -65,19 +65,10 @@ export default new Vuex.Store({
       state.treatments = payload;
       localStorage.setItem('treatments', JSON.stringify(state.treatments));
     },
-    // having some issues here with updating the store on the plant-care.vue page
-    // things working consistently in db and also plant-detail.vue
     DELETE_TREATMENT(state, treatment) {
-      console.log(treatment);// this correctly includes all of the treatments
       state.treatments = state.treatments.filter((t) => t.plantId != treatment.plantId || t.careId != treatment.careId);
       localStorage.setItem('treatments', JSON.stringify(state.treatments));
-      //console.log(state.treatments);
     },
-    // DELETE_TREATMENT(state, payload) {
-    //   state.treatments = state.treatments.filter((t) => t.plantId != payload.plantId 
-    //   && t.careId != payload.careId);
-    //   localStorage.setItem('treatments', JSON.stringify(state.treatments));
-    // },
     ADD_NOTE(state, note) {
       state.notes.unshift(note);
       localStorage.setItem('notes', JSON.stringify(state.notes));

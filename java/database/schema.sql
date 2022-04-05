@@ -25,6 +25,7 @@ CREATE TABLE users (
 CREATE TABLE profiles (
     profile_id serial,
     user_id int NOT NULL,
+    display_name varchar(200),
     profile_img varchar(500),
     fave_plant varchar(200),
     skill_level varchar(50),

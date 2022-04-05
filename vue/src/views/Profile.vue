@@ -1,9 +1,17 @@
 <template>
   <div id="profile">
-    <h1>You look great in green, {{ this.$store.state.user.username }}!</h1>
+    <h1>
+      You look great in green,
+      {{
+        this.$store.state.profile.displayName === undefined
+          ? this.$store.state.user.username
+          : this.$store.state.profile.displayName
+      }}!
+    </h1>
     <p>Consider adding a profile display name.</p>
     <div class="profile-details">
       <p>My id: {{ profile.userId }}</p>
+      <p>My display name: {{ this.$store.state.profile.displayName }}</p>
       <p>My favorite plant: {{ this.$store.state.profile.favePlant }}</p>
       <p>My skill level: {{ this.$store.state.profile.skillLevel }}</p>
       <p>I have {{ this.$store.state.plants.length }} plants!</p>
@@ -16,6 +24,8 @@
       }}
     </h2>
     <form v-on:submit.prevent="saveProfile" id="profile-form">
+      <label for="displayName" class="profile-form">Display name</label>
+      <input type="text" class="profile-form" v-model="profile.displayName" />
       <label for="favePlant" class="profile-form">Favorite plant</label>
       <input type="text" class="profile-form" v-model="profile.favePlant" />
       <label for="skillLevel" class="profile-form">Skill level</label>

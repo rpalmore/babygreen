@@ -3,6 +3,7 @@ package com.techelevator.model;
 public class Profile {
     private int profileId;
     private int userId;
+    private String displayName;
     private String profileImg;
     private String favePlant;
     private String skillLevel;
@@ -21,6 +22,14 @@ public class Profile {
 
     public void setUserId(int userId) {
         this.userId = userId;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 
     public String getProfileImg() {

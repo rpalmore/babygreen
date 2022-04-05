@@ -18,7 +18,7 @@ public class JdbcProfileDao implements ProfileDao {
 
     @Override
     public Profile getProfile(String username) {
-        String sql = "SELECT profile_id, profiles.user_id, profile_img, fave_plant, skill_level " +
+        String sql = "SELECT profile_id, profiles.user_id, display_name, profile_img, fave_plant, skill_level " +
                 "FROM profiles " +
                 "JOIN users ON users.user_id = profiles.user_id " +
                 "WHERE username = ?";
@@ -28,6 +28,7 @@ public class JdbcProfileDao implements ProfileDao {
             profile = new Profile();
             profile.setProfileId(result.getInt("profile_id"));
             profile.setUserId(result.getInt("user_id"));
+            profile.setDisplayName(result.getString("display_name"));
             profile.setProfileImg(result.getString("profile_img"));
             profile.setFavePlant(result.getString("fave_plant"));
             profile.setSkillLevel(result.getString("skill_level"));
@@ -37,10 +38,10 @@ public class JdbcProfileDao implements ProfileDao {
 
     @Override
     public Profile createProfile(Profile newProfile) {
-        String sql = "INSERT INTO profiles(user_id, profile_img, fave_plant, skill_level) " +
-                "VALUES (?, ?, ?, ?) RETURNING profile_id";
-        int profileId = template.queryForObject(sql, Integer.class, newProfile.getUserId(), newProfile.getProfileImg(),
-                newProfile.getFavePlant(), newProfile.getSkillLevel());
+        String sql = "INSERT INTO profiles(user_id, display_name, profile_img, fave_plant, skill_level) " +
+                "VALUES (?, ?, ?, ?, ?) RETURNING profile_id";
+        int profileId = template.queryForObject(sql, Integer.class, newProfile.getUserId(), newProfile.getDisplayName(),
+                newProfile.getProfileImg(), newProfile.getFavePlant(), newProfile.getSkillLevel());
         newProfile.setProfileId(profileId);
         return newProfile;
     }
@@ -54,9 +55,9 @@ public class JdbcProfileDao implements ProfileDao {
     @Override
     public void editProfile(Profile updatedProfile) {
         String sql = "UPDATE profiles " +
-                "SET profile_img = ?, fave_plant = ?, skill_level = ? " +
+                "SET display_name = ?, profile_img = ?, fave_plant = ?, skill_level = ? " +
                 "WHERE user_id = ?";
-        template.update(sql, updatedProfile.getProfileImg(), updatedProfile.getFavePlant(),
+        template.update(sql, updatedProfile.getDisplayName(), updatedProfile.getProfileImg(), updatedProfile.getFavePlant(),
                 updatedProfile.getSkillLevel(), updatedProfile.getUserId());
     }
 }
