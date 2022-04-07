@@ -1,20 +1,47 @@
 <template>
-  <div id="profile">
-    <h1>
-      You look great in green,
-      {{
-        this.$store.state.profile.displayName === undefined
-          ? this.$store.state.user.username
-          : this.$store.state.profile.displayName
-      }}!
-    </h1>
-    <div class="profile-details">
-      <p>My id: {{ profile.userId }}</p>
-      <p>My display name: {{ this.$store.state.profile.displayName }}</p>
-      <p>My favorite plant: {{ this.$store.state.profile.favePlant }}</p>
-      <p>My skill level: {{ this.$store.state.profile.skillLevel }}</p>
-      <p>I have {{ this.$store.state.plants.length }} plants!</p>
-    </div>
+  <!-- <b-container id="profile" class="text-center"> -->
+  <!-- Above: quick and easy way to center all text -->
+  <b-container id="profile">
+    <b-row>
+      <h2>
+        You look great in green,
+        {{
+          this.$store.state.profile.displayName === undefined
+            ? this.$store.state.user.username
+            : this.$store.state.profile.displayName
+        }}!
+      </h2>
+    </b-row>
+    <b-container class="profile-details">
+      <b-row>
+        <b-col><span class="profile-question">My favorite plant</span> </b-col>
+        <b-col
+          ><span class="profile-answer">{{
+            this.$store.state.profile.favePlant
+          }}</span></b-col
+        >
+      </b-row>
+      <b-row>
+        <b-col><span class="profile-question">My skill level</span></b-col>
+        <b-col
+          ><span class="profile-answer">{{
+            this.$store.state.profile.skillLevel
+          }}</span></b-col
+        >
+      </b-row>
+      <b-row>
+        <b-col><span class="profile-question">I am tracking ...</span></b-col>
+        <b-col
+          ><span class="profile-answer">
+            {{
+              this.$store.state.plants.length === 1
+                ? this.$store.state.plants.length + " plant baby"
+                : this.$store.state.plants.length + " plant babies"
+            }}!</span
+          >
+        </b-col>
+      </b-row>
+    </b-container>
     <h2>
       {{
         this.$store.state.profile.favePlant === undefined
@@ -34,7 +61,7 @@
     <button v-on:click="deleteProfile(profile.userId)" class="delete">
       Delete
     </button>
-  </div>
+  </b-container>
 </template>
 
 <script>
@@ -46,7 +73,7 @@ export default {
       profile: {
         userId: this.$store.state.user.id,
       },
-      modal: '',
+      modal: "",
     };
   },
   methods: {
@@ -79,34 +106,49 @@ export default {
       }
     },
     deleteProfile(userId) {
-      this.modal = '';
-        this.$bvModal
-          .msgBoxConfirm("Are you sure you want to delete this profile?")
-          .then((value) => {
-            this.modal = value;
-            if (value === true) {
-              profileService
-                .deleteProfile(userId)
-                .then((response) => {
-                  if (response.status == 204) {
-                    this.$store.commit("SET_PROFILE", userId);
-                  }
-                })
-                .catch((err) => {
-                  alert(err + " problem deleting profile!");
-                });
-            }
-          });
+      this.modal = "";
+      this.$bvModal
+        .msgBoxConfirm("Are you sure you want to delete this profile?")
+        .then((value) => {
+          this.modal = value;
+          if (value === true) {
+            profileService
+              .deleteProfile(userId)
+              .then((response) => {
+                if (response.status == 204) {
+                  this.$store.commit("SET_PROFILE", userId);
+                }
+              })
+              .catch((err) => {
+                alert(err + " problem deleting profile!");
+              });
+          }
+        });
     },
   },
 };
 </script>
 
 <style>
-#profile-form {
-  background-color: pink;
+#profile > .row {
+  justify-content: center;
+  text-align: center;
 }
 .profile-details {
-  background-color: lightblue;
+  background-color: var(--green);
+}
+.profile-details > .row {
+  border: 3px solid var(--light);
+}
+.profile-details .col {
+  border-right: 4px solid var(--light);
+  padding: 10px;
+}
+.profile-details span {
+  font-size: 1.2rem;
+}
+.profile-question {
+  display: flex;
+  justify-content: end;
 }
 </style>

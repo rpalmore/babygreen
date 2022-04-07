@@ -14,7 +14,7 @@
       thumbnail of each plant at left (in circle) or a placeholder image if no
       photo has been uploaded -- including for plants just added, for example.
     </p>
-    <p>To do: Filter by indoor/outdoor.</p>
+    <p>To do: Filter by indoor/outdoor and do a text search for plants by name.</p>
     <p id="select-all">
       <input type="checkbox" v-model="checkAll" v-on:change="selectAll" />
       Select all

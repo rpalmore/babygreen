@@ -185,43 +185,45 @@ export default {
         });
     },
     deleteNote(noteId) {
-      this.modal = '';
-      this.$bvModal.msgBoxConfirm(
-        "Are you sure you want to delete this note?"
-      ).then((value) => {
-        this.modal = value;
-        if (value === true) {
-          plantNoteService
-            .deleteNote(noteId)
-            .then((response) => {
-              if (response.status == 204) {
-                this.$store.commit("DELETE_NOTE", noteId);
-              }
-            })
-            .catch((err) => {
-              alert(err + " problem deleting note!");
-            });
-        }
-      });
+      this.modal = "";
+      this.$bvModal
+        .msgBoxConfirm("Are you sure you want to delete this note?")
+        .then((value) => {
+          this.modal = value;
+          if (value === true) {
+            plantNoteService
+              .deleteNote(noteId)
+              .then((response) => {
+                if (response.status == 204) {
+                  this.$store.commit("DELETE_NOTE", noteId);
+                }
+              })
+              .catch((err) => {
+                alert(err + " problem deleting note!");
+              });
+          }
+        });
     },
     deleteTreatment(treatment) {
-      this.modal = '';
-      this.$bvModal.msgBoxConfirm('Are you sure you want to delete this treatment?').then((value) => {
-        this.modal = value;
-        if (value === true) {
-      treatment.plantId = this.$route.params.plantId;
-        treatmentService
-          .deleteTreatment(treatment.plantId, treatment.careId)
-          .then((response) => {
-            if (response.status == 204) {
-              this.$store.commit("DELETE_TREATMENT", treatment);
-            }
-          })
-          .catch((err) => {
-            alert(err + " problem deleting treatment!");
-          });
-        }
-      });
+      this.modal = "";
+      this.$bvModal
+        .msgBoxConfirm("Are you sure you want to delete this treatment?")
+        .then((value) => {
+          this.modal = value;
+          if (value === true) {
+            treatment.plantId = this.$route.params.plantId;
+            treatmentService
+              .deleteTreatment(treatment.plantId, treatment.careId)
+              .then((response) => {
+                if (response.status == 204) {
+                  this.$store.commit("DELETE_TREATMENT", treatment);
+                }
+              })
+              .catch((err) => {
+                alert(err + " problem deleting treatment!");
+              });
+          }
+        });
     },
   },
   created() {

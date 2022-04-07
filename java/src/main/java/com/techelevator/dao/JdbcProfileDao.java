@@ -18,7 +18,8 @@ public class JdbcProfileDao implements ProfileDao {
 
     @Override
     public Profile getProfile(String username) {
-        String sql = "SELECT profile_id, profiles.user_id, display_name, profile_img, fave_plant, skill_level " +
+        String sql = "SELECT profile_id, profiles.user_id, display_name, profile_img, " +
+                "fave_plant, skill_level " +
                 "FROM profiles " +
                 "JOIN users ON users.user_id = profiles.user_id " +
                 "WHERE username = ?";

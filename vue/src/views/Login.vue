@@ -72,7 +72,12 @@ export default {
                 this.$store.commit("SET_PLANTS", response.data);
               }
             })
-            this.$router.push("/");
+            if (this.$store.state.profile.displayName === null) {
+              this.$router.push("/profile");
+            } else {
+              this.$router.push("/plants");
+            }
+            
           }
         })
         .catch(error => {

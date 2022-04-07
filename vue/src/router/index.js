@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from '../views/Home.vue'
+// import Home from '../views/Home.vue'
 import Login from '../views/Login.vue'
 import Logout from '../views/Logout.vue'
 import Register from '../views/Register.vue'
@@ -8,6 +8,7 @@ import Profile from '../views/Profile.vue'
 import Plants from '../views/Plants.vue'
 import PlantDetail from '../components/PlantDetail.vue'
 import PlantCare from '../views/PlantCare.vue'
+import About from '../views/About.vue'
 import store from '../store/index'
 
 Vue.use(Router)
@@ -25,14 +26,14 @@ const router = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
   routes: [
-    {
-      path: "/",
-      name: "home",
-      component: Home,
-      meta: {
-        requiresAuth: true
-      }
-    },
+    // {
+    //   path: "/",
+    //   name: "home",
+    //   component: Home,
+    //   meta: {
+    //     requiresAuth: true
+    //   }
+    // },
     {
       path: "/login",
       name: "login",
@@ -53,6 +54,14 @@ const router = new Router({
       path: "/register",
       name: "register",
       component: Register,
+      meta: {
+        requiresAuth: false
+      }
+    },
+    {
+      path: "/about",
+      name: "about",
+      component: About,
       meta: {
         requiresAuth: false
       }
