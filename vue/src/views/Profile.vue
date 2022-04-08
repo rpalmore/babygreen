@@ -42,14 +42,14 @@
         </b-col>
       </b-row>
     </b-container>
-    <h2>
+    <!--<h2>
       {{
         this.$store.state.profile.favePlant === undefined
           ? "Create a profile"
           : "Edit your profile"
       }}
     </h2>
-    <form v-on:submit.prevent="saveProfile" id="profile-form">
+     <form v-on:submit.prevent="saveProfile" id="profile-form">
       <label for="displayName" class="profile-form">Display name</label>
       <input type="text" class="profile-form" v-model="profile.displayName" />
       <label for="favePlant" class="profile-form">Favorite plant</label>
@@ -60,7 +60,7 @@
     </form>
     <button v-on:click="deleteProfile(profile.userId)" class="delete">
       Delete
-    </button>
+    </button> -->
   </b-container>
 </template>
 
@@ -136,12 +136,13 @@ export default {
 }
 .profile-details {
   background-color: var(--green);
+  margin-top: 10px;
 }
 .profile-details > .row {
-  border: 3px solid var(--light);
+  /* border: 3px solid var(--light); */
 }
 .profile-details .col {
-  border-right: 4px solid var(--light);
+  border: 3px solid var(--light);
   padding: 10px;
 }
 .profile-details span {

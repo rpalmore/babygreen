@@ -1,6 +1,7 @@
 <template>
   <b-card-header header-tag="nav" v-if="$store.state.token != ''">
     <b-nav pills>
+      <!-- <b-nav-text>baby green</b-nav-text> -->
       <b-nav-item :to="{ name: 'plants' }" exact exact-active-class="active"
         >My Plants</b-nav-item
       >
