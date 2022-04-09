@@ -28,7 +28,7 @@
         v-model="user.confirmPassword"
         required
       ></b-form-input>
-      <b-button class="homepage" type="submit">
+      <b-button class="default" type="submit">
         Go
       </b-button>
     </b-form>

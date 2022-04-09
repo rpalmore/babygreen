@@ -42,25 +42,54 @@
         </b-col>
       </b-row>
     </b-container>
-    <!--<h2>
+    <p class="section-header">
       {{
         this.$store.state.profile.favePlant === undefined
           ? "Create a profile"
           : "Edit your profile"
       }}
-    </h2>
-     <form v-on:submit.prevent="saveProfile" id="profile-form">
-      <label for="displayName" class="profile-form">Display name</label>
-      <input type="text" class="profile-form" v-model="profile.displayName" />
-      <label for="favePlant" class="profile-form">Favorite plant</label>
-      <input type="text" class="profile-form" v-model="profile.favePlant" />
-      <label for="skillLevel" class="profile-form">Skill level</label>
-      <input type="text" class="profile-form" v-model="profile.skillLevel" />
-      <button class="submit">Save</button>
-    </form>
-    <button v-on:click="deleteProfile(profile.userId)" class="delete">
+    </p>
+
+    <!-- Create or edit your profile -->
+    <b-form v-on:submit.prevent="saveProfile" id="profile-form">
+      <b-form-group
+        id="input-group-1"
+        label="Display name:"
+        label-for="input-1"
+      >
+        <b-form-input
+          type="text"
+          id="input-1"
+          placeholder="Enter display name"
+          v-model="profile.displayName"
+        ></b-form-input>
+      </b-form-group>
+      <b-form-group
+        id="input-group-2"
+        label="Favorite plant:"
+        label-for="input-2"
+      >
+        <b-form-input
+          type="text"
+          id="input-2"
+          placeholder="Your favorite plant"
+          v-model="profile.favePlant"
+        ></b-form-input>
+      </b-form-group>
+      <b-form-group id="input-group-3" label="Skill level:" label-for="input-3">
+        <b-form-select
+          id="input-3"
+          v-model="profile.skillLevel"
+          :options="skill"
+          required
+        ></b-form-select>
+      </b-form-group>
+      <b-button type="submit" class="default">Save</b-button>&nbsp;
+      <b-button @click="cancel" class="default">Cancel</b-button>
+    </b-form>
+    <b-button v-on:click="deleteProfile(profile.userId)" class="delete">
       Delete
-    </button> -->
+    </b-button>
   </b-container>
 </template>
 
@@ -74,11 +103,22 @@ export default {
         userId: this.$store.state.user.id,
       },
       modal: "",
+      skill: [
+        { text: "Select One", value: null },
+        "Beginner",
+        "Intermediate",
+        "Advanced",
+      ],
     };
   },
   methods: {
+    cancel() {
+      this.profile = {
+        userId: this.$store.state.user.id,
+      };
+    },
     saveProfile() {
-      if (this.$store.state.profile.favePlant === undefined) {
+      if (this.$store.state.profile.favePlant === "") {
         profileService
           .createProfile(this.profile)
           .then((response) => {
@@ -99,6 +139,9 @@ export default {
             if (response.status === 200) {
               this.$store.commit("SET_PROFILE", this.profile);
             }
+            this.profile = {
+              userId: this.$store.state.user.id,
+            };
           })
           .catch((err) => {
             alert(err + " problem updating profile!");

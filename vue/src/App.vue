@@ -59,10 +59,17 @@ h2 {
 a {
   color: var(--dark);
 }
-.btn.homepage {
+.btn.default {
   background-color: var(--dark);
   border-right: 3px solid var(--orange);
   border-left: 3px solid var(--orange);
   color: var(--light);
+}
+.btn.delete {
+  background-color: var(--orange);
+  border-right: 3px solid var(--dark);
+  border-left: 3px solid var(--dark);
+  color: var(--light);
+  color: var(--dark);
 }
 </style>

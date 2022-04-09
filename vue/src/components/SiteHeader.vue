@@ -5,8 +5,8 @@
     lead="TK tagline"
   >
   <hr class="my-4">
-    <b-button class="homepage" :to="{ name: 'login' }">Sign In</b-button>&nbsp;
-    <b-button class="homepage" :to="{ name: 'register' }">Register</b-button>
+    <b-button class="default" :to="{ name: 'login' }">Sign In</b-button>&nbsp;
+    <b-button class="default" :to="{ name: 'register' }">Register</b-button>
   </b-jumbotron>
   </div>
 </template>

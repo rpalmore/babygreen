@@ -1,8 +1,15 @@
 <template>
   <b-container fluid id="login">
-    <p class="section-header">{{ invalidCredentials ? "Invalid username and password!" : this.$route.query.registration ? "Thank you for registering, please sign in" : "Please sign in" }}</p>
+    <p class="section-header">
+      {{
+        invalidCredentials
+          ? "Invalid username and password!"
+          : this.$route.query.registration
+          ? "Thank you for registering, please sign in"
+          : "Please sign in"
+      }}
+    </p>
     <b-form inline @submit.prevent="login">
-
       <label class="sr-only" for="username">Username</label>
       <b-form-input
         id="username"
@@ -24,7 +31,7 @@
         required
       >
       </b-form-input>
-      <b-button class="homepage" type="submit">Submit</b-button>
+      <b-button class="default" type="submit">Submit</b-button>
     </b-form>
   </b-container>
 </template>
@@ -64,10 +71,10 @@ export default {
                 this.$store.commit("SET_PLANTS", response.data);
               }
             });
-            if (this.$store.state.profile.displayName === undefined || this.$store.state.profile.displayName === null) {
-              this.$router.push("/profile");
-            } else {
+            if (this.$store.state.profile.favePlant != undefined) {
               this.$router.push("/plants");
+            } else {
+              this.$router.push("/profile");
             }
           }
         })
