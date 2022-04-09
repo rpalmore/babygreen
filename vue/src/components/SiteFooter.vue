@@ -1,6 +1,6 @@
 <template>
   <b-container id="footer" fluid>
-    Footer content and links
+    Created and maintained by Rebecca Palmore
   </b-container>
 </template>
 

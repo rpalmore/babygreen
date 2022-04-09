@@ -43,7 +43,7 @@ export default {
 </script>
 
 <style>
-#about .section-header {
+.section-header {
   /* text-align: center; */
   padding-top: 20px;
   font-size: 1.5rem;

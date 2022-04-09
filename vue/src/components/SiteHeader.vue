@@ -5,8 +5,8 @@
     lead="TK tagline"
   >
   <hr class="my-4">
-    <b-button :to="{ name: 'login' }">Sign In</b-button>&nbsp;
-    <b-button :to="{ name: 'register' }">Register</b-button>
+    <b-button class="homepage" :to="{ name: 'login' }">Sign In</b-button>&nbsp;
+    <b-button class="homepage" :to="{ name: 'register' }">Register</b-button>
   </b-jumbotron>
   </div>
 </template>
@@ -29,14 +29,13 @@ height: 100%;
   width: 50%;
   margin-left: 0;
 }
-.btn {
+/* .btn {
   background-color: var(--green);
   background-color: var(--grey);
   background-color: var(--dark);
-  /* border-bottom: 2px solid var(--orange); */
   border-right: 3px solid var(--orange);
   border-left: 3px solid var(--orange);
-}
+} */
 h1, .lead {
   color: var(--dark);
 }

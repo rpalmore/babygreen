@@ -1,43 +1,38 @@
 <template>
-  <div id="register" class="text-center">
-    <form class="form-register" @submit.prevent="register">
-      <h1 class="h3 mb-3 font-weight-normal">Create Account</h1>
-      <div class="alert alert-danger" role="alert" v-if="registrationErrors">
-        {{ registrationErrorMsg }}
-      </div>
+  <b-container fluid id="register">
+    <p class="section-header">{{ registrationErrors? registrationErrors : "Create Account" }}</p>
+    <b-form inline @submit.prevent="register">
       <label for="username" class="sr-only">Username</label>
-      <input
+      <b-form-input
         type="text"
         id="username"
-        class="form-control"
+        class="mb-2 mr-sm-2 mb-sm-0"
         placeholder="Username"
         v-model="user.username"
         required
-        autofocus
-      />
+      ></b-form-input>
       <label for="password" class="sr-only">Password</label>
-      <input
+      <b-form-input
         type="password"
         id="password"
-        class="form-control"
+        class="mb-2 mr-sm-2 mb-sm-0"
         placeholder="Password"
         v-model="user.password"
         required
-      />
-      <input
+      ></b-form-input>
+      <b-form-input
         type="password"
         id="confirmPassword"
-        class="form-control"
+        class="mb-2 mr-sm-2 mb-sm-0"
         placeholder="Confirm Password"
         v-model="user.confirmPassword"
         required
-      />
-      <router-link :to="{ name: 'login' }">Have an account?</router-link>
-      <button class="btn btn-lg btn-primary btn-block" type="submit">
-        Create Account
-      </button>
-    </form>
-  </div>
+      ></b-form-input>
+      <b-button class="homepage" type="submit">
+        Go
+      </b-button>
+    </b-form>
+  </b-container>
 </template>
 
 <script>
@@ -90,4 +85,5 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+</style>

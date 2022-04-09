@@ -1,40 +1,32 @@
 <template>
-  <div id="login" class="text-center">
-    <form class="form-signin" @submit.prevent="login">
-      <h1 class="h3 mb-3 font-weight-normal">Please Sign In</h1>
-      <div
-        class="alert alert-danger"
-        role="alert"
-        v-if="invalidCredentials"
-      >Invalid username and password!</div>
-      <div
-        class="alert alert-success"
-        role="alert"
-        v-if="this.$route.query.registration"
-      >Thank you for registering, please sign in.</div>
-      <label for="username" class="sr-only">Username</label>
-      <input
-        type="text"
+  <b-container fluid id="login">
+    <p class="section-header">{{ invalidCredentials ? "Invalid username and password!" : this.$route.query.registration ? "Thank you for registering, please sign in" : "Please sign in" }}</p>
+    <b-form inline @submit.prevent="login">
+
+      <label class="sr-only" for="username">Username</label>
+      <b-form-input
         id="username"
-        class="form-control"
+        class="mb-2 mr-sm-2 mb-sm-0"
         placeholder="Username"
+        type="text"
         v-model="user.username"
         required
-        autofocus
-      />
-      <label for="password" class="sr-only">Password</label>
-      <input
-        type="password"
+      ></b-form-input>
+
+      <label class="sr-only" for="password">Password</label>
+
+      <b-form-input
         id="password"
-        class="form-control"
+        class="mb-2 mr-sm-2 mb-sm-0"
         placeholder="Password"
+        type="password"
         v-model="user.password"
         required
-      />
-      <router-link :to="{ name: 'register' }">Need an account?</router-link>
-      <button type="submit">Sign in</button>
-    </form>
-  </div>
+      >
+      </b-form-input>
+      <b-button class="homepage" type="submit">Submit</b-button>
+    </b-form>
+  </b-container>
 </template>
 
 <script>
@@ -49,16 +41,16 @@ export default {
     return {
       user: {
         username: "",
-        password: ""
+        password: "",
       },
-      invalidCredentials: false
+      invalidCredentials: false,
     };
   },
   methods: {
     login() {
       authService
         .login(this.user)
-        .then(response => {
+        .then((response) => {
           if (response.status == 200) {
             this.$store.commit("SET_AUTH_TOKEN", response.data.token);
             this.$store.commit("SET_USER", response.data.user);
@@ -71,22 +63,21 @@ export default {
               if (response.status == 200) {
                 this.$store.commit("SET_PLANTS", response.data);
               }
-            })
-            if (this.$store.state.profile.displayName === null) {
+            });
+            if (this.$store.state.profile.displayName === undefined || this.$store.state.profile.displayName === null) {
               this.$router.push("/profile");
             } else {
               this.$router.push("/plants");
             }
-            
           }
         })
-        .catch(error => {
+        .catch((error) => {
           const response = error.response;
           if (response.status === 401) {
             this.invalidCredentials = true;
           }
         });
-    }
-  }
+    },
+  },
 };
 </script>

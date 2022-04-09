@@ -3,14 +3,14 @@
   <!-- Above: quick and easy way to center all text -->
   <b-container id="profile">
     <b-row>
-      <h2>
+      <p class="section-header">
         You look great in green,
         {{
           this.$store.state.profile.displayName === undefined
             ? this.$store.state.user.username
             : this.$store.state.profile.displayName
         }}!
-      </h2>
+      </p>
     </b-row>
     <b-container class="profile-details">
       <b-row>

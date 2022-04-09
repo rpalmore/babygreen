@@ -40,7 +40,7 @@ https://coolors.co/palette/729b79-475b63-2e2c2f-d34e24-f5e4d7 */
 }
 #container-main {
   background-color: var(--grey);
-  /* min-height: 86vh; */
+  min-height: 86vh;
   height: auto;
   border: 1px solid var(--dark);
   /* background-color: var(--light); */
@@ -58,5 +58,11 @@ h2 {
 }
 a {
   color: var(--dark);
+}
+.btn.homepage {
+  background-color: var(--dark);
+  border-right: 3px solid var(--orange);
+  border-left: 3px solid var(--orange);
+  color: var(--light);
 }
 </style>

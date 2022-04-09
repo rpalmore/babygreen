@@ -45,6 +45,7 @@ export default {
   background: url(../assets/avinash-kumar-1-unsplash-nav.webp) center center;
   background-size: cover;
   height: 100%;
+  border-bottom: 3px solid var(--orange);
 }
 .nav-pills .nav-link.active,
 .nav-pills .show > .nav-link,
