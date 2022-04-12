@@ -6,8 +6,9 @@
 export default {
   created() {
     this.$store.commit("LOGOUT");
+    if (this.$route != "/") {
     this.$router.push("/");
-    // todo: redirect to another page where login component will load
+    }
   }
 };
 </script>

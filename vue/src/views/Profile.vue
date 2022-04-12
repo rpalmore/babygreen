@@ -41,6 +41,15 @@
           >
         </b-col>
       </b-row>
+      <b-row>
+        <b-col><span class="profile-question">I most recently ...</span></b-col>
+        <b-col
+          ><span class="profile-answer">
+            {{ this.$store.state.latestTreatment.careType }} plants on
+            {{ this.$store.state.latestTreatment.careDate }}
+          </span>
+        </b-col>
+      </b-row>
     </b-container>
     <p class="section-header">
       {{
@@ -95,6 +104,7 @@
 
 <script>
 import profileService from "../services/ProfileService";
+import treatmentService from "../services/TreatmentService";
 export default {
   name: "profile",
   data() {
@@ -105,7 +115,7 @@ export default {
       modal: "",
       skill: [
         { text: "Select One", value: null },
-        "Beginner",
+        "Seedling (Beginner)",
         "Intermediate",
         "Advanced",
       ],
@@ -168,6 +178,18 @@ export default {
           }
         });
     },
+  },
+  created() {
+    treatmentService
+      .getLatestTreatment()
+      .then((response) => {
+        if (response.status == 200) {
+          this.$store.commit("SET_LATEST_TREATMENT", response.data);
+        }
+      })
+      .catch((err) => {
+        alert(err + " problem getting latest treatment!");
+      });
   },
 };
 </script>

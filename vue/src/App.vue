@@ -28,23 +28,38 @@ export default {
 /* Coolers palette: 
 https://coolors.co/palette/729b79-475b63-2e2c2f-d34e24-f5e4d7 */
 :root {
-  --green: #729B79;
+  /* --green: #729B79;
   --grey: #475B63;
   --dark: #2E2C2F;
   --orange: #D34E24;
-  --light: #F5E4D7;
+  --light: #F5E4D7; */
+  /* Coolers palette: https://coolors.co/palette/190b28-bacdb0-729b79-475b63-b74f6f */
+  --green: #729b79;
+  --grey: #475b63;
+  --dark: #190b28;
+  --orange: #b74f6f;
+  --light: #bacdb0;
+  /* Extra color for font where needed */
+  --platinum: #ecedea;
+  /* --green:  #F2CC8F;
+  --grey: #81B29A;
+  --dark: #3D405B;
+  --orange: #E07A5F;
+  --light: #F4F1DE; */
 }
 #app {
+  background-color: var(--orange);
   /* background-color: var(--grey); */
-  background-color: var(--dark);
+  /* background-color: var(--dark); */
 }
 #container-main {
   background-color: var(--grey);
+  background-color: var(--light);
   min-height: 86vh;
   height: auto;
   border: 1px solid var(--dark);
   /* background-color: var(--light); */
-  border-top: 1px solid var(--orange);
+  border-top: 7px solid var(--grey);
   /* padding-top: 20px; */
 }
 /* span#branding {
@@ -63,7 +78,7 @@ a {
   background-color: var(--dark);
   border-right: 3px solid var(--orange);
   border-left: 3px solid var(--orange);
-  color: var(--light);
+  color: var(--platinum);
 }
 .btn.delete {
   background-color: var(--orange);

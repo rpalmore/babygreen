@@ -7,10 +7,10 @@ import java.util.List;
 
 public interface TreatmentDao {
 
-    //List<Treatment> getAllTreats(int userId);
-
     List<Treatment> getSinglePlantEvents(int plantId);
 
     Treatment createCareEvent(Treatment careEvent);
+
+    Treatment getLatestTreatment(int userId);
 
 }

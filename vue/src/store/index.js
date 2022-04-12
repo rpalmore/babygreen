@@ -25,6 +25,7 @@ export default new Vuex.Store({
     profile: JSON.parse(localStorage.getItem('profile') || '{}'),
     plants: JSON.parse(localStorage.getItem('plants') || '{}'),
     treatments: JSON.parse(localStorage.getItem('treatments') || '{}'),
+    latestTreatment: JSON.parse(localStorage.getItem('latestTreatment') || '{}'),
     notes: JSON.parse(localStorage.getItem('notes') || '{}'),
   },
   mutations: {
@@ -35,14 +36,14 @@ export default new Vuex.Store({
     },
     SET_USER(state, user) {
       state.user = user;
-      localStorage.setItem('user',JSON.stringify(user));
+      localStorage.setItem('user', JSON.stringify(user));
     },
     SET_PROFILE(state, payload) {
       state.profile = payload;
       localStorage.setItem('profile', JSON.stringify(state.profile));
     },
     ADD_PLANT(state, plant) {
-      state.plants.unshift(plant);
+      state.plants.push(plant);
       localStorage.setItem('plants', JSON.stringify(state.plants));
     },
     SET_PLANTS(state, payload) {
@@ -64,6 +65,10 @@ export default new Vuex.Store({
     SET_TREATMENTS(state, payload) {
       state.treatments = payload;
       localStorage.setItem('treatments', JSON.stringify(state.treatments));
+    },
+    SET_LATEST_TREATMENT(state, payload) {
+      state.latestTreatment = payload;
+      localStorage.setItem('latestTreatment', JSON.stringify(state.latestTreatment));
     },
     DELETE_TREATMENT(state, treatment) {
       state.treatments = state.treatments.filter((t) => t.plantId != treatment.plantId || t.careId != treatment.careId);

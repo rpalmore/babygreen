@@ -13,6 +13,10 @@ export default {
         return axios.get('/plants/' + plantId + '/care');
     },
 
+    getLatestTreatment() {
+        return axios.get('/care/latest');
+    },
+
     deleteTreatment(plantId, careId) {
         return axios.delete('/deleteTreatment/' + plantId + '/' + careId)
     }

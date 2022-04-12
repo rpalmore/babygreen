@@ -86,7 +86,7 @@ public class JdbcPlantDao implements PlantDao {
                 "SET plant_img = ?, plant_name = ?, indoor = ?, info_url = ?, plant_age = ? " +
                 "WHERE plant_id = ?";
         template.update(sql, updatedPlant.getPlantImg(), updatedPlant.getPlantName(),
-                updatedPlant.getIndoor(), updatedPlant.getInfoUrl(), updatedPlant.getPlantAge(),updatedPlant.getPlantId());
+                updatedPlant.getIndoor(), updatedPlant.getInfoUrl(), updatedPlant.getPlantAge(), updatedPlant.getPlantId());
     }
 
     @Override

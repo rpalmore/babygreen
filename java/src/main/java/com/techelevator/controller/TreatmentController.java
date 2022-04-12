@@ -50,6 +50,13 @@ public class TreatmentController {
         return treatmentDetailsDao.getAllTreatments(userId);
     }
 
+    @RequestMapping(path="/care/latest", method=RequestMethod.GET)
+    public Treatment getLatestTreatment(Principal principal) {
+        String username = principal.getName();
+        int userId = userDao.findIdByUsername(username);
+        return treatmentDao.getLatestTreatment(userId);
+    }
+
     @RequestMapping(path="/deleteTreatment/{plantId}/{careId}", method=RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteTreatment(@PathVariable int plantId, @PathVariable int careId) {

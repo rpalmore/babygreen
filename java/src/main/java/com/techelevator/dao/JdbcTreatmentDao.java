@@ -2,6 +2,7 @@ package com.techelevator.dao;
 
 import com.techelevator.model.Treatment;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.SqlInOutParameter;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
 
@@ -67,5 +68,32 @@ public class JdbcTreatmentDao implements TreatmentDao {
         }
 
         return careEvent;
+    }
+
+    @Override
+    public Treatment getLatestTreatment(int userId) {
+
+        // If I want to count the number of plants that were treated, I can pass that
+        // int to a second Sql statement (after returning it from the statement below.
+        // BUT this requires a new data model and dao, etc.
+
+        // This would be displayed on profile page: I recently watered 6 plants on [date].
+
+        String sql = "SELECT care_type, care_date " +
+                "FROM treatments " +
+                "JOIN plants_treatments ON plants_treatments.care_id = treatments.care_id " +
+                "JOIN plants on plants.plant_id = plants_treatments.plant_id " +
+                "WHERE user_id = ? " +
+                "ORDER BY care_date DESC " +
+                "LIMIT 1";
+        SqlRowSet results = template.queryForRowSet(sql, userId);
+
+        Treatment treatment = null;
+        if (results.next()) {
+            treatment = new Treatment();
+            treatment.setCareType(results.getString("care_type"));
+            treatment.setCareDate(results.getDate("care_date").toLocalDate());
+        }
+        return treatment;
     }
 }
