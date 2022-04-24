@@ -18,7 +18,8 @@
       v-for="treatment in treatments"
       v-bind:key="treatment.treatmentId"
     >
-      I was {{ treatment.careType }} on {{ treatment.careDate }}
+      I was {{ treatment.careType }} on
+      {{ formatDateDay(treatment.careDate.replace(/-/g, "\/")) }}
       <a v-on:click="deleteTreatment(treatment)">&#10006;</a>
     </div>
     <p>
@@ -120,6 +121,15 @@ export default {
     },
   },
   methods: {
+    formatDateDay(date) {
+      const options = {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      };
+      return new Date(date).toLocaleDateString("en-US", options);
+    },
     toggleInfoForm() {
       this.showInfoForm === true
         ? (this.showInfoForm = false)

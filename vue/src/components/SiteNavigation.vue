@@ -2,9 +2,28 @@
   <b-card-header header-tag="nav" v-if="$store.state.token != ''">
     <b-nav pills>
       <!-- <b-nav-text>baby green</b-nav-text> -->
-      <b-nav-item :to="{ name: 'plants' }" exact exact-active-class="active"
-        >My Plants</b-nav-item
+      <b-nav-item-dropdown
+        id="nav-dropdown"
+        text="My Plants"
+        toggle-class="nav-link-custom"
+        left
       >
+        <b-dropdown-item
+          :to="{ name: 'plants' }"
+          exact
+          exact-active-class="active"
+          >All Plants</b-dropdown-item
+        >
+        <b-dropdown-item
+          v-bind:plant="plant"
+          v-for="plant in plants"
+          v-bind:key="plant.plantId"
+          :to="{ name: 'plant-detail', params: { plantId: plant.plantId } }"
+          exact
+          exact-active-class="active"
+          >{{ plant.plantName }}</b-dropdown-item
+        >
+      </b-nav-item-dropdown>
       <b-nav-item :to="{ name: 'plant-care' }" exact exact-active-class="active"
         >Plant Care</b-nav-item
       >
@@ -15,7 +34,7 @@
         id="nav-dropdown"
         text="Account"
         toggle-class="nav-link-custom"
-        right
+        left
       >
         <b-dropdown-item
           :to="{ name: 'about' }"
@@ -37,6 +56,11 @@
 <script>
 export default {
   name: "site-header",
+  computed: {
+    plants() {
+      return this.$store.state.plants;
+    },
+  },
 };
 </script>
 

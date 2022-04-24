@@ -1,12 +1,14 @@
 <template>
-  <div id="plant-view">
-    <h2>
+  <b-container id="plant-view">
+    <b-row>
+    <p class="section-header">
       {{
         this.$store.state.profile.displayName === undefined
           ? this.$store.state.user.username
           : this.$store.state.profile.displayName
       }}&#8217;s plants
-    </h2>
+    </p>
+    </b-row>
     <p>
       This page lists all plants associated with user. Features to add: sort by
       indoor/outdoor; select plants to record that you watered them, defaulting
@@ -65,6 +67,7 @@
         <button id="submit">Save</button>
       </form>
     </div>
+    <!-- Form to log plant care -->
     <form v-on:submit.prevent="logCare">
       <label for="watered">Watered</label>
       <input
@@ -96,7 +99,7 @@
         value="repotted"
         v-model="treatment.careType"
       />
-      <label for="treated">Pest Treatment</label>
+      <label for="treated">Treated for pests</label>
       <input
         v-bind:disabled="btnDisabled"
         required
@@ -151,7 +154,7 @@
       <label for="outdoor">Outdoor</label>
       <button id="submit">Save</button>
     </form>
-  </div>
+  </b-container>
 </template>
 
 <script>
@@ -276,7 +279,15 @@ export default {
 </script>
 
 <style>
+#plant-view .section-header {
+  border-top: 3px solid var(--orange);
+  border-bottom: 3px solid var(--orange);
+}
+#plant-view > .row {
+  justify-content: center;
+  text-align: center;
+}
 #plant-form {
-  background-color: lightcoral;
+  
 }
 </style>

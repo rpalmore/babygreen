@@ -44,7 +44,8 @@ export default {
 <style>
 .section-header {
   /* text-align: center; */
-  padding-top: 20px;
+  /* padding-top: 20px; */
+  margin-top: 20px;
   font-size: 1.5rem;
   font-weight: 300;
   color: var(--light);

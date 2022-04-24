@@ -41,11 +41,20 @@
           >
         </b-col>
       </b-row>
-      <b-row>
+      <b-row
+        v-if="
+          this.$store.state.treatments != ''"
+      >
         <b-col><span class="profile-question">I most recently ...</span></b-col>
         <b-col
           ><span class="profile-answer">
-            {{ this.$store.state.latestTreatment.careType }} plants on
+            {{ this.$store.state.latestTreatment.careType }}
+            {{ this.$store.state.latestTreatment.numPlants }}
+            {{
+              this.$store.state.latestTreatment.numPlants == 1
+                ? " plant on "
+                : "plants on "
+            }}
             {{ this.$store.state.latestTreatment.careDate }}
           </span>
         </b-col>
@@ -60,7 +69,7 @@
     </p>
 
     <!-- Create or edit your profile -->
-    <b-form v-on:submit.prevent="saveProfile" id="profile-form">
+    <b-form @submit.prevent="saveProfile" id="profile-form">
       <b-form-group
         id="input-group-1"
         label="Display name:"
@@ -121,6 +130,11 @@ export default {
       ],
     };
   },
+  computed: {
+    treatments() {
+      return this.$store.state.treatments;
+    },
+  },
   methods: {
     cancel() {
       this.profile = {
@@ -128,7 +142,9 @@ export default {
       };
     },
     saveProfile() {
-      if (this.$store.state.profile.favePlant === "") {
+      // eslint-disable-next-line no-console
+      console.log(this.$store.state.profile.favePlant);
+      if (this.$store.state.profile.favePlant == undefined) {
         profileService
           .createProfile(this.profile)
           .then((response) => {

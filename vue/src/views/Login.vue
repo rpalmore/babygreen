@@ -5,7 +5,7 @@
         invalidCredentials
           ? "Invalid username and password!"
           : this.$route.query.registration
-          ? "Thank you for registering, please sign in"
+          ? "Thank you for registering, please sign in."
           : "Please sign in"
       }}
     </p>

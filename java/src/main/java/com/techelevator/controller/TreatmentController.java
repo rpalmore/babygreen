@@ -1,9 +1,7 @@
 package com.techelevator.controller;
 
-import com.techelevator.dao.PlantTreatmentDao;
-import com.techelevator.dao.TreatmentDao;
-import com.techelevator.dao.TreatmentDetailsDao;
-import com.techelevator.dao.UserDao;
+import com.techelevator.dao.*;
+import com.techelevator.model.LatestTreatment;
 import com.techelevator.model.Treatment;
 import com.techelevator.model.TreatmentDetails;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +28,9 @@ public class TreatmentController {
     PlantTreatmentDao plantTreatmentDao;
 
     @Autowired
+    LatestTreatmentDao latestTreatmentDao;
+
+    @Autowired
     UserDao userDao;
 
     @RequestMapping(path="/createTreatment", method=RequestMethod.POST)
@@ -51,10 +52,10 @@ public class TreatmentController {
     }
 
     @RequestMapping(path="/care/latest", method=RequestMethod.GET)
-    public Treatment getLatestTreatment(Principal principal) {
+    public LatestTreatment getLatestTreatment(Principal principal) {
         String username = principal.getName();
         int userId = userDao.findIdByUsername(username);
-        return treatmentDao.getLatestTreatment(userId);
+        return latestTreatmentDao.getLatestTreatment(userId);
     }
 
     @RequestMapping(path="/deleteTreatment/{plantId}/{careId}", method=RequestMethod.DELETE)

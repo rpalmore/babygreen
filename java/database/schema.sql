@@ -19,7 +19,7 @@ CREATE TABLE users (
 	username varchar(50) NOT NULL,
 	password_hash varchar(200) NOT NULL,
 	role varchar(50) NOT NULL,
-	CONSTRAINT PK_user PRIMARY KEY (user_id)
+	CONSTRAINT PK_user PRIMARY KEY(user_id)
 );
 
 CREATE TABLE profiles (
@@ -29,8 +29,8 @@ CREATE TABLE profiles (
     profile_img varchar(500),
     fave_plant varchar(200),
     skill_level varchar(50),
-    CONSTRAINT PK_profile PRIMARY KEY (profile_id),
-    CONSTRAINT FK_user FOREIGN KEY (user_id)
+    CONSTRAINT PK_profile PRIMARY KEY(profile_id),
+    CONSTRAINT FK_user FOREIGN KEY(user_id)
     REFERENCES users(user_id)
 );
 
@@ -42,8 +42,8 @@ CREATE TABLE plants (
     indoor BOOLEAN NOT NULL,
     info_url varchar(500),
     plant_age DATE DEFAULT CURRENT_DATE NOT NULL,
-    CONSTRAINT PK_plant PRIMARY KEY (plant_id),
-    CONSTRAINT FK_user FOREIGN KEY (user_id)
+    CONSTRAINT PK_plant PRIMARY KEY(plant_id),
+    CONSTRAINT FK_user FOREIGN KEY(user_id)
     REFERENCES users(user_id)
 );
 
@@ -53,8 +53,8 @@ CREATE TABLE notes (
     note TEXT,
     note_img VARCHAR(500),
     created_on DATE DEFAULT CURRENT_DATE NOT NULL,
-    CONSTRAINT PK_note PRIMARY KEY (note_id),
-    CONSTRAINT FK_plant FOREIGN KEY (plant_id)
+    CONSTRAINT PK_note PRIMARY KEY(note_id),
+    CONSTRAINT FK_plant FOREIGN KEY(plant_id)
     REFERENCES plants(plant_id)
     ON DELETE CASCADE
 );
@@ -63,7 +63,7 @@ CREATE TABLE treatments (
     care_id serial,
     care_date date NOT NULL,
     care_type varchar(300),
-    CONSTRAINT PK_care_id PRIMARY KEY (care_id)
+    CONSTRAINT PK_care_id PRIMARY KEY(care_id)
 );
 
 CREATE TABLE plants_treatments (

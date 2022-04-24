@@ -1,7 +1,9 @@
 package com.techelevator.dao;
 
 import com.techelevator.model.Plant;
+import com.techelevator.model.Treatment;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.SqlInOutParameter;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
 
@@ -94,5 +96,15 @@ public class JdbcPlantDao implements PlantDao {
 
         String sql = "DELETE FROM plants WHERE plant_id = ?";
         template.update(sql, plantId);
+
+        /**
+         * Next, delete the treatment care_ids that are no longer
+        included in the plants_treatments associative table:
+         **/
+
+        String sql2 = "DELETE FROM treatments " +
+                "WHERE care_id NOT IN (SELECT care_id FROM plants_treatments)";
+        template.update(sql2);
+
     }
 }
