@@ -10,24 +10,23 @@
     </p>
     <!-- <h3>Monday, April 4</h3>
     <p>Watered Croton, Gardenia, Rubber tree</p> -->
-    {{ testing() }}
 
-    <!-- <div
-      v-bind:treatment="treatment"
-      v-for="treatment in treatments"
-      v-bind:key="treatment.treatmentId"
-    >
-      <h3>{{ formatDateDay(treatment.careDate.replace(/-/g, "\/")) }}</h3>
-      
-      {{ treatment.careType }}
-      <router-link
-        :to="{ name: 'plant-detail', params: { plantId: treatment.plantId } }"
-      >
-        {{ treatment.plantName }}
-      </router-link>
-      {{ treatment.careId }}
-      <a v-on:click="deleteTreatment(treatment)">&#10006;</a>
-    </div> -->
+    <div v-for="uniqueDate in formatTreatment()" v-bind:key="uniqueDate.itemId">
+      <h3>{{ formatDateDay(uniqueDate.replace(/-/g, "\/")) }}</h3>
+      <div v-for="treatment in treatments" v-bind:key="treatment.treatmentId">
+        {{ uniqueDate === treatment.careDate ? treatment.careType : " " }}
+        <router-link
+          :to="{ name: 'plant-detail', params: { plantId: treatment.plantId } }"
+        >
+          {{ uniqueDate === treatment.careDate ? treatment.plantName : " " }}
+        </router-link>
+        <a
+          v-if="uniqueDate === treatment.careDate"
+          v-on:click="deleteTreatment(treatment)"
+          >&#10006;</a
+        >
+      </div>
+    </div>
   </div>
 </template>
 
@@ -39,32 +38,22 @@ export default {
     treatments() {
       return this.$store.state.treatments;
     },
-    // plants() {
-    //   return this.$store.state.plants;
-    // },
-    data() {
-      return {
-        modal: "",
-      };
-    },
+  },
+  data() {
+    return {
+      modal: "",
+    };
   },
   methods: {
-    // trying a method to get the results I want to display
-    
-    testing() {
-      const distinct = [];
-      for (let i = 0; i < this.treatments.length -1; i++) {
-        if (this.treatments[i].careDate != this.treatments[i+1].careDate) {
-          distinct.push(this.treatments[i].careDate)
+    formatTreatment() {
+      let uniqueDates = [];
+      for (let i = 0; i < this.treatments.length; i++) {
+        if (!uniqueDates.includes(this.treatments[i].careDate)) {
+          uniqueDates.push(this.treatments[i].careDate);
         }
       }
-    
-
-        // eslint-disable-next-line no-console
-        console.log(distinct);
- 
+      return uniqueDates;
     },
-
     formatDateDay(date) {
       const options = {
         weekday: "long",
@@ -100,8 +89,6 @@ export default {
       .getAllTreatments()
       .then((response) => {
         if (response.status == 200) {
-          // eslint-disable-next-line no-console
-          console.log(response.data);
           this.$store.commit("SET_TREATMENTS", response.data);
         }
       })
