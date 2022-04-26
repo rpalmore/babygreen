@@ -26,6 +26,7 @@ export default new Vuex.Store({
     plants: JSON.parse(localStorage.getItem('plants') || '{}'),
     treatments: JSON.parse(localStorage.getItem('treatments') || '{}'),
     latestTreatment: JSON.parse(localStorage.getItem('latestTreatment') || '{}'),
+    latestWatering: JSON.parse(localStorage.getItem('latestWatering') || '{}'),
     notes: JSON.parse(localStorage.getItem('notes') || '{}'),
   },
   mutations: {
@@ -69,6 +70,10 @@ export default new Vuex.Store({
     SET_LATEST_TREATMENT(state, payload) {
       state.latestTreatment = payload;
       localStorage.setItem('latestTreatment', JSON.stringify(state.latestTreatment));
+    },
+    SET_LATEST_WATERING(state, payload) {
+      state.latestWatering = payload;
+      localStorage.setItem('latestWatering', JSON.stringify(state.latestWatering));
     },
     DELETE_TREATMENT(state, treatment) {
       state.treatments = state.treatments.filter((t) => t.plantId != treatment.plantId || t.careId != treatment.careId);

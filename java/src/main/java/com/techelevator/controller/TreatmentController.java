@@ -31,9 +31,6 @@ public class TreatmentController {
     LatestTreatmentDao latestTreatmentDao;
 
     @Autowired
-    TreatmentTestDao treatmentTestDao;
-
-    @Autowired
     UserDao userDao;
 
     @RequestMapping(path="/createTreatment", method=RequestMethod.POST)
@@ -54,12 +51,12 @@ public class TreatmentController {
         return treatmentDetailsDao.getAllTreatments(userId);
     }
 
-//    @RequestMapping(path="/care", method=RequestMethod.GET)
-//    public List<TreatmentTest> getTreatmentTest(Principal principal) {
-//        String username = principal.getName();
-//        int userId = userDao.findIdByUsername(username);
-//        return treatmentTestDao.getAllTreatmentsTest(userId);
-//    }
+    @RequestMapping(path="/care/watered", method=RequestMethod.GET)
+    public List<TreatmentDetails> getLatestWaterings(Principal principal) {
+        String username = principal.getName();
+        int userId = userDao.findIdByUsername(username);
+        return treatmentDetailsDao.getLatestWaterings(userId);
+    }
 
     @RequestMapping(path="/care/latest", method=RequestMethod.GET)
     public LatestTreatment getLatestTreatment(Principal principal) {

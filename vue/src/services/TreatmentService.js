@@ -9,6 +9,10 @@ export default {
         return axios.get('/care')
     },
 
+    getLatestWaterings() {
+        return axios.get('/care/watered');
+    },
+
     getSinglePlantTreatments(plantId) {
         return axios.get('/plants/' + plantId + '/care');
     },

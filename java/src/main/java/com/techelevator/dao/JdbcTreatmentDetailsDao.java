@@ -1,5 +1,6 @@
 package com.techelevator.dao;
 
+import com.techelevator.model.Treatment;
 import com.techelevator.model.TreatmentDetails;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
@@ -31,7 +32,7 @@ public class JdbcTreatmentDetailsDao implements TreatmentDetailsDao {
                 "ORDER BY care_date DESC";
         SqlRowSet results = template.queryForRowSet(sql, userId);
 
-        while(results.next()) {
+        while (results.next()) {
             TreatmentDetails details = new TreatmentDetails();
             details.setCareDate(results.getDate("care_date").toLocalDate());
             details.setCareType(results.getString("care_type"));
@@ -43,5 +44,32 @@ public class JdbcTreatmentDetailsDao implements TreatmentDetailsDao {
         }
 
         return treatmentDetails;
+    }
+
+    @Override
+    public List<TreatmentDetails> getLatestWaterings(int userId) {
+
+        List<TreatmentDetails> latestWaterings = new ArrayList<>();
+
+        String sql = "SELECT plants.plant_id, plant_name, MAX(treatments.care_date) " +
+                "FROM plants " +
+                "JOIN plants_treatments ON plants_treatments.plant_id = plants.plant_id " +
+                "JOIN treatments ON treatments.care_id = plants_treatments.care_id " +
+                "WHERE user_id = ? AND treatments.care_type = 'watered' " +
+                "GROUP BY plants.plant_id";
+        SqlRowSet results = template.queryForRowSet(sql, userId);
+
+        while (results.next()) {
+            TreatmentDetails treatment = new TreatmentDetails();
+            treatment.setCareDate(results.getDate("max").toLocalDate());
+//            treatment.setCareType(results.getString("care_type"));
+            treatment.setPlantName(results.getString("plant_name"));
+            treatment.setPlantId(results.getInt("plant_id"));
+//            treatment.setCareId(results.getInt("care_id"));
+
+            latestWaterings.add(treatment);
+        }
+
+        return latestWaterings;
     }
 }

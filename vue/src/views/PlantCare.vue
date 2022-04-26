@@ -2,19 +2,21 @@
 <template>
   <div id="plant-care">
     <h2>Plant care</h2>
-    <p>
-      This page should list, by a heading of most recent date (Monday, March
-      28), which plants were watered. You can click on any plant in the list to
-      go to its detail page, much like the "My plants" page. The purpose of the
-      page is to offer a quick snapshot of which plants were last treated.
-    </p>
+
     <!-- <h3>Monday, April 4</h3>
     <p>Watered Croton, Gardenia, Rubber tree</p> -->
 
+    <!-- {{ treatments }} -->
+
     <div v-for="uniqueDate in formatTreatment()" v-bind:key="uniqueDate.itemId">
-      <h3>{{ formatDateDay(uniqueDate.replace(/-/g, "\/")) }}</h3>
+      <h4>{{ formatDateDay(uniqueDate.replace(/-/g, "\/")) }}</h4>
       <div v-for="treatment in treatments" v-bind:key="treatment.treatmentId">
-        {{ uniqueDate === treatment.careDate ? treatment.careType : " " }}
+        {{
+          uniqueDate === treatment.careDate
+            ? treatment.careType.substring(0, 1).toUpperCase() +
+              treatment.careType.substring(1)
+            : " "
+        }}
         <router-link
           :to="{ name: 'plant-detail', params: { plantId: treatment.plantId } }"
         >

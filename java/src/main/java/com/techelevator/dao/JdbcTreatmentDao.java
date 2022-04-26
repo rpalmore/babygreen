@@ -46,7 +46,6 @@ public class JdbcTreatmentDao implements TreatmentDao {
         return singlePlantTreatments;
     }
 
-
     @Override
     public Treatment createCareEvent(Treatment careEvent) {
 

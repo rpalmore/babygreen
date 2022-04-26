@@ -1,13 +1,13 @@
 <template>
   <b-container id="plant-view">
     <b-row>
-    <p class="section-header">
-      {{
-        this.$store.state.profile.displayName === undefined
-          ? this.$store.state.user.username
-          : this.$store.state.profile.displayName
-      }}&#8217;s plants
-    </p>
+      <p class="section-header">
+        {{
+          this.$store.state.profile.displayName === undefined
+            ? this.$store.state.user.username
+            : this.$store.state.profile.displayName
+        }}&#8217;s plants
+      </p>
     </b-row>
     <p>
       This page lists all plants associated with user. Features to add: sort by
@@ -16,7 +16,9 @@
       thumbnail of each plant at left (in circle) or a placeholder image if no
       photo has been uploaded -- including for plants just added, for example.
     </p>
-    <p>To do: Filter by indoor/outdoor and do a text search for plants by name.</p>
+    <p>
+      To do: Filter by indoor/outdoor and do a text search for plants by name.
+    </p>
     <p id="select-all">
       <input type="checkbox" v-model="checkAll" v-on:change="selectAll" />
       Select all
@@ -42,6 +44,19 @@
       }}</a>
       |
       {{ plant.indoor == true ? "indoor" : "outdoor" }}
+      |
+      <!-- Need to find a way to limit this to one watering event -->
+      <span
+        v-for="treatment in latestWatering"
+        v-bind:key="treatment.treatmentId"
+        >{{
+          plant.plantId === treatment.plantId
+            ? "Last watered on " +
+              formatDateDay(treatment.careDate.replace(/-/g, "\/"))
+            : " "
+        }}</span
+      >
+      <!-- End of watered code -->
     </div>
     <div id="form-container">
       <form
@@ -174,12 +189,15 @@ export default {
       treatment: {
         plantId: [],
       },
-      modal: '',
+      modal: "",
     };
   },
   computed: {
     plants() {
       return this.$store.state.plants;
+    },
+    latestWatering() {
+      return this.$store.state.latestWatering;
     },
     btnDisabled() {
       if (this.selectedPlantIds.length === 0) {
@@ -242,7 +260,7 @@ export default {
         });
     },
     deletePlant(plantId) {
-      this.modal = '';
+      this.modal = "";
       this.$bvModal
         .msgBoxConfirm("Are you sure you want to delete this plant?")
         .then((value) => {
@@ -274,6 +292,27 @@ export default {
           alert(err + " problem editing plant!");
         });
     },
+    formatDateDay(date) {
+      const options = {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      };
+      return new Date(date).toLocaleDateString("en-US", options);
+    },
+  },
+  created() {
+    treatmentService
+      .getLatestWaterings()
+      .then((response) => {
+        if (response.status == 200) {
+          this.$store.commit("SET_LATEST_WATERING", response.data);
+        }
+      })
+      .catch((err) => {
+        alert(err + " problem getting latest waterings!");
+      });
   },
 };
 </script>
@@ -288,6 +327,5 @@ export default {
   text-align: center;
 }
 #plant-form {
-  
 }
 </style>

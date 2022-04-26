@@ -9,7 +9,6 @@ public class Note {
     private int plantId;
     private String note;
     private String noteImg;
-    @JsonFormat(pattern="dd-MM-yyyy")
     private LocalDate createdOn;
 
     public int getNoteId() {

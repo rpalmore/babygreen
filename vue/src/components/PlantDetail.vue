@@ -63,7 +63,7 @@
     </form>
     <div id="note-container" v-for="note in notes" v-bind:key="note.noteId">
       {{ note.note }}
-      {{ note.createdOn }}&nbsp;
+      {{ formatDateDay(note.createdOn.replace(/-/g, "\/")) }}&nbsp;
       <a v-on:click="deleteNote(note.noteId)">&#10006;</a>&nbsp;
       <a v-on:click.prevent="toggleNoteForm(note)">{{
         showNoteForm === true ? "cancel" : "edit"

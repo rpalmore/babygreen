@@ -11,6 +11,4 @@ public interface TreatmentDao {
 
     Treatment createCareEvent(Treatment careEvent);
 
-    //Treatment getLatestTreatment(int userId);
-
 }

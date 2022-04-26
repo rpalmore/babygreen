@@ -8,4 +8,6 @@ public interface TreatmentDetailsDao {
 
     List<TreatmentDetails> getAllTreatments(int userId);
 
+    List<TreatmentDetails> getLatestWaterings(int userId);
+
 }
