@@ -62,10 +62,8 @@ public class JdbcTreatmentDetailsDao implements TreatmentDetailsDao {
         while (results.next()) {
             TreatmentDetails treatment = new TreatmentDetails();
             treatment.setCareDate(results.getDate("max").toLocalDate());
-//            treatment.setCareType(results.getString("care_type"));
             treatment.setPlantName(results.getString("plant_name"));
             treatment.setPlantId(results.getInt("plant_id"));
-//            treatment.setCareId(results.getInt("care_id"));
 
             latestWaterings.add(treatment);
         }

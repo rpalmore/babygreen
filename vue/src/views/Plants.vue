@@ -18,46 +18,106 @@
     </p>
     <p>
       To do: Filter by indoor/outdoor and do a text search for plants by name.
+      <!-- {{ plants }} -->
+      <!-- {{ latestWatering }} -->
     </p>
-    <p id="select-all">
-      <input type="checkbox" v-model="checkAll" v-on:change="selectAll" />
-      Select all
-    </p>
-    <div
-      v-bind:plant="plant"
-      v-for="plant in plants"
-      v-bind:key="plant.plantId"
-    >
-      <input
-        type="checkbox"
-        v-bind:value="plant.plantId"
-        v-model="selectedPlantIds"
-      />
-      <router-link
-        :to="{ name: 'plant-detail', params: { plantId: plant.plantId } }"
-      >
-        {{ plant.plantName }}
-      </router-link>
-      <a v-on:click="deletePlant(plant.plantId)">&#10006;</a> |
-      <a v-on:click.prevent="toggleForm(plant)">{{
-        showForm === true ? "cancel" : "edit"
-      }}</a>
-      |
-      {{ plant.indoor == true ? "indoor" : "outdoor" }}
-      |
-      <!-- Need to find a way to limit this to one watering event -->
-      <span
-        v-for="treatment in latestWatering"
-        v-bind:key="treatment.treatmentId"
-        >{{
-          plant.plantId === treatment.plantId
-            ? "Last watered on " +
-              formatDateDay(treatment.careDate.replace(/-/g, "\/"))
-            : " "
-        }}</span
-      >
-      <!-- End of watered code -->
+    <div id="filter">
+      <b-form-checkbox v-model="checkAll" v-on:change="selectAll">
+        Select all
+      </b-form-checkbox>
     </div>
+
+    <!-- testing bootstrap table -->
+    <b-table striped hover :items="plants" :fields="fields">
+      <template #cell(selectAll)="data">
+        <b-form-checkbox
+          v-bind:value="data.item.plantId"
+          v-model="selectedPlantIds"
+          v-on:change="checkSelectedIds"
+        ></b-form-checkbox>
+      </template>
+      <template #cell(plantName)="data">
+        <router-link
+          :to="{ name: 'plant-detail', params: { plantId: data.item.plantId } }"
+        >
+          {{ data.item.plantName }}
+        </router-link>
+      </template>
+      <template #cell(indoor)="data">
+        {{ data.item.indoor === true ? "indoor" : "outdoor" }}
+      </template>
+      <template #cell(careDate)="data">
+        <span
+          v-for="treatment in latestWatering"
+          v-bind:key="treatment.treatmentId"
+          >{{
+            data.item.plantId === treatment.plantId
+              ? formatDateDay(treatment.careDate.replace(/-/g, "\/"))
+              : " "
+          }}</span
+        >
+      </template>
+      <template #cell(plantImg)> 
+        <!-- {{ data.item.plantImg === null ?  }} -->
+        <b-avatar></b-avatar>
+      </template>
+    </b-table>
+
+    <!-- formatted using a grid -->
+    <!-- <b-container id="plant-list">
+      <b-row id="filter">
+        <b-col>
+          <b-form-checkbox v-model="checkAll" v-on:change="selectAll">
+            Select all
+          </b-form-checkbox>
+        </b-col>
+      </b-row>
+      <b-row
+        align-v="center"
+        v-bind:plant="plant"
+        v-for="plant in plants"
+        v-bind:key="plant.plantId"
+      >
+        <b-col>
+          <b-form-checkbox
+            v-bind:value="plant.plantId"
+            v-model="selectedPlantIds"
+            v-on:change="checkSelectedIds"
+          >
+            <router-link
+              :to="{ name: 'plant-detail', params: { plantId: plant.plantId } }"
+            >
+              {{ plant.plantName }}
+            </router-link>
+          </b-form-checkbox>
+        </b-col>
+        <b-col>
+          <a v-on:click="deletePlant(plant.plantId)">&#10006;</a> |
+          <a v-on:click.prevent="toggleForm(plant)">{{
+            showForm === true ? "cancel" : "edit"
+          }}</a>
+        </b-col>
+        <b-col>
+          {{ plant.indoor == true ? "indoor" : "outdoor" }}
+        </b-col>
+        <b-col>
+          <span
+            v-for="treatment in latestWatering"
+            v-bind:key="treatment.treatmentId"
+            >{{
+              plant.plantId === treatment.plantId
+                ? formatDateDay(treatment.careDate.replace(/-/g, "\/"))
+                : " "
+            }}</span
+          >
+        </b-col>
+        <b-col>
+          <b-avatar></b-avatar>
+        </b-col>
+      </b-row>
+    </b-container> -->
+
+    <!-- edit a plant -->
     <div id="form-container">
       <form
         v-on:submit.prevent="editPlant(newPlant)"
@@ -82,6 +142,7 @@
         <button id="submit">Save</button>
       </form>
     </div>
+
     <!-- Form to log plant care -->
     <form v-on:submit.prevent="logCare">
       <label for="watered">Watered</label>
@@ -147,41 +208,47 @@
       </p>
       <button id="submit">Log</button>
     </form>
-    <h3>Add a plant</h3>
-    <form v-on:submit.prevent="addPlant" id="plant-form">
-      <label for="plantName">Name of plant:</label>
-      <input type="text" class="plant-form" v-model="plant.plantName" />
-      <input
-        required
-        type="radio"
-        name="indoor"
-        value="true"
-        v-model="plant.indoor"
-      />
-      <label for="indoor">Indoor</label>
-      <input
-        required
-        type="radio"
-        name="indoor"
-        value="false"
-        v-model="plant.indoor"
-      />
-      <label for="outdoor">Outdoor</label>
-      <button id="submit">Save</button>
-    </form>
+    <AddPlant />
   </b-container>
 </template>
 
 <script>
+import AddPlant from "../components/AddPlant.vue";
 import plantService from "../services/PlantService";
 import treatmentService from "../services/TreatmentService";
 export default {
+  components: { AddPlant },
   name: "plants",
   data() {
     return {
       plant: {
         userId: this.$store.state.user.id,
       },
+      fields: [
+        {
+          key: "selectAll",
+          label: "",
+          // need to add a checkbox here somehow
+        },
+        {
+          key: "plantName",
+          sortable: true,
+        },
+        {
+          key: "indoor",
+          label: "Location",
+          sortable: true,
+        },
+        {
+          key: "careDate",
+          label: "Last Watered",
+          sortable: true,
+        },
+        {
+          key: "plantImg",
+          label: "Image",
+        },
+      ],
       newPlant: {},
       showForm: false,
       selectedPlantIds: [],
@@ -200,14 +267,15 @@ export default {
       return this.$store.state.latestWatering;
     },
     btnDisabled() {
-      if (this.selectedPlantIds.length === 0) {
-        return true;
-      } else {
-        return false;
-      }
+      return this.selectedPlantIds.length === 0 ? true : false;
     },
   },
   methods: {
+    checkSelectedIds() {
+      this.selectedPlantIds.length === this.$store.state.plants.length
+        ? (this.checkAll = true)
+        : (this.checkAll = false);
+    },
     logCare() {
       this.treatment.plantId = this.selectedPlantIds;
       treatmentService
@@ -226,11 +294,7 @@ export default {
     },
     toggleForm(plant) {
       this.newPlant = plant;
-      if (this.showForm === true) {
-        this.showForm = false;
-      } else {
-        this.showForm = true;
-      }
+      this.showForm === true ? (this.showForm = false) : (this.showForm = true);
     },
     selectAll() {
       if (this.checkAll === true) {
@@ -239,25 +303,12 @@ export default {
             this.selectedPlantIds.push(this.plants[i].plantId);
           }
         }
+        // eslint-disable-next-line no-console
+        console.log(this.selectedPlantIds);
       } else {
         this.selectedPlantIds = [];
         this.checkAll = false;
       }
-    },
-    addPlant() {
-      plantService
-        .createPlant(this.plant)
-        .then((response) => {
-          if (response.status == 201) {
-            this.$store.commit("ADD_PLANT", response.data);
-          }
-          this.plant = {
-            userId: this.$store.state.user.id,
-          };
-        })
-        .catch((err) => {
-          alert(err + " problem creating plant!");
-        });
     },
     deletePlant(plantId) {
       this.modal = "";
@@ -280,6 +331,14 @@ export default {
         });
     },
     editPlant(newPlant) {
+      if (newPlant.plantAge === null) {
+        let today = new Date();
+        const dd = String(today.getDate()).padStart(2, "0");
+        const mm = String(today.getMonth() + 1).padStart(2, "0");
+        const yyyy = today.getFullYear();
+        today = yyyy + "-" + mm + "-" + dd;
+        newPlant.plantAge = today;
+      }
       plantService
         .editPlant(newPlant)
         .then((response) => {
@@ -295,7 +354,7 @@ export default {
     formatDateDay(date) {
       const options = {
         weekday: "long",
-        year: "numeric",
+        //year: "numeric",
         month: "long",
         day: "numeric",
       };
@@ -313,6 +372,11 @@ export default {
       .catch((err) => {
         alert(err + " problem getting latest waterings!");
       });
+    plantService.getAllPlants().then((response) => {
+      if (response.status == 200) {
+        this.$store.commit("SET_PLANTS", response.data);
+      }
+    });
   },
 };
 </script>
@@ -326,6 +390,7 @@ export default {
   justify-content: center;
   text-align: center;
 }
-#plant-form {
+#filter {
+  justify-content: start;
 }
 </style>

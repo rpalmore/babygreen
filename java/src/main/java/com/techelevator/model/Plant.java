@@ -11,7 +11,6 @@ public class Plant {
     private String plantName;
     private Boolean indoor;
     private String infoUrl;
-    @JsonFormat(pattern="yyyy-MM-dd")
     private LocalDate plantAge;
 
     public int getPlantId() {

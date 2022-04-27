@@ -39,7 +39,6 @@
 <script>
 import authService from "../services/AuthService";
 import profileService from "../services/ProfileService";
-import plantService from "../services/PlantService";
 
 export default {
   name: "login",
@@ -64,11 +63,6 @@ export default {
             profileService.getProfile().then((response) => {
               if (response.status == 200) {
                 this.$store.commit("SET_PROFILE", response.data);
-              }
-            });
-            plantService.getAllPlants().then((response) => {
-              if (response.status == 200) {
-                this.$store.commit("SET_PLANTS", response.data);
               }
             });
             if (this.$store.state.profile.favePlant != undefined) {
