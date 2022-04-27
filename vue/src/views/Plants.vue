@@ -21,11 +21,6 @@
       <!-- {{ plants }} -->
       <!-- {{ latestWatering }} -->
     </p>
-    <!-- <div id="filter">
-      <b-form-checkbox v-model="checkAll" v-on:change="selectAll">
-        Select all
-      </b-form-checkbox>
-    </div> -->
 
     <!-- testing bootstrap table -->
     <b-table striped hover :items="plants" :fields="fields">
@@ -65,9 +60,8 @@
           }}</span
         >
       </template>
-      <template #cell(plantImg)>
-        <!-- {{ data.item.plantImg === null ?  }} -->
-        <b-avatar></b-avatar>
+      <template #cell(plantImg)="data">
+        <b-avatar v-bind:variant="selectImg(data.item.plantImg)"></b-avatar>
       </template>
     </b-table>
 
@@ -151,87 +145,27 @@
       </form>
     </div>
 
-    <!-- Form to log plant care -->
-    <form v-on:submit.prevent="logCare">
-      <label for="watered">Watered</label>
-      <input
-        v-bind:disabled="btnDisabled"
-        required
-        type="radio"
-        name="type"
-        id="watered"
-        value="watered"
-        v-model="treatment.careType"
-      />
-      <label for="sprayed">Sprayed</label>
-      <input
-        v-bind:disabled="btnDisabled"
-        required
-        type="radio"
-        name="type"
-        id="sprayed"
-        value="sprayed"
-        v-model="treatment.careType"
-      />
-      <label for="repotted">Repotted</label>
-      <input
-        v-bind:disabled="btnDisabled"
-        required
-        type="radio"
-        name="type"
-        id="repotted"
-        value="repotted"
-        v-model="treatment.careType"
-      />
-      <label for="treated">Treated for pests</label>
-      <input
-        v-bind:disabled="btnDisabled"
-        required
-        type="radio"
-        name="type"
-        id="pest-treatment"
-        value="pest-treatment"
-        v-model="treatment.careType"
-      />
-      <label for="treated">Fertilized</label>
-      <input
-        v-bind:disabled="btnDisabled"
-        required
-        type="radio"
-        name="type"
-        id="fertilized"
-        value="fertilized"
-        v-model="treatment.careType"
-      />
-      <p>
-        <label for="careDate">Date of care: </label>
-        <input
-          v-bind:disabled="btnDisabled"
-          required
-          name="careDate"
-          id="careDate"
-          type="date"
-          v-model="treatment.careDate"
-        />
-      </p>
-      <button id="submit">Log</button>
-    </form>
+    <LogCare
+      v-bind:selectedPlantIds="selectedPlantIds" @form-sent="updateSelectedIds" />
     <AddPlant />
+
   </b-container>
 </template>
 
 <script>
 import AddPlant from "../components/AddPlant.vue";
+import LogCare from "../components/LogCare.vue";
 import plantService from "../services/PlantService";
 import treatmentService from "../services/TreatmentService";
 export default {
-  components: { AddPlant },
+  components: { AddPlant, LogCare },
   name: "plants",
   data() {
     return {
-      plant: {
-        userId: this.$store.state.user.id,
-      },
+      // Not sure if I need this plant object now that I've moved "add plant" form. Need to test!
+      // plant: {
+      //   userId: this.$store.state.user.id,
+      // },
       fields: [
         {
           key: "selectAll",
@@ -261,9 +195,9 @@ export default {
       showForm: false,
       selectedPlantIds: [],
       checkAll: false,
-      treatment: {
-        plantId: [],
-      },
+      // treatment: {
+      //   plantId: [],
+      // },
       modal: "",
     };
   },
@@ -274,35 +208,24 @@ export default {
     latestWatering() {
       return this.$store.state.latestWatering;
     },
-    btnDisabled() {
-      return this.selectedPlantIds.length === 0 ? true : false;
-    },
+    // this is now handled in child component: logCare
+    // btnDisabled() {
+    //   return this.selectedPlantIds.length === 0 ? true : false;
+    // },
   },
   methods: {
+    selectImg(plantImg) {
+      // to do: conditionally render avatar image URL instead of variant
+      return plantImg === null ? "info" : "danger";
+    },
     checkSelectedIds() {
       this.selectedPlantIds.length === this.$store.state.plants.length
         ? (this.checkAll = true)
         : (this.checkAll = false);
     },
-    logCare() {
-      this.treatment.plantId = this.selectedPlantIds;
-      treatmentService
-        .createTreatment(this.treatment)
-        .then((response) => {
-          if (response.status == 201) {
-            this.$store.commit("ADD_TREATMENT", response.data);
-          }
-          this.selectedPlantIds = [];
-          this.checkAll = false;
-          this.treatment = {};
-        })
-        .catch((err) => {
-          alert(err + " problem creating treatment!");
-        });
-    },
-    toggleForm(plant) {
-      this.newPlant = plant;
-      this.showForm === true ? (this.showForm = false) : (this.showForm = true);
+    updateSelectedIds() {
+      this.checkAll = false;
+      this.selectedPlantIds = [];
     },
     selectAll() {
       if (this.checkAll === true) {
@@ -317,6 +240,10 @@ export default {
         this.selectedPlantIds = [];
         this.checkAll = false;
       }
+    },
+    toggleForm(plant) {
+      this.newPlant = plant;
+      this.showForm === true ? (this.showForm = false) : (this.showForm = true);
     },
     deletePlant(plantId) {
       this.modal = "";
