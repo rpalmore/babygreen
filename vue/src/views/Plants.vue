@@ -21,14 +21,22 @@
       <!-- {{ plants }} -->
       <!-- {{ latestWatering }} -->
     </p>
-    <div id="filter">
+    <!-- <div id="filter">
       <b-form-checkbox v-model="checkAll" v-on:change="selectAll">
         Select all
       </b-form-checkbox>
-    </div>
+    </div> -->
 
     <!-- testing bootstrap table -->
     <b-table striped hover :items="plants" :fields="fields">
+      <template #head(selectAll)="data">
+        <b-form-checkbox
+          v-bind:value="data.checkAll"
+          v-model="checkAll"
+          v-on:change="selectAll"
+        >
+        </b-form-checkbox>
+      </template>
       <template #cell(selectAll)="data">
         <b-form-checkbox
           v-bind:value="data.item.plantId"
@@ -57,7 +65,7 @@
           }}</span
         >
       </template>
-      <template #cell(plantImg)> 
+      <template #cell(plantImg)>
         <!-- {{ data.item.plantImg === null ?  }} -->
         <b-avatar></b-avatar>
       </template>
