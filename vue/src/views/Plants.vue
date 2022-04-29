@@ -1,6 +1,6 @@
 <template>
   <b-container id="plant-view">
-    <b-row>
+    <b-row align-h="center">
       <p class="section-header">
         {{
           this.$store.state.profile.displayName === undefined
@@ -19,10 +19,10 @@
     <p>
       To do: Filter by indoor/outdoor and do a text search for plants by name.
       <!-- {{ plants }} -->
-      <!-- {{ latestWatering }} -->
+      {{ latestWatering }}
     </p>
-
-    <!-- testing bootstrap table -->
+    <AddPlant />
+    <!-- plants table -->
     <b-table striped hover :items="plants" :fields="fields">
       <template #head(selectAll)="data">
         <b-form-checkbox
@@ -61,66 +61,22 @@
         >
       </template>
       <template #cell(plantImg)="data">
-        <b-avatar v-bind:variant="selectImg(data.item.plantImg)"></b-avatar>
+        <b-avatar id="avatar-custom" v-bind:src="selectImg(data.item.plantImg)"></b-avatar>
       </template>
     </b-table>
 
-    <!-- formatted using a grid -->
-    <!-- <b-container id="plant-list">
-      <b-row id="filter">
-        <b-col>
-          <b-form-checkbox v-model="checkAll" v-on:change="selectAll">
-            Select all
-          </b-form-checkbox>
-        </b-col>
-      </b-row>
-      <b-row
-        align-v="center"
-        v-bind:plant="plant"
-        v-for="plant in plants"
-        v-bind:key="plant.plantId"
-      >
-        <b-col>
-          <b-form-checkbox
-            v-bind:value="plant.plantId"
-            v-model="selectedPlantIds"
-            v-on:change="checkSelectedIds"
-          >
-            <router-link
-              :to="{ name: 'plant-detail', params: { plantId: plant.plantId } }"
-            >
-              {{ plant.plantName }}
-            </router-link>
-          </b-form-checkbox>
-        </b-col>
+    <!-- leaving for reference in case I decide to add back to Plants.vue -->
+    <b-container id="plant-list">
         <b-col>
           <a v-on:click="deletePlant(plant.plantId)">&#10006;</a> |
           <a v-on:click.prevent="toggleForm(plant)">{{
             showForm === true ? "cancel" : "edit"
           }}</a>
         </b-col>
-        <b-col>
-          {{ plant.indoor == true ? "indoor" : "outdoor" }}
-        </b-col>
-        <b-col>
-          <span
-            v-for="treatment in latestWatering"
-            v-bind:key="treatment.treatmentId"
-            >{{
-              plant.plantId === treatment.plantId
-                ? formatDateDay(treatment.careDate.replace(/-/g, "\/"))
-                : " "
-            }}</span
-          >
-        </b-col>
-        <b-col>
-          <b-avatar></b-avatar>
-        </b-col>
-      </b-row>
-    </b-container> -->
+    </b-container>
 
     <!-- edit a plant -->
-    <div id="form-container">
+    <!-- <div id="form-container">
       <form
         v-on:submit.prevent="editPlant(newPlant)"
         v-show="showForm === true"
@@ -143,12 +99,12 @@
         <label for="outdoor">Outdoor</label>
         <button id="submit">Save</button>
       </form>
-    </div>
+    </div> -->
 
     <LogCare
-      v-bind:selectedPlantIds="selectedPlantIds" @form-sent="updateSelectedIds" />
-    <AddPlant />
-
+      v-bind:selectedPlantIds="selectedPlantIds"
+      @form-sent="updateSelectedIds"
+    />
   </b-container>
 </template>
 
@@ -191,7 +147,7 @@ export default {
           label: "Image",
         },
       ],
-      newPlant: {},
+      // newPlant: {},
       showForm: false,
       selectedPlantIds: [],
       checkAll: false,
@@ -216,7 +172,8 @@ export default {
   methods: {
     selectImg(plantImg) {
       // to do: conditionally render avatar image URL instead of variant
-      return plantImg === null ? "info" : "danger";
+
+      return plantImg === null ? require('@/assets/leaf.png') : plantImg;
     },
     checkSelectedIds() {
       this.selectedPlantIds.length === this.$store.state.plants.length
@@ -265,27 +222,27 @@ export default {
           }
         });
     },
-    editPlant(newPlant) {
-      if (newPlant.plantAge === null) {
-        let today = new Date();
-        const dd = String(today.getDate()).padStart(2, "0");
-        const mm = String(today.getMonth() + 1).padStart(2, "0");
-        const yyyy = today.getFullYear();
-        today = yyyy + "-" + mm + "-" + dd;
-        newPlant.plantAge = today;
-      }
-      plantService
-        .editPlant(newPlant)
-        .then((response) => {
-          if (response.status == 200) {
-            this.$store.commit("EDIT_PLANT", newPlant);
-            this.showForm = false;
-          }
-        })
-        .catch((err) => {
-          alert(err + " problem editing plant!");
-        });
-    },
+    // editPlant(newPlant) {
+    //   if (newPlant.plantAge === null) {
+    //     let today = new Date();
+    //     const dd = String(today.getDate()).padStart(2, "0");
+    //     const mm = String(today.getMonth() + 1).padStart(2, "0");
+    //     const yyyy = today.getFullYear();
+    //     today = yyyy + "-" + mm + "-" + dd;
+    //     newPlant.plantAge = today;
+    //   }
+    //   plantService
+    //     .editPlant(newPlant)
+    //     .then((response) => {
+    //       if (response.status == 200) {
+    //         this.$store.commit("EDIT_PLANT", newPlant);
+    //         this.showForm = false;
+    //       }
+    //     })
+    //     .catch((err) => {
+    //       alert(err + " problem editing plant!");
+    //     });
+    // },
     formatDateDay(date) {
       const options = {
         weekday: "long",
@@ -302,30 +259,35 @@ export default {
       .then((response) => {
         if (response.status == 200) {
           this.$store.commit("SET_LATEST_WATERING", response.data);
+          //eslint-disable-next-line no-console
+          console.log(response.data);
         }
       })
       .catch((err) => {
         alert(err + " problem getting latest waterings!");
       });
-    plantService.getAllPlants().then((response) => {
-      if (response.status == 200) {
-        this.$store.commit("SET_PLANTS", response.data);
-      }
-    });
+
+      // Best to get plants at login. Otherwise, list of plants is tied to 
+      // most recent user. Even if you clear the list at logout via the store, it *might* mean that 
+      // a user's plant list won't appear until they get to this page -- problematic if 
+      // you are directed *first* to the profile page.
+
+    // plantService.getAllPlants().then((response) => {
+    //   if (response.status == 200) {
+    //     this.$store.commit("SET_PLANTS", response.data);
+    //   }
+    // });
   },
 };
 </script>
 
 <style>
-#plant-view .section-header {
+.section-header {
   border-top: 3px solid var(--orange);
   border-bottom: 3px solid var(--orange);
 }
-#plant-view > .row {
-  justify-content: center;
-  text-align: center;
-}
-#filter {
-  justify-content: start;
+#avatar-custom {
+  background-color: var(--green);
+  border: 1px solid var(--orange);
 }
 </style>

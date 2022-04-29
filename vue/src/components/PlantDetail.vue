@@ -1,6 +1,11 @@
 <template>
-  <div id="plant-detail">
-    <h2>{{ plant.plantName }}</h2>
+  <b-container fluid id="plant-detail">
+    <b-row align-h="center">
+      <p class="section-header">
+        {{ plant.plantName }}
+      </p>
+    </b-row>
+    <h2></h2>
     {{ plant.infoUrl }}
     <a v-on:click="toggleInfoForm">{{
       plant.infoUrl == null ? "Add link" : "(edit link)"
@@ -79,7 +84,7 @@
         <button id="submit">Update</button>
       </form>
     </div>
-  </div>
+  </b-container>
 </template>
 
 <script>
@@ -256,4 +261,5 @@ export default {
 </script>
 
 <style>
+
 </style>

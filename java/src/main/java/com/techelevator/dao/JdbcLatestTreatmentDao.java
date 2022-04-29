@@ -17,12 +17,16 @@ public class JdbcLatestTreatmentDao implements LatestTreatmentDao {
     @Override
     public LatestTreatment getLatestTreatment(int userId) {
 
+        /**
+         * This query is for display on user's profile page,
+         * i.e., "I most recently watered 3 plants on April 22, 2022."
+         */
         String sql = "SELECT care_type, care_date, treatments.care_id " +
                 "FROM treatments " +
                 "JOIN plants_treatments ON plants_treatments.care_id = treatments.care_id " +
                 "JOIN plants on plants.plant_id = plants_treatments.plant_id " +
                 "WHERE user_id = ? " +
-                "ORDER BY care_date DESC " +
+                "ORDER BY care_date DESC, treatments.care_id DESC " +
                 "LIMIT 1";
 
         SqlRowSet results = template.queryForRowSet(sql, userId);

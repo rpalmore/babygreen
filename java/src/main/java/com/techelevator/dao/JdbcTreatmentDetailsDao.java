@@ -51,6 +51,11 @@ public class JdbcTreatmentDetailsDao implements TreatmentDetailsDao {
 
         List<TreatmentDetails> latestWaterings = new ArrayList<>();
 
+        /**
+         * Consider passing care_type from client (treatment.care_type = ?)
+         * so user can filter by most recent watering, fertilizing, repotting, etc.
+         * This could be a useful data set to return as an enhancement.
+         */
         String sql = "SELECT plants.plant_id, plant_name, MAX(treatments.care_date) " +
                 "FROM plants " +
                 "JOIN plants_treatments ON plants_treatments.plant_id = plants.plant_id " +

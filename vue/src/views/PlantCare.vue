@@ -2,6 +2,7 @@
 <template>
   <div id="plant-care">
     <h2>Plant care</h2>
+    <p v-if="this.$store.state.treatments.length == 0">You have not logged any treatments.</p>
 
     <!-- <h3>Monday, April 4</h3>
     <p>Watered Croton, Gardenia, Rubber tree</p> -->

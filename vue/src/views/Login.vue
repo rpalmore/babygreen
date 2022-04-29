@@ -1,6 +1,7 @@
 <template>
   <b-container fluid id="login">
-    <p class="section-header">
+    <!-- <p class="section-header"> -->
+    <p>
       {{
         invalidCredentials
           ? "Invalid username and password!"
@@ -38,8 +39,8 @@
 
 <script>
 import authService from "../services/AuthService";
+import plantService from "../services/PlantService";
 import profileService from "../services/ProfileService";
-
 export default {
   name: "login",
   components: {},
@@ -60,16 +61,20 @@ export default {
           if (response.status == 200) {
             this.$store.commit("SET_AUTH_TOKEN", response.data.token);
             this.$store.commit("SET_USER", response.data.user);
+            plantService.getAllPlants().then((response) => {
+              if (response.status == 200) {
+                this.$store.commit("SET_PLANTS", response.data);
+              }
+            });
             profileService.getProfile().then((response) => {
               if (response.status == 200) {
                 this.$store.commit("SET_PROFILE", response.data);
               }
             });
-            if (this.$store.state.profile.favePlant != undefined) {
-              this.$router.push("/plants");
-            } else {
-              this.$router.push("/profile");
-            }
+            this.$store.state.profile.favePlant != undefined &&
+            this.$store.state.profile.favePlant != null
+              ? this.$router.push("/plants")
+              : this.$router.push("/profile");
           }
         })
         .catch((error) => {

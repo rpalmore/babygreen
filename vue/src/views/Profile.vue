@@ -1,8 +1,8 @@
 <template>
   <!-- <b-container id="profile" class="text-center"> -->
   <!-- Above: quick and easy way to center all text -->
-  <b-container id="profile">
-    <b-row>
+  <b-container id="profile-view">
+    <b-row align-h="center">
       <p class="section-header">
         You look great in green,
         {{
@@ -60,7 +60,7 @@
         </b-col>
       </b-row>
     </b-container>
-    <p class="section-header">
+    <p>
       {{
         this.$store.state.profile.favePlant === undefined
           ? "Create a profile"
@@ -211,10 +211,10 @@ export default {
 </script>
 
 <style>
-#profile > .row {
+/* #profile-view > .row {
   justify-content: center;
   text-align: center;
-}
+} */
 .profile-details {
   background-color: var(--green);
   margin-top: 10px;

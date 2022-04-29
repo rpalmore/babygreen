@@ -1,27 +1,31 @@
 <template>
-  <b-container id="add-plant">
-    <h3>Add a plant</h3>
-    <form v-on:submit.prevent="addPlant" id="plant-form">
-      <label for="plantName">Name of plant:</label>
-      <input type="text" class="plant-form" v-model="plant.plantName" />
-      <input
-        required
-        type="radio"
-        name="indoor"
-        value="true"
-        v-model="plant.indoor"
-      />
-      <label for="indoor">Indoor</label>
-      <input
-        required
-        type="radio"
-        name="indoor"
-        value="false"
-        v-model="plant.indoor"
-      />
-      <label for="outdoor">Outdoor</label>
-      <button id="submit">Save</button>
-    </form>
+  <b-container fluid id="add-plant">
+    <label id="add-plant-label">
+      {{
+        this.$store.state.plants.length == 0
+          ? "Let&#8217;s Get Started!"
+          : "Add a plant:"
+      }}
+    </label>
+      <b-form inline @submit.prevent="addPlant" id="add-plant-form">
+        <label class="sr-only" for="plantName">Plant Name</label>
+        <b-form-input
+          id="plantName"
+          class="mb-2 mr-sm-2 mb-sm-0"
+          placeholder="Plant name"
+          type="text"
+          v-model="plant.plantName"
+          required
+        ></b-form-input>
+        <b-form-radio-group
+          required
+          v-model="plant.indoor"
+          :options="options"
+          :aria-describedby="ariaDescribedby"
+          name="radio-inline"
+        ></b-form-radio-group>
+        <b-button size="sm" class="default" type="submit">Save</b-button>
+      </b-form>
   </b-container>
 </template>
 
@@ -34,6 +38,10 @@ export default {
       plant: {
         userId: this.$store.state.user.id,
       },
+      options: [
+        { text: "Indoor", value: true },
+        { text: "Outdoor", value: false },
+      ],
     };
   },
   methods: {
@@ -57,4 +65,7 @@ export default {
 </script>
 
 <style>
+#add-plant {
+  margin-bottom: 10px;
+}
 </style>

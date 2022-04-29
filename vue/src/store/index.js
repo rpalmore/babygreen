@@ -75,6 +75,14 @@ export default new Vuex.Store({
       state.latestWatering = payload;
       localStorage.setItem('latestWatering', JSON.stringify(state.latestWatering));
     },
+    UPDATE_LATEST_WATERING(state, payload) {
+      state.latestWatering = state.latestWatering.map(w => w.plantId != payload.plantId ? w : payload);
+      localStorage.setItem('latestWatering', JSON.stringify(state.latestWatering));
+    },
+    ADD_LATEST_WATERING(state, payload) {
+      state.latestWatering.unshift(payload);
+      localStorage.setItem('latestWatering', JSON.stringify(state.latestWatering));
+    },
     DELETE_TREATMENT(state, treatment) {
       state.treatments = state.treatments.filter((t) => t.plantId != treatment.plantId || t.careId != treatment.careId);
       localStorage.setItem('treatments', JSON.stringify(state.treatments));
