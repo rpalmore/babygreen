@@ -87,7 +87,8 @@ export default {
         });
     },
   },
-  created() {
+  // does 'mounted' improve performance over 'created'? Testing.
+  mounted() {
     treatmentService
       .getAllTreatments()
       .then((response) => {

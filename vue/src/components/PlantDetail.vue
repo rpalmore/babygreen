@@ -18,12 +18,58 @@
         Cancel
       </button>
     </form>
+    <span><h3>Recent waterings:</h3></span>
+    <!-- to do: display 5 of the most recent waterings -->
+    <!-- maybe toggle to see "all"? -->
+    <b-list-group>
+      <b-list-group-item
+        class="d-flex justify-content-between align-items-center"
+        v-bind:treatment="treatment"
+        v-for="treatment in treatments.slice(0, 5)"
+        v-bind:key="treatment.treatmentId"
+        v-show="treatment.careType === 'watered'"
+      >
+        {{ formatDateDay(treatment.careDate.replace(/-/g, "\/")) }}
+        <b-badge
+          id="deleteTreatment"
+          v-on:click="deleteTreatment(treatment)"
+          href="#"
+          >&#10006;</b-badge
+        >
+        <!-- <a v-on:click="deleteTreatment(treatment)">&#10006;</a> -->
+      </b-list-group-item>
+    </b-list-group>
+    <!-- toggle test -->
+    <p>
+      <b-button id="toggleBtn" size="sm" v-b-toggle.collapse-1
+        >See the rest: {{ treatments.length - 5 }}</b-button
+      >
+    </p>
+    <b-collapse id="collapse-1" class="mt-2">
+      <b-list-group>
+        <b-list-group-item
+          class="d-flex justify-content-between align-items-center"
+          v-for="treatment in treatments.slice(5)"
+          v-bind:key="treatment.treatmentId"
+          >{{ formatDateDay(treatment.careDate.replace(/-/g, "\/")) }}
+          <b-badge
+            id="deleteTreatment"
+            v-on:click="deleteTreatment(treatment)"
+            href="#"
+            >&#10006;</b-badge
+          >
+        </b-list-group-item>
+      </b-list-group>
+    </b-collapse>
+    <!-- end toggle test -->
+    <span><h3>Other treatments:</h3></span>
     <div
       v-bind:treatment="treatment"
       v-for="treatment in treatments"
       v-bind:key="treatment.treatmentId"
+      v-show="treatment.careType != 'watered'"
     >
-      I was {{ treatment.careType }} on
+      {{ treatment.careType }} on
       {{ formatDateDay(treatment.careDate.replace(/-/g, "\/")) }}
       <a v-on:click="deleteTreatment(treatment)">&#10006;</a>
     </div>
@@ -98,6 +144,7 @@ export default {
       // todo: set the date of the note object to "today" so it is sent to store and immediately available
       note: {
         plantId: this.$route.params.plantId,
+        createdOn: new Date(),
       },
       //treatments: {},
       // note: this new object "editedNote" might not be needed if the update function is moved into a new component.
@@ -116,7 +163,8 @@ export default {
       return this.$route.params.plantId;
     },
     plant() {
-      return this.plants.find((p) => p.plantId == this.$route.params.plantId);
+      // return this.plants.find((p) => p.plantId == this.$route.params.plantId);
+      return this.plants.find((p) => p.plantId == this.plantId);
     },
     notes() {
       return this.$store.state.notes;
@@ -171,14 +219,18 @@ export default {
         });
     },
     saveNote() {
+      // eslint-disable-next-line no-console
+      console.log(this.note);
       plantNoteService
         .createNote(this.note)
         .then((response) => {
           if (response.status == 201) {
+            // eslint-disable-next-line no-console
+            console.log(response.data);
             this.$store.commit("ADD_NOTE", response.data);
           }
           this.note = {
-            plantId: this.$route.params.plantId,
+            plantId: this.plantId,
           };
         })
         .catch((err) => {
@@ -251,6 +303,8 @@ export default {
         if (response.status == 200) {
           //this.treatments = response.data;
           this.$store.commit("SET_TREATMENTS", response.data);
+          // eslint-disable-next-line no-console
+          // console.log(response.data);
         }
       })
       .catch((err) => {
@@ -261,5 +315,13 @@ export default {
 </script>
 
 <style>
-
+#toggleBtn {
+  background-color: var(--orange);
+  margin-top: 1rem;
+}
+#deleteTreatment {
+  background-color: var(--orange);
+  background-color: white;
+  border: 2px solid var(--orange);
+}
 </style>

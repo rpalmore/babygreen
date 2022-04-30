@@ -10,16 +10,9 @@
       </p>
     </b-row>
     <p>
-      This page lists all plants associated with user. Features to add: sort by
-      indoor/outdoor; select plants to record that you watered them, defaulting
-      to today but with the option to select a different date. List could show
-      thumbnail of each plant at left (in circle) or a placeholder image if no
-      photo has been uploaded -- including for plants just added, for example.
-    </p>
-    <p>
-      To do: Filter by indoor/outdoor and do a text search for plants by name.
+      To do: Filter by indoor/outdoor and text search for plants by name.
       <!-- {{ plants }} -->
-      {{ latestWatering }}
+      <!-- {{ latestWatering }} -->
     </p>
     <AddPlant />
     <!-- plants table -->
@@ -192,7 +185,7 @@ export default {
           }
         }
         // eslint-disable-next-line no-console
-        console.log(this.selectedPlantIds);
+        // console.log(this.selectedPlantIds);
       } else {
         this.selectedPlantIds = [];
         this.checkAll = false;
@@ -260,12 +253,13 @@ export default {
         if (response.status == 200) {
           this.$store.commit("SET_LATEST_WATERING", response.data);
           //eslint-disable-next-line no-console
-          console.log(response.data);
+          // console.log(response.data);
         }
       })
       .catch((err) => {
         alert(err + " problem getting latest waterings!");
       });
+      
 
       // Best to get plants at login. Otherwise, list of plants is tied to 
       // most recent user. Even if you clear the list at logout via the store, it *might* mean that 

@@ -76,33 +76,28 @@ export default {
         .then((response) => {
           if (response.status == 201) {
             this.$store.commit("ADD_TREATMENT", response.data);
-
             let addedTreatment = response.data;
             if (addedTreatment.careType === "watered") {
-              
               for (let i = 0; i < addedTreatment.plantId.length; i++) {
                 let payload = [
                   {
                     careDate: addedTreatment.careDate,
                     careType: "watered",
-                    plantName: "", // I don't think I need to include the plant name
                     plantId: addedTreatment.plantId[i],
-                    careId: 0,
                   },
                 ];
                 let idExists = this.$store.state.latestWatering.some(
                   (plant) => plant.plantId == addedTreatment.plantId[i]
                 );
-
                 if (idExists) {
-                  // AND if date is greater than existing date???
-                  // eslint-disable-next-line no-console
-                  console.log("yes");
+                  let existingPlant= this.$store.state.latestWatering.find(
+                  (e) => e.plantId == addedTreatment.plantId[i]
+                );
+                let dateValid = existingPlant.careDate < addedTreatment.careDate;
+                  if (dateValid) {
                   this.$store.commit("UPDATE_LATEST_WATERING", payload[0]);
-                  
+                  }
                 } else {
-                  // eslint-disable-next-line no-console
-                  console.log("no");
                   this.$store.commit("ADD_LATEST_WATERING", payload[0]);
                 }
               }
