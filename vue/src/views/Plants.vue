@@ -54,7 +54,7 @@
         >
       </template>
       <template #cell(plantImg)="data">
-        <b-avatar id="avatar-custom" v-bind:src="selectImg(data.item.plantImg)"></b-avatar>
+        <b-avatar class="avatar-custom" v-bind:src="selectImg(data.item.plantImg)"></b-avatar>
       </template>
     </b-table>
 
@@ -280,7 +280,7 @@ export default {
   border-top: 3px solid var(--orange);
   border-bottom: 3px solid var(--orange);
 }
-#avatar-custom {
+.avatar-custom {
   background-color: var(--green);
   border: 1px solid var(--orange);
 }

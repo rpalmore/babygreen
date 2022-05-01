@@ -5,7 +5,6 @@
         {{ plant.plantName }}
       </p>
     </b-row>
-    <h2></h2>
     {{ plant.infoUrl }}
     <a v-on:click="toggleInfoForm">{{
       plant.infoUrl == null ? "Add link" : "(edit link)"
@@ -18,40 +17,61 @@
         Cancel
       </button>
     </form>
-    <span><h3>Recent waterings:</h3></span>
-    <!-- to do: display 5 of the most recent waterings -->
-    <!-- maybe toggle to see "all"? -->
-    <b-list-group>
+    <b-row class="subsection-header"> <p>Recent waterings:</p></b-row>
+    <p v-show="waterings.length === 0">You have no waterings to display.</p>
+    <!-- to do: conditionally display message if no recent waterings -->
+    <b-list-group
+      v-bind:treatment="treatment"
+      v-for="treatment in waterings.slice(0, 5)"
+      v-bind:key="treatment.treatmentId"
+      v-show="waterings.length > 0"
+    >
       <b-list-group-item
         class="d-flex justify-content-between align-items-center"
-        v-bind:treatment="treatment"
-        v-for="treatment in treatments.slice(0, 5)"
-        v-bind:key="treatment.treatmentId"
-        v-show="treatment.careType === 'watered'"
       >
-        {{ formatDateDay(treatment.careDate.replace(/-/g, "\/")) }}
+        <span>
+          <b-avatar
+            class="avatar-custom"
+            id="watering"
+            v-bind:src="require('@/assets/watering-can.png')"
+          ></b-avatar>
+
+          {{ formatDateDay(treatment.careDate.replace(/-/g, "\/")) }}
+        </span>
         <b-badge
           id="deleteTreatment"
           v-on:click="deleteTreatment(treatment)"
           href="#"
           >&#10006;</b-badge
         >
-        <!-- <a v-on:click="deleteTreatment(treatment)">&#10006;</a> -->
       </b-list-group-item>
     </b-list-group>
-    <!-- toggle test -->
     <p>
-      <b-button id="toggleBtn" size="sm" v-b-toggle.collapse-1
-        >See the rest: {{ treatments.length - 5 }}</b-button
+      <b-button
+        v-if="waterings.length > 5"
+        id="toggleBtn"
+        size="sm"
+        v-b-toggle.collapse-1
+        >See {{ waterings.length - 5 }} more</b-button
       >
     </p>
     <b-collapse id="collapse-1" class="mt-2">
-      <b-list-group>
+      <b-list-group
+        v-for="treatment in waterings.slice(5)"
+        v-bind:key="treatment.treatmentId"
+      >
         <b-list-group-item
           class="d-flex justify-content-between align-items-center"
-          v-for="treatment in treatments.slice(5)"
-          v-bind:key="treatment.treatmentId"
-          >{{ formatDateDay(treatment.careDate.replace(/-/g, "\/")) }}
+        >
+          <span>
+            <b-avatar
+              class="avatar-custom"
+              id="watering"
+              v-bind:src="require('@/assets/watering-can.png')"
+            ></b-avatar>
+
+            {{ formatDateDay(treatment.careDate.replace(/-/g, "\/")) }}
+          </span>
           <b-badge
             id="deleteTreatment"
             v-on:click="deleteTreatment(treatment)"
@@ -62,17 +82,82 @@
       </b-list-group>
     </b-collapse>
     <!-- end toggle test -->
-    <span><h3>Other treatments:</h3></span>
-    <div
+    <b-row class="subsection-header"> <p>Other recent treatments:</p></b-row>
+    <p v-show="otherTreatments.length === 0">
+      You have no other treatments to display.
+    </p>
+    <b-list-group
       v-bind:treatment="treatment"
-      v-for="treatment in treatments"
+      v-for="treatment in otherTreatments.slice(0, 5)"
       v-bind:key="treatment.treatmentId"
-      v-show="treatment.careType != 'watered'"
+      v-show="otherTreatments.length > 0"
     >
-      {{ treatment.careType }} on
-      {{ formatDateDay(treatment.careDate.replace(/-/g, "\/")) }}
-      <a v-on:click="deleteTreatment(treatment)">&#10006;</a>
-    </div>
+      <b-list-group-item
+        class="d-flex justify-content-between align-items-center"
+      >
+        <span>
+          <b-avatar
+            class="avatar-custom"
+            v-bind:id="treatment.careType"
+            v-bind:src="selectImg(treatment.careType)"
+          ></b-avatar>
+
+          {{
+            formatDateDay(treatment.careDate.replace(/-/g, "\/")) +
+            ": " +
+            treatment.careType
+          }}
+        </span>
+        <b-badge
+          id="deleteTreatment"
+          v-on:click="deleteTreatment(treatment)"
+          href="#"
+          >&#10006;</b-badge
+        >
+      </b-list-group-item>
+    </b-list-group>
+    <!-- toggle test -->
+    <p>
+      <b-button
+        v-if="otherTreatments.length > 5"
+        id="toggleBtn"
+        size="sm"
+        v-b-toggle.collapse-2
+        >See {{ otherTreatments.length - 5 }} more</b-button
+      >
+    </p>
+    <b-collapse id="collapse-2" class="mt-2">
+      <b-list-group
+        v-for="treatment in otherTreatments.slice(5)"
+        v-bind:key="treatment.treatmentId"
+      >
+        <b-list-group-item
+          class="d-flex justify-content-between align-items-center"
+        >
+          <span>
+            <b-avatar
+              class="avatar-custom"
+              v-bind:id="treatment.careType"
+              v-bind:src="selectImg(treatment.careType)"
+            ></b-avatar>
+
+            {{
+              formatDateDay(treatment.careDate.replace(/-/g, "\/")) +
+              ": " +
+              treatment.careType
+            }}
+          </span>
+          <b-badge
+            id="deleteTreatment"
+            v-on:click="deleteTreatment(treatment)"
+            href="#"
+            >&#10006;</b-badge
+          >
+        </b-list-group-item>
+      </b-list-group>
+    </b-collapse>
+    <!-- end toggle test -->
+
     <p>
       This page offers more details about a plant and the option to add dated
       notes and additional information, such as a link to resources and a field
@@ -112,10 +197,14 @@
       <input required type="text" class="note-form" v-model="note.note" />
       <button id="submit">Save</button>
     </form>
-    <div id="note-container" v-for="note in notes" v-bind:key="note.noteId">
-      {{ note.note }}
-      {{ formatDateDay(note.createdOn.replace(/-/g, "\/")) }}&nbsp;
-      <a v-on:click="deleteNote(note.noteId)">&#10006;</a>&nbsp;
+    <div
+      id="note-container"
+      v-for="plantNote in notes"
+      v-bind:key="plantNote.noteId"
+    >
+      {{ plantNote.note }}
+      {{ formatDateDay(plantNote.createdOn.replace(/-/g, "\/")) }}&nbsp;
+      <a v-on:click="deleteNote(plantNote.noteId)">&#10006;</a>&nbsp;
       <a v-on:click.prevent="toggleNoteForm(note)">{{
         showNoteForm === true ? "cancel" : "edit"
       }}</a>
@@ -141,7 +230,6 @@ export default {
   name: "plant-detail",
   data() {
     return {
-      // todo: set the date of the note object to "today" so it is sent to store and immediately available
       note: {
         plantId: this.$route.params.plantId,
         createdOn: new Date(),
@@ -163,17 +251,42 @@ export default {
       return this.$route.params.plantId;
     },
     plant() {
-      // return this.plants.find((p) => p.plantId == this.$route.params.plantId);
       return this.plants.find((p) => p.plantId == this.plantId);
     },
+    // to do: add "get all notes" method on server, then compute a filtered array using plantId
     notes() {
       return this.$store.state.notes;
     },
+    // not sure this is needed either?
+    plantNote() {
+      return this.notes.filter((n) => n.plantId == this.plantId);
+    },
     treatments() {
-      return this.$store.state.treatments;
+      return this.$store.state.treatments.filter(
+        (t) => t.plantId == this.plantId
+      );
+    },
+    waterings() {
+      return this.treatments.filter(
+        (treatment) => treatment.careType == "watered"
+      );
+    },
+    otherTreatments() {
+      return this.treatments.filter(
+        (treatment) => treatment.careType != "watered"
+      );
     },
   },
   methods: {
+    selectImg(careType) {
+      return careType === "sprayed"
+        ? require("@/assets/spray-bottle.png")
+        : careType === "repotted"
+        ? require("@/assets/plant-pot.png")
+        : careType === "fertilized"
+        ? require("@/assets/eyedropper.png")
+        : require("@/assets/bug.png");
+    },
     formatDateDay(date) {
       const options = {
         weekday: "long",
@@ -231,6 +344,7 @@ export default {
           }
           this.note = {
             plantId: this.plantId,
+            createdOn: new Date(),
           };
         })
         .catch((err) => {
@@ -294,22 +408,19 @@ export default {
     },
   },
   created() {
-    plantNoteService.getNotes(this.plantId).then((response) => {
-      this.$store.commit("SET_NOTES", response.data);
-    });
     treatmentService
-      .getSinglePlantTreatments(this.plantId)
+      .getAllTreatments()
       .then((response) => {
         if (response.status == 200) {
-          //this.treatments = response.data;
           this.$store.commit("SET_TREATMENTS", response.data);
-          // eslint-disable-next-line no-console
-          // console.log(response.data);
         }
       })
       .catch((err) => {
-        alert(err + " problem retrieving treatments!");
+        alert(err + " problem getting treatments!");
       });
+    plantNoteService.getNotes(this.plantId).then((response) => {
+      this.$store.commit("SET_NOTES", response.data);
+    });
   },
 };
 </script>
@@ -323,5 +434,31 @@ export default {
   background-color: var(--orange);
   background-color: white;
   border: 2px solid var(--orange);
+}
+.subsection-header {
+  font-size: 1.3rem;
+  font-weight: 400;
+}
+.avatar-custom#watering,
+.avatar-custom#sprayed,
+.avatar-custom#repotted,
+.avatar-custom#fertilized,
+.avatar-custom#pest-treated {
+  margin-right: 1rem;
+}
+.avatar-custom#pest-treated {
+  margin-right: 1rem;
+  background-color: var(--orange);
+  border: 1px solid var(--green);
+}
+.avatar-custom#fertilized {
+  margin-right: 1rem;
+  background-color: var(--light);
+  border: 1px solid var(--green);
+}
+.avatar-custom#repotted {
+  margin-right: 1rem;
+  background-color: var(--platinum);
+  border: 1px solid var(--green);
 }
 </style>

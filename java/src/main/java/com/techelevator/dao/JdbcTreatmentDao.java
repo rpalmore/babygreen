@@ -24,7 +24,7 @@ public class JdbcTreatmentDao implements TreatmentDao {
 
         List<Treatment> singlePlantTreatments = new ArrayList<>();
 
-        String sql = "SELECT care_date, care_type, treatments.care_id " +
+        String sql = "SELECT care_date, care_type, treatments.care_id, plants.plant_id " +
                 "FROM treatments " +
                 "JOIN plants_treatments ON plants_treatments.care_id = treatments.care_id " +
                 "JOIN plants ON plants.plant_id = plants_treatments.plant_id " +
@@ -38,6 +38,8 @@ public class JdbcTreatmentDao implements TreatmentDao {
             treatments.setCareDate(results.getDate("care_date").toLocalDate());
             treatments.setCareType(results.getString("care_type"));
             treatments.setCareId(results.getInt("care_id"));
+//            Testing plant_id in results to see if it improves plant_detail page load
+            treatments.setPlantId(new int[]{results.getInt("plant_id")});
 
             singlePlantTreatments.add(treatments);
 
