@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -21,9 +22,11 @@ public class NoteController {
     @Autowired
     UserDao userDao;
 
-    @RequestMapping(path="/plants/{plantId}/notes", method=RequestMethod.GET)
-    public List<Note> getNotes(@PathVariable int plantId) {
-        return noteDao.getAllNotes(plantId);
+    @RequestMapping(path="/plants/notes", method=RequestMethod.GET)
+    public List<Note> getNotes(Principal principal) {
+        String username = principal.getName();
+        int userId = userDao.findIdByUsername(username);
+        return noteDao.getAllNotes(userId);
     }
 
     @RequestMapping(path="/createNote", method=RequestMethod.POST)

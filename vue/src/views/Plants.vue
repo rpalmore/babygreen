@@ -14,7 +14,19 @@
       <!-- {{ plants }} -->
       <!-- {{ latestWatering }} -->
     </p>
-    <AddPlant />
+    <p>
+      <b-button id="toggleFormBtn" size="sm" v-b-toggle.collapse-form
+        >Add a new plant!
+        <b-avatar
+          class="avatar-custom-reverse"
+          :src="require('@/assets/leaf.png')"
+        ></b-avatar
+      ></b-button>
+    </p>
+    <b-collapse id="collapse-form" class="mt-2">
+      <AddPlant />
+    </b-collapse>
+
     <!-- plants table -->
     <b-table striped hover :items="plants" :fields="fields">
       <template #head(selectAll)="data">
@@ -54,45 +66,22 @@
         >
       </template>
       <template #cell(plantImg)="data">
-        <b-avatar class="avatar-custom" v-bind:src="selectImg(data.item.plantImg)"></b-avatar>
+        <b-avatar
+          class="avatar-custom"
+          v-bind:src="selectImg(data.item.plantImg)"
+        ></b-avatar>
       </template>
     </b-table>
 
     <!-- leaving for reference in case I decide to add back to Plants.vue -->
-    <b-container id="plant-list">
-        <b-col>
-          <a v-on:click="deletePlant(plant.plantId)">&#10006;</a> |
-          <a v-on:click.prevent="toggleForm(plant)">{{
-            showForm === true ? "cancel" : "edit"
-          }}</a>
-        </b-col>
-    </b-container>
-
-    <!-- edit a plant -->
-    <!-- <div id="form-container">
-      <form
-        v-on:submit.prevent="editPlant(newPlant)"
-        v-show="showForm === true"
-      >
-        <label for="newName">New name:</label>
-        <input type="text" v-model="newPlant.plantName" />
-        <input
-          type="radio"
-          name="indoor"
-          value="true"
-          v-model="newPlant.indoor"
-        />
-        <label for="indoor">Indoor</label>
-        <input
-          type="radio"
-          name="indoor"
-          value="false"
-          v-model="newPlant.indoor"
-        />
-        <label for="outdoor">Outdoor</label>
-        <button id="submit">Save</button>
-      </form>
-    </div> -->
+    <!-- <b-container id="plant-list">
+      <b-col>
+        <a v-on:click="deletePlant(plant.plantId)">&#10006;</a> |
+        <a v-on:click.prevent="toggleForm(plant)">{{
+          showForm === true ? "cancel" : "edit"
+        }}</a>
+      </b-col>
+    </b-container> -->
 
     <LogCare
       v-bind:selectedPlantIds="selectedPlantIds"
@@ -119,7 +108,6 @@ export default {
         {
           key: "selectAll",
           label: "",
-          // need to add a checkbox here somehow
         },
         {
           key: "plantName",
@@ -157,16 +145,10 @@ export default {
     latestWatering() {
       return this.$store.state.latestWatering;
     },
-    // this is now handled in child component: logCare
-    // btnDisabled() {
-    //   return this.selectedPlantIds.length === 0 ? true : false;
-    // },
   },
   methods: {
     selectImg(plantImg) {
-      // to do: conditionally render avatar image URL instead of variant
-
-      return plantImg === null ? require('@/assets/leaf.png') : plantImg;
+      return plantImg === null ? require("@/assets/leaf.png") : plantImg;
     },
     checkSelectedIds() {
       this.selectedPlantIds.length === this.$store.state.plants.length
@@ -215,27 +197,6 @@ export default {
           }
         });
     },
-    // editPlant(newPlant) {
-    //   if (newPlant.plantAge === null) {
-    //     let today = new Date();
-    //     const dd = String(today.getDate()).padStart(2, "0");
-    //     const mm = String(today.getMonth() + 1).padStart(2, "0");
-    //     const yyyy = today.getFullYear();
-    //     today = yyyy + "-" + mm + "-" + dd;
-    //     newPlant.plantAge = today;
-    //   }
-    //   plantService
-    //     .editPlant(newPlant)
-    //     .then((response) => {
-    //       if (response.status == 200) {
-    //         this.$store.commit("EDIT_PLANT", newPlant);
-    //         this.showForm = false;
-    //       }
-    //     })
-    //     .catch((err) => {
-    //       alert(err + " problem editing plant!");
-    //     });
-    // },
     formatDateDay(date) {
       const options = {
         weekday: "long",
@@ -259,12 +220,11 @@ export default {
       .catch((err) => {
         alert(err + " problem getting latest waterings!");
       });
-      
 
-      // Best to get plants at login. Otherwise, list of plants is tied to 
-      // most recent user. Even if you clear the list at logout via the store, it *might* mean that 
-      // a user's plant list won't appear until they get to this page -- problematic if 
-      // you are directed *first* to the profile page.
+    // Best to get plants at login. Otherwise, list of plants is tied to
+    // most recent user. Even if you clear the list at logout via the store, it *might* mean that
+    // a user's plant list won't appear until they get to this page -- problematic if
+    // you are directed *first* to the profile page.
 
     // plantService.getAllPlants().then((response) => {
     //   if (response.status == 200) {
@@ -280,8 +240,18 @@ export default {
   border-top: 3px solid var(--orange);
   border-bottom: 3px solid var(--orange);
 }
+#toggleFormBtn {
+  background-color: var(--green);
+  color: var(--dark);
+  border: 1px solid var(--orange);
+  font-size: 1rem;
+}
 .avatar-custom {
   background-color: var(--green);
+  border: 1px solid var(--orange);
+}
+.avatar-custom-reverse {
+  background-color: var(--light);
   border: 1px solid var(--orange);
 }
 </style>

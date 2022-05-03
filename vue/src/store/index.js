@@ -44,7 +44,7 @@ export default new Vuex.Store({
       localStorage.setItem('profile', JSON.stringify(state.profile));
     },
     ADD_PLANT(state, plant) {
-      state.plants.push(plant);
+      state.plants.unshift(plant);
       localStorage.setItem('plants', JSON.stringify(state.plants));
     },
     SET_PLANTS(state, payload) {

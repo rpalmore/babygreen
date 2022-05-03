@@ -26,6 +26,7 @@ const router = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
   routes: [
+    // Todo: What lives at the home page when user is logged in?
     // {
     //   path: "/",
     //   name: "home",

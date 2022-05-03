@@ -12,102 +12,156 @@
         }}!
       </p>
     </b-row>
-    <b-container class="profile-details">
-      <b-row>
-        <b-col><span class="profile-question">My favorite plant</span> </b-col>
-        <b-col
-          ><span class="profile-answer">{{
-            this.$store.state.profile.favePlant
-          }}</span></b-col
-        >
-      </b-row>
-      <b-row>
-        <b-col><span class="profile-question">My skill level</span></b-col>
-        <b-col
-          ><span class="profile-answer">{{
-            this.$store.state.profile.skillLevel
-          }}</span></b-col
-        >
-      </b-row>
-      <b-row>
-        <b-col><span class="profile-question">I am tracking ...</span></b-col>
-        <b-col
-          ><span class="profile-answer">
-            {{
-              this.$store.state.plants.length === 1
-                ? this.$store.state.plants.length + " plant baby"
-                : this.$store.state.plants.length + " plant babies"
-            }}!</span
-          >
-        </b-col>
-      </b-row>
-      <b-row
-        v-if="
-          this.$store.state.treatments != ''"
-      >
-        <b-col><span class="profile-question">I most recently ...</span></b-col>
-        <b-col
-          ><span class="profile-answer">
-            {{ this.$store.state.latestTreatment.careType }}
-            {{ this.$store.state.latestTreatment.numPlants }}
-            {{
-              this.$store.state.latestTreatment.numPlants == 1
-                ? " plant on "
-                : "plants on "
-            }}
-            {{ this.$store.state.latestTreatment.careDate }}
-          </span>
-        </b-col>
-      </b-row>
-    </b-container>
-    <p>
-      {{
-        this.$store.state.profile.favePlant === undefined
-          ? "Create a profile"
-          : "Edit your profile"
-      }}
-    </p>
+
+    <!-- Profile card -->
+    <b-row class="plant-card" align-h="center">
+      <b-card no-body class="overflow-hidden" style="max-width: 540px">
+        <b-row no-gutters>
+          <b-col md="6">
+            <b-card-img
+              fluid-grow
+              id="b-card-img"
+              :src="require('@/assets/plant-placeholder.png')"
+              alt="Plant image"
+              class="rounded-0"
+            ></b-card-img>
+          </b-col>
+          <b-col md="6">
+            <b-list-group flush>
+              <b-list-group-item>
+                <span
+                  >My favorite plant:
+                  {{ this.$store.state.profile.favePlant }}</span
+                >
+              </b-list-group-item>
+              <b-list-group-item>
+                <span
+                  >My skill level:
+                  {{ this.$store.state.profile.skillLevel }}</span
+                >
+              </b-list-group-item>
+              <b-list-group-item>
+                <span
+                  >I am tracking
+                  {{
+                    this.$store.state.plants.length === 1
+                      ? this.$store.state.plants.length + " plant"
+                      : this.$store.state.plants.length + " plants"
+                  }}!</span
+                >
+              </b-list-group-item>
+              <b-list-group-item v-if="treatments != ''">
+                <span
+                  >I most recently
+                  {{ latestTreatment.careType }}
+                  {{ latestTreatment.numPlants }}
+                  {{
+                    latestTreatment.numPlants == 1 ? " plant on " : "plants on "
+                  }}
+                  {{
+                    formatDateMonth(
+                      latestTreatment.careDate.replace(/-/g, "\/")
+                    )
+                  }}
+                </span>
+              </b-list-group-item>
+            </b-list-group>
+          </b-col>
+        </b-row>
+        <b-card-footer>
+          <b-row align-v="center">
+            <b-col class="text-center">
+              <b-button id="addPhotoBtn" size="sm"
+                >Add a photo
+                <b-avatar
+                  icon="camera-fill"
+                  class="avatar-icon-camera"
+                ></b-avatar
+              ></b-button>
+            </b-col>
+            <b-col class="text-center middle">
+              <b-button id="addPhotoBtn" size="sm" @click="toggleForm()"
+                >Edit profile
+                <b-avatar
+                  icon="pencil-fill"
+                  class="avatar-icon-camera"
+                ></b-avatar
+              ></b-button>
+            </b-col>
+            <b-col>
+              <b-button
+                id="addPhotoBtn"
+                size="sm"
+                @click="deleteProfile(profile.userId)"
+              >
+                Delete
+                <b-avatar
+                  icon="trash-fill"
+                  class="avatar-icon-camera"
+                ></b-avatar>
+              </b-button>
+            </b-col>
+          </b-row>
+        </b-card-footer>
+      </b-card>
+    </b-row>
+    <!-- End profile card -->
 
     <!-- Create or edit your profile -->
-    <b-form @submit.prevent="saveProfile" id="profile-form">
-      <b-form-group
-        id="input-group-1"
-        label="Display name:"
-        label-for="input-1"
-      >
-        <b-form-input
-          type="text"
-          id="input-1"
-          placeholder="Enter display name"
-          v-model="profile.displayName"
-        ></b-form-input>
-      </b-form-group>
-      <b-form-group
-        id="input-group-2"
-        label="Favorite plant:"
-        label-for="input-2"
-      >
-        <b-form-input
-          type="text"
-          id="input-2"
-          placeholder="Your favorite plant"
-          v-model="profile.favePlant"
-        ></b-form-input>
-      </b-form-group>
-      <b-form-group id="input-group-3" label="Skill level:" label-for="input-3">
-        <b-form-select
-          id="input-3"
-          v-model="profile.skillLevel"
-          :options="skill"
-          required
-        ></b-form-select>
-      </b-form-group>
-      <b-button type="submit" class="default">Save</b-button>&nbsp;
-      <b-button @click="cancel" class="default">Cancel</b-button>
-    </b-form>
-    <b-button v-on:click="deleteProfile(profile.userId)" class="delete">
-      Delete
-    </b-button>
+    <b-container v-show="showProfileForm === true" fluid id="profile-form">
+      <b-row>
+        <span class="form-title">
+          {{
+            this.$store.state.profile.favePlant === undefined
+              ? "Create a profile"
+              : "Edit your profile"
+          }}
+        </span>
+      </b-row>
+
+      <b-form @submit.prevent="saveProfile" id="profile-form">
+        <b-form-group
+          id="input-group-1"
+          label="Display name:"
+          label-for="input-1"
+        >
+          <b-form-input
+            type="text"
+            id="input-1"
+            placeholder="Enter display name"
+            v-model="profile.displayName"
+          ></b-form-input>
+        </b-form-group>
+        <b-form-group
+          id="input-group-2"
+          label="Favorite plant:"
+          label-for="input-2"
+        >
+          <b-form-input
+            type="text"
+            id="input-2"
+            placeholder="Your favorite plant"
+            v-model="profile.favePlant"
+          ></b-form-input>
+        </b-form-group>
+        <b-form-group
+          id="input-group-3"
+          label="Skill level:"
+          label-for="input-3"
+        >
+          <b-form-select
+            id="input-3"
+            v-model="profile.skillLevel"
+            :options="skill"
+            required
+          ></b-form-select>
+        </b-form-group>
+        <b-button size="sm" type="submit" class="default">Save</b-button>
+        <b-button size="sm" id="cancel" @click="cancel" class="default"
+          >Cancel</b-button
+        >
+      </b-form>
+    </b-container>
   </b-container>
 </template>
 
@@ -121,6 +175,7 @@ export default {
       profile: {
         userId: this.$store.state.user.id,
       },
+      showProfileForm: false,
       modal: "",
       skill: [
         { text: "Select One", value: null },
@@ -134,12 +189,28 @@ export default {
     treatments() {
       return this.$store.state.treatments;
     },
+    latestTreatment() {
+      return this.$store.state.latestTreatment;
+    },
   },
   methods: {
+    toggleForm() {
+      this.showProfileForm === true ? (this.showProfileForm = false) : (this.showProfileForm = true);
+    },
+    formatDateMonth(date) {
+      const options = {
+        // weekday: "long",
+        // year: "numeric",
+        month: "long",
+        day: "numeric",
+      };
+      return new Date(date).toLocaleDateString("en-US", options);
+    },
     cancel() {
       this.profile = {
         userId: this.$store.state.user.id,
       };
+      this.toggleForm();
     },
     saveProfile() {
       // eslint-disable-next-line no-console
@@ -211,26 +282,25 @@ export default {
 </script>
 
 <style>
-/* #profile-view > .row {
-  justify-content: center;
-  text-align: center;
-} */
-.profile-details {
-  background-color: var(--green);
-  margin-top: 10px;
+.card-footer > .row {
+  /* background-color: var(--green);
+  background-color: var(--orange); */
 }
-.profile-details > .row {
-  /* border: 3px solid var(--light); */
+.card-footer .btn {
+  width: 100%;
 }
-.profile-details .col {
-  border: 3px solid var(--light);
-  padding: 10px;
+.text-center.middle.col {
+  border-right: 1px solid var(--light);
+  border-left: 1px solid var(--light);
 }
-.profile-details span {
-  font-size: 1.2rem;
+#profile-form {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 }
-.profile-question {
-  display: flex;
-  justify-content: end;
+.form-title {
+  font-size: 1.3rem;
+}
+.btn#cancel {
+  margin-left: 1%;
 }
 </style>

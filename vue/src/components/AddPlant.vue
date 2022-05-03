@@ -1,12 +1,12 @@
 <template>
   <b-container fluid id="add-plant">
-    <label id="add-plant-label">
+    <!-- <label id="add-plant-label">
       {{
         this.$store.state.plants.length == 0
           ? "Let&#8217;s Get Started!"
           : "Add a plant:"
       }}
-    </label>
+    </label> -->
       <b-form inline @submit.prevent="addPlant" id="add-plant-form">
         <label class="sr-only" for="plantName">Plant Name</label>
         <b-form-input
@@ -66,6 +66,6 @@ export default {
 
 <style>
 #add-plant {
-  margin-bottom: 10px;
+  margin-bottom: 1rem;
 }
 </style>

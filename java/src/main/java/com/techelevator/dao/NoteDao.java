@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface NoteDao {
 
-    List<Note> getAllNotes(int plantId);
+    List<Note> getAllNotes(int userId);
 
     Note createNote(Note newNote);
 

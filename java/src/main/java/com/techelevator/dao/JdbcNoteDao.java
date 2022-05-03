@@ -6,6 +6,7 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,19 +20,21 @@ public class JdbcNoteDao implements NoteDao {
     }
 
     @Override
-    public List<Note> getAllNotes(int plantId) {
+    public List<Note> getAllNotes(int userId) {
 
         List<Note> noteList = new ArrayList<>();
 
-        String sql = "SELECT note_id, note, note_img, created_on " +
-                "FROM notes WHERE plant_id = ? " +
+        String sql = "SELECT note_id, notes.plant_id, note, note_img, created_on " +
+                "FROM notes " +
+                "JOIN plants on plants.plant_id = notes.plant_id " +
+                "WHERE plants.user_id = ? " +
                 "ORDER BY note_id DESC";
-        SqlRowSet results = template.queryForRowSet(sql, plantId);
+        SqlRowSet results = template.queryForRowSet(sql, userId);
 
         while (results.next()) {
             Note note = new Note();
             note.setNoteId(results.getInt("note_id"));
-            note.setPlantId(plantId);
+            note.setPlantId(results.getInt("plant_id"));
             note.setNote(results.getString("note"));
             note.setNote_img(results.getString("note_img"));
             note.setCreatedOn(results.getDate("created_on").toLocalDate());
@@ -41,6 +44,7 @@ public class JdbcNoteDao implements NoteDao {
 
         return noteList;
     }
+
 
     @Override
     public Note createNote(Note newNote) {

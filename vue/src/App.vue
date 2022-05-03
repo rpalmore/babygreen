@@ -25,6 +25,8 @@ export default {
 </script>
 
 <style>
+/* Another test palette I haven't managed to save yet
+https://coolors.co/190b28-accccc-ffcb77-4d6a6d-b74f6f */
 /* Coolers palette: 
 https://coolors.co/palette/729b79-475b63-2e2c2f-d34e24-f5e4d7 */
 :root {
@@ -46,7 +48,15 @@ https://coolors.co/palette/729b79-475b63-2e2c2f-d34e24-f5e4d7 */
   --dark: #3D405B;
   --orange: #E07A5F;
   --light: #F4F1DE; */
-}
+  /* Coolers palette based on 
+  plant placeholder image: https://coolors.co/palette/20140b-accccc-4a9494-cb4a00-ea9029 */
+  /* --green: #4A9494;
+  --grey: #EA9029;
+  --dark: #20140B;
+  --orange: #CB4A00;
+  --light: #ACCCCC;
+  */
+} 
 #app {
   background-color: var(--orange);
   /* background-color: var(--grey); */

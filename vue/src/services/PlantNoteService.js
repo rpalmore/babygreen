@@ -2,8 +2,8 @@ import axios from 'axios';
 
 export default {
 
-    getNotes(plantId) {
-        return axios.get(`/plants/${plantId}/notes`);
+    getNotes() {
+        return axios.get('/plants/notes');
     },
 
     createNote(note) {
