@@ -73,7 +73,7 @@
     <!-- End todo -->
 
     <p class="subsection-header">Recent waterings:</p>
-    <p v-show="waterings.length === 0">You have no waterings to display.</p>
+    <p class="no-content" v-show="waterings.length === 0">You have no waterings to display.</p>
     <b-list-group
       v-bind:treatment="treatment"
       v-for="treatment in waterings.slice(0, 5)"
@@ -92,12 +92,13 @@
 
           {{ formatDateDay(treatment.careDate.replace(/-/g, "\/")) }}
         </span>
-        <b-badge
+        <b-avatar
+          icon="trash-fill"
           id="deleteTreatment"
+          size="sm"
           v-on:click="deleteTreatment(treatment)"
           href="#"
-          >&#10006;</b-badge
-        >
+        ></b-avatar>
       </b-list-group-item>
     </b-list-group>
 
@@ -108,7 +109,7 @@
         id="toggleBtn"
         size="sm"
         v-b-toggle.collapse-1
-        >See {{ waterings.length - 5 }} more</b-button
+        >See <b-badge>{{ waterings.length - 5 }}</b-badge> more</b-button
       >
     </p>
     <b-collapse id="collapse-1" class="mt-2">
@@ -128,18 +129,19 @@
 
             {{ formatDateDay(treatment.careDate.replace(/-/g, "\/")) }}
           </span>
-          <b-badge
+          <b-avatar
+            icon="trash-fill"
             id="deleteTreatment"
+            size="sm"
             v-on:click="deleteTreatment(treatment)"
             href="#"
-            >&#10006;</b-badge
-          >
+          ></b-avatar>
         </b-list-group-item>
       </b-list-group>
     </b-collapse>
 
     <p class="subsection-header">Other recent treatments:</p>
-    <p v-show="otherTreatments.length === 0">
+    <p class="no-content" v-show="otherTreatments.length === 0">
       You have no other treatments to display.
     </p>
     <b-list-group
@@ -164,12 +166,13 @@
             treatment.careType
           }}
         </span>
-        <b-badge
+        <b-avatar
+          icon="trash-fill"
           id="deleteTreatment"
+          size="sm"
           v-on:click="deleteTreatment(treatment)"
           href="#"
-          >&#10006;</b-badge
-        >
+        ></b-avatar>
       </b-list-group-item>
     </b-list-group>
 
@@ -180,7 +183,7 @@
         id="toggleBtn"
         size="sm"
         v-b-toggle.collapse-2
-        >See {{ otherTreatments.length - 5 }} more</b-button
+        >See <b-badge>{{ otherTreatments.length - 5 }}</b-badge> more</b-button
       >
     </p>
     <b-collapse id="collapse-2" class="mt-2">
@@ -204,42 +207,91 @@
               treatment.careType
             }}
           </span>
-          <b-badge
+          <b-avatar
+            icon="trash-fill"
             id="deleteTreatment"
+            size="sm"
             v-on:click="deleteTreatment(treatment)"
             href="#"
-            >&#10006;</b-badge
-          >
+          ></b-avatar>
         </b-list-group-item>
       </b-list-group>
     </b-collapse>
 
-    <p>
-      This page offers more details about a plant and the option to add dated
-      notes and additional information, such as a link to resources and a field
-      to enter the age of the plant (i.e., when you first started caring for the
-      plant, or when you planted it, if it's an outdoor plant). You can also add
-      a plant image here via Cloudinary, which will be the main art on the page.
-      You can also add photos to your notes.
-    </p>
-    <p>Enhance this listing by adding a link, age of plant.</p>
-    <p>[Plant image placeholder with option to add/edit.]</p>
+    <!-- Notes section -->
+    <p class="subsection-header">Notes on {{ plant.plantName }}:</p>
+    <p class="no-content" v-show="notes.length === 0">You have no notes to display.</p>
 
-    <!-- ADD NOTES -->
-    <p>Add notes about this plant via some kind of notes form.</p>
-    <form v-on:submit.prevent="saveNote(note.note)" id="note-form">
-      <label for="note">Notes:</label>
-      <input required type="text" class="note-form" v-model="note.note" />
-      <button id="submit">Save</button>
-    </form>
-    <div id="note-container" v-for="note in notes" v-bind:key="note.noteId">
-      {{ note.note }}
-      {{ formatDateDay(note.createdOn.replace(/-/g, "\/")) }}&nbsp;
-      <a v-on:click="deleteNote(note.noteId)">&#10006;</a>&nbsp;
-      <a v-on:click.prevent="toggleNoteForm(note)">{{
-        showNoteForm === true ? "cancel" : "edit"
-      }}</a>
-    </div>
+    <!-- Add a note with collapse -->
+    <p>
+      <b-button id="toggleFormBtn" size="sm" v-b-toggle.collapse-form
+        ><span class="when-open">Close form</span
+        ><span class="when-closed">Add a note</span>
+        <b-avatar class="avatar-custom-note" icon="file-post"></b-avatar
+      ></b-button>
+    </p>
+
+    <b-collapse id="collapse-form" class="mt-2">
+      <b-form id="add-note-form" @submit.prevent="saveNote(note.note)">
+        <b-form-group>
+          <label for="note">My note:</label>
+          <b-form-textarea v-model="note.note"></b-form-textarea>
+        </b-form-group>
+        <b-button size="sm" id="cancel" @click="cancel" class="default"
+          >Cancel</b-button
+        >
+        <b-button size="sm" type="submit" class="default">Save</b-button>
+      </b-form>
+    </b-collapse>
+    <!-- End add a note -->
+
+    <b-card
+      id="note-card"
+      v-for="note in notes"
+      v-bind:key="note.noteId"
+      no-body
+      :header="formatDateDay(note.createdOn.replace(/-/g, '\/'))"
+    >
+      <b-card-body v-show="showNoteForm === false">
+        {{ note.note }}
+      </b-card-body>
+      <b-card-body v-show="showNoteForm === true">
+        <b-form v-on:submit.prevent="editNote(editedNote)">
+          <b-form-textarea v-model="editedNote.note"></b-form-textarea>
+          <b-button size="sm" id="cancel" @click="cancel" class="default"
+            >Cancel</b-button
+          >
+          <b-button size="sm" type="submit" class="default">Update</b-button>
+        </b-form>
+      </b-card-body>
+      <b-card-footer>
+        <b-row align-v="center">
+          <b-col class="text-center">
+            <b-button id="addPhotoBtn" size="sm"
+              >Add a photo
+              <b-avatar icon="camera-fill" class="avatar-icon-camera"></b-avatar
+            ></b-button>
+          </b-col>
+          <b-col class="text-center middle">
+            <b-button id="addPhotoBtn" size="sm" @click="toggleNoteForm(note)"
+              >Edit note
+              <b-avatar icon="pencil-fill" class="avatar-icon-pencil"></b-avatar
+            ></b-button>
+          </b-col>
+          <b-col>
+            <b-button
+              id="addPhotoBtn"
+              size="sm"
+              @click="deleteNote(note.noteId)"
+            >
+              Delete
+              <b-avatar icon="trash-fill" class="avatar-icon-trash"></b-avatar>
+            </b-button>
+          </b-col>
+        </b-row>
+      </b-card-footer>
+    </b-card>
+
     <div id="form-container">
       <form
         v-on:submit.prevent="editNote(editedNote)"
@@ -250,6 +302,15 @@
         <button id="submit">Update</button>
       </form>
     </div>
+
+    <p>
+      This page offers more details about a plant and the option to add dated
+      notes and additional information, such as a link to resources and a field
+      to enter the age of the plant (i.e., when you first started caring for the
+      plant, or when you planted it, if it's an outdoor plant). You can also add
+      a plant image here via Cloudinary, which will be the main art on the page.
+      You can also add photos to your notes.
+    </p>
   </b-container>
 </template>
 
@@ -348,6 +409,7 @@ export default {
         ? (this.showNoteForm = false)
         : (this.showNoteForm = true);
     },
+    // todo: make sure note is included here
     cancelForm(event) {
       event.target.id === "cancelInfoForm"
         ? this.toggleInfoForm()
@@ -463,6 +525,10 @@ export default {
 #plant-detail > .row.plant-card {
   margin-top: 1rem;
 }
+.no-content {
+  padding: 10px;
+  border: 2px solid var(--green);
+}
 .card {
   border: 1px solid var(--gray);
 }
@@ -472,7 +538,8 @@ export default {
 #b-card-img {
   background-color: var(--orange);
 }
-#addPhotoBtn, .avatar-icon-camera {
+#addPhotoBtn,
+.avatar-icon-camera {
   background-color: var(--light);
   border: 1px solid var(--orange);
   color: var(--dark);
@@ -481,16 +548,19 @@ export default {
   background-color: var(--green);
 }
 .badge-secondary {
-  color: var(--dark);
+  /* color: var(--dark); */
 }
 #toggleBtn {
   background-color: var(--orange);
   margin-top: 1rem;
 }
+#toggleBtn .badge {
+  background-color: var(--light);
+}
 #deleteTreatment {
   background-color: var(--orange);
-  background-color: white;
-  border: 2px solid var(--orange);
+  /* background-color: white;
+  border: 2px solid var(--orange); */
 }
 .subsection-header {
   font-size: 1.3rem;
@@ -515,5 +585,21 @@ export default {
 .avatar-custom#repotted {
   background-color: var(--platinum);
   border: 1px solid var(--green);
+}
+.card#note-card {
+  margin-bottom: 1rem;
+}
+.avatar-custom-note {
+  color: var(--dark);
+  background-color: var(--platinum);
+  border: 1px solid var(--orange);
+  margin-left: 3px;
+}
+.collapsed > .when-open,
+.not-collapsed > .when-closed {
+  display: none;
+}
+#add-note-form {
+  margin-bottom: 1rem;
 }
 </style>

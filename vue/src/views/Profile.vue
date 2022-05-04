@@ -1,6 +1,4 @@
 <template>
-  <!-- <b-container id="profile" class="text-center"> -->
-  <!-- Above: quick and easy way to center all text -->
   <b-container id="profile-view">
     <b-row align-h="center">
       <p class="section-header">
@@ -47,8 +45,8 @@
                     this.$store.state.plants.length === 1
                       ? this.$store.state.plants.length + " plant"
                       : this.$store.state.plants.length + " plants"
-                  }}!</span
-                >
+                  }}!
+                </span>
               </b-list-group-item>
               <b-list-group-item v-if="treatments != ''">
                 <span
@@ -84,7 +82,7 @@
                 >Edit profile
                 <b-avatar
                   icon="pencil-fill"
-                  class="avatar-icon-camera"
+                  class="avatar-icon-pencil"
                 ></b-avatar
               ></b-button>
             </b-col>
@@ -97,7 +95,7 @@
                 Delete
                 <b-avatar
                   icon="trash-fill"
-                  class="avatar-icon-camera"
+                  class="avatar-icon-trash"
                 ></b-avatar>
               </b-button>
             </b-col>
@@ -156,10 +154,10 @@
             required
           ></b-form-select>
         </b-form-group>
-        <b-button size="sm" type="submit" class="default">Save</b-button>
         <b-button size="sm" id="cancel" @click="cancel" class="default"
           >Cancel</b-button
         >
+        <b-button size="sm" type="submit" class="default">Save</b-button>
       </b-form>
     </b-container>
   </b-container>
@@ -195,7 +193,9 @@ export default {
   },
   methods: {
     toggleForm() {
-      this.showProfileForm === true ? (this.showProfileForm = false) : (this.showProfileForm = true);
+      this.showProfileForm === true
+        ? (this.showProfileForm = false)
+        : (this.showProfileForm = true);
     },
     formatDateMonth(date) {
       const options = {
@@ -293,14 +293,28 @@ export default {
   border-right: 1px solid var(--light);
   border-left: 1px solid var(--light);
 }
+.avatar-icon-pencil {
+  border: 1px solid var(--orange);
+  background-color: var(--platinum);
+  color: var(--dark);
+}
+.avatar-icon-trash {
+  border: 1px solid var(--green);
+  border: 1px solid var(--platinum);
+  background-color: var(--orange);
+  /* color: var(--dark); */
+}
 #profile-form {
   margin-top: 1rem;
   margin-bottom: 1rem;
 }
 .form-title {
   font-size: 1.3rem;
+  border-top: 1px solid var(--orange);
+  border-bottom: 1px solid var(--orange);
 }
 .btn#cancel {
-  margin-left: 1%;
+  margin-right: 1%;
+  background-color: var(--gray);
 }
 </style>

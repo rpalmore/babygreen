@@ -243,6 +243,7 @@ export default {
 #toggleFormBtn {
   background-color: var(--green);
   color: var(--dark);
+  color: var(--platinum);
   border: 1px solid var(--orange);
   font-size: 1rem;
 }
@@ -252,6 +253,7 @@ export default {
 }
 .avatar-custom-reverse {
   background-color: var(--light);
+  background-color: var(--platinum);
   border: 1px solid var(--orange);
 }
 </style>

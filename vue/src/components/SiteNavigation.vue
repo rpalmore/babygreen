@@ -1,5 +1,5 @@
 <template>
-  <b-card-header header-tag="nav" v-if="$store.state.token != ''">
+  <b-card-header id="site-nav" header-tag="nav" v-if="$store.state.token != ''">
     <b-nav pills>
       <!-- <b-nav-text>baby green</b-nav-text> -->
       <b-nav-item-dropdown
@@ -65,7 +65,7 @@ export default {
 </script>
 
 <style>
-.card-header {
+#site-nav.card-header {
   background: url(../assets/avinash-kumar-1-unsplash-nav.webp) center center;
   background-size: cover;
   height: 100%;

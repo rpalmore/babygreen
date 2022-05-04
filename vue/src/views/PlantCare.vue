@@ -50,13 +50,13 @@
               }}
             </router-link>
           </span>
-          <b-badge
+          <b-avatar
+            icon="trash-fill"
             id="deleteTreatment"
-            v-if="uniqueDate === treatment.careDate"
+            size="sm"
             v-on:click="deleteTreatment(treatment)"
             href="#"
-            >&#10006;</b-badge
-          >
+          ></b-avatar>
         </b-list-group-item>
       </b-list-group>
 
@@ -92,13 +92,13 @@
               }}
             </router-link>
           </span>
-          <b-badge
+          <b-avatar
+            icon="trash-fill"
             id="deleteTreatment"
-            v-if="uniqueDate === treatment.careDate"
+            size="sm"
             v-on:click="deleteTreatment(treatment)"
             href="#"
-            >&#10006;</b-badge
-          >
+          ></b-avatar>
         </b-list-group-item>
       </b-list-group>
 
@@ -134,13 +134,13 @@
               }}
             </router-link>
           </span>
-          <b-badge
+          <b-avatar
+            icon="trash-fill"
             id="deleteTreatment"
-            v-if="uniqueDate === treatment.careDate"
+            size="sm"
             v-on:click="deleteTreatment(treatment)"
             href="#"
-            >&#10006;</b-badge
-          >
+          ></b-avatar>
         </b-list-group-item>
       </b-list-group>
 
@@ -176,13 +176,13 @@
               }}
             </router-link>
           </span>
-          <b-badge
+          <b-avatar
+            icon="trash-fill"
             id="deleteTreatment"
-            v-if="uniqueDate === treatment.careDate"
+            size="sm"
             v-on:click="deleteTreatment(treatment)"
             href="#"
-            >&#10006;</b-badge
-          >
+          ></b-avatar>
         </b-list-group-item>
       </b-list-group>
 
@@ -218,13 +218,13 @@
               }}
             </router-link>
           </span>
-          <b-badge
+          <b-avatar
+            icon="trash-fill"
             id="deleteTreatment"
-            v-if="uniqueDate === treatment.careDate"
+            size="sm"
             v-on:click="deleteTreatment(treatment)"
             href="#"
-            >&#10006;</b-badge
-          >
+          ></b-avatar>
         </b-list-group-item>
       </b-list-group>
     </b-list-group>
