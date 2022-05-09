@@ -1,6 +1,6 @@
 <template>
   <b-container fluid id="register">
-    <p class="section-header">{{ registrationErrors? registrationErrors : "Create Account" }}</p>
+    <p class="section-header-about">{{ registrationErrors? registrationErrors : "Create Account" }}</p>
     <b-form inline @submit.prevent="register">
       <label for="username" class="sr-only">Username</label>
       <b-form-input

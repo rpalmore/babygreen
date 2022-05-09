@@ -65,9 +65,6 @@ export default {
     },
   },
   methods: {
-    // btnDisabled() {
-    //   return this.selectedPlantIds.length === 0 ? true : false;
-    // },
     logCare() {
       this.treatment.plantId = this.selectedPlantIds;
       this.$emit("form-sent");

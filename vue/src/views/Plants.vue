@@ -1,5 +1,5 @@
 <template>
-  <b-container id="plant-view">
+  <b-container fluid id="plant-view">
     <b-row align-h="center">
       <p class="section-header">
         {{
@@ -16,7 +16,8 @@
     </p>
     <p>
       <b-button id="toggleFormBtn" size="sm" v-b-toggle.collapse-form
-        >Add a new plant!
+        ><span class="when-open">Close form</span
+        ><span class="when-closed">Add a plant</span>
         <b-avatar
           class="avatar-custom-reverse"
           :src="require('@/assets/leaf.png')"
@@ -100,10 +101,6 @@ export default {
   name: "plants",
   data() {
     return {
-      // Not sure if I need this plant object now that I've moved "add plant" form. Need to test!
-      // plant: {
-      //   userId: this.$store.state.user.id,
-      // },
       fields: [
         {
           key: "selectAll",
@@ -128,13 +125,9 @@ export default {
           label: "Image",
         },
       ],
-      // newPlant: {},
       showForm: false,
       selectedPlantIds: [],
       checkAll: false,
-      // treatment: {
-      //   plantId: [],
-      // },
       modal: "",
     };
   },
@@ -239,6 +232,10 @@ export default {
 .section-header {
   border-top: 3px solid var(--orange);
   border-bottom: 3px solid var(--orange);
+  margin-top: 20px;
+  font-size: 1.5rem;
+  font-weight: 300;
+  color: var(--dark);
 }
 #toggleFormBtn {
   background-color: var(--green);
@@ -246,6 +243,7 @@ export default {
   color: var(--platinum);
   border: 1px solid var(--orange);
   font-size: 1rem;
+  min-width: 142px;
 }
 .avatar-custom {
   background-color: var(--green);
@@ -255,5 +253,6 @@ export default {
   background-color: var(--light);
   background-color: var(--platinum);
   border: 1px solid var(--orange);
+  margin-left: 3px;
 }
 </style>

@@ -43,6 +43,7 @@ https://coolors.co/palette/729b79-475b63-2e2c2f-d34e24-f5e4d7 */
   --light: #bacdb0;
   /* Extra color for font where needed */
   --platinum: #ecedea;
+  --yellow: #FFCB77;
   /* --green:  #F2CC8F;
   --grey: #81B29A;
   --dark: #3D405B;
@@ -56,6 +57,7 @@ https://coolors.co/palette/729b79-475b63-2e2c2f-d34e24-f5e4d7 */
   --orange: #CB4A00;
   --light: #ACCCCC;
   */
+  /* Another to try: https://coolors.co/palette/f4f1de-e07a5f-3d405b-81b29a-f2cc8f */
 } 
 #app {
   background-color: var(--orange);

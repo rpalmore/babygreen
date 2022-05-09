@@ -1,7 +1,6 @@
 <template>
   <b-container id="about" fluid>
-    <!-- <p class="section-header">Tools for a lush life</p> -->
-    <p>Tools for a lush life</p>
+    <p class="section-header-about">Tools for a lush life</p>
     <!-- <b-img right v-bind="mainProps" rounded="circle" alt="Circle image"></b-img> -->
     <!-- <b-container>
       <b-card img-src="https://placekitten.com/300/300" img-alt="Card image" img-right>
@@ -43,9 +42,7 @@ export default {
 </script>
 
 <style>
-.section-header {
-  /* text-align: center; */
-  /* padding-top: 20px; */
+.section-header-about {
   margin-top: 20px;
   font-size: 1.5rem;
   font-weight: 300;

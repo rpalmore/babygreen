@@ -1,32 +1,26 @@
 <template>
-  <b-container fluid id="add-plant">
-    <!-- <label id="add-plant-label">
-      {{
-        this.$store.state.plants.length == 0
-          ? "Let&#8217;s Get Started!"
-          : "Add a plant:"
-      }}
-    </label> -->
-      <b-form inline @submit.prevent="addPlant" id="add-plant-form">
-        <label class="sr-only" for="plantName">Plant Name</label>
-        <b-form-input
-          id="plantName"
-          class="mb-2 mr-sm-2 mb-sm-0"
-          placeholder="Plant name"
-          type="text"
-          v-model="plant.plantName"
-          required
-        ></b-form-input>
-        <b-form-radio-group
-          required
-          v-model="plant.indoor"
-          :options="options"
-          :aria-describedby="ariaDescribedby"
-          name="radio-inline"
-        ></b-form-radio-group>
-        <b-button size="sm" class="default" type="submit">Save</b-button>
-      </b-form>
-  </b-container>
+  <b-form inline @submit.prevent="addPlant" id="add-plant-form">
+    <label class="sr-only" for="plantName">Plant Name</label>
+    <b-form-input
+      id="plantName"
+      class="mb-2 mr-sm-2 mb-sm-0"
+      placeholder="Plant name"
+      type="text"
+      v-model="plant.plantName"
+      required
+    ></b-form-input>
+    <b-form-radio-group
+      required
+      v-model="plant.indoor"
+      :options="options"
+      :aria-describedby="ariaDescribedby"
+      name="radio-inline"
+    ></b-form-radio-group>
+    <b-button size="sm" id="cancel" @click="cancel" class="default"
+      >Cancel</b-button
+    >
+    <b-button size="sm" type="submit" class="default">Save</b-button>
+  </b-form>
 </template>
 
 <script>
@@ -60,12 +54,18 @@ export default {
           alert(err + " problem creating plant!");
         });
     },
+    cancel() {
+      this.plant = {
+        userId: this.$store.state.user.id,
+      };
+      this.$root.$emit('bv::toggle::collapse', 'collapse-form')
+    },
   },
 };
 </script>
 
 <style>
-#add-plant {
+#add-plant-form {
   margin-bottom: 1rem;
 }
 </style>

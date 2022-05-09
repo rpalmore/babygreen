@@ -14,7 +14,7 @@
     <!-- Profile card -->
     <b-row class="plant-card" align-h="center">
       <b-card no-body class="overflow-hidden" style="max-width: 540px">
-        <b-row no-gutters>
+        <b-row no-gutters align-v="center">
           <b-col md="6">
             <b-card-img
               fluid-grow
@@ -72,6 +72,7 @@
               <b-button id="addPhotoBtn" size="sm"
                 >Add a photo
                 <b-avatar
+                  size="sm"
                   icon="camera-fill"
                   class="avatar-icon-camera"
                 ></b-avatar
@@ -79,8 +80,11 @@
             </b-col>
             <b-col class="text-center middle">
               <b-button id="addPhotoBtn" size="sm" @click="toggleForm()"
-                >Edit profile
+                >{{this.$store.state.profile.favePlant === undefined
+              ? "Create profile"
+              : "Edit profile" }}
                 <b-avatar
+                  size="sm"
                   icon="pencil-fill"
                   class="avatar-icon-pencil"
                 ></b-avatar
@@ -94,6 +98,7 @@
               >
                 Delete
                 <b-avatar
+                  size="sm"
                   icon="trash-fill"
                   class="avatar-icon-trash"
                 ></b-avatar>
@@ -106,8 +111,10 @@
     <!-- End profile card -->
 
     <!-- Create or edit your profile -->
+    <!-- Todo: Get existing data to display if edit profile (instead of create)
+    Look to Bird Nerds treatment here. -->
     <b-container v-show="showProfileForm === true" fluid id="profile-form">
-      <b-row>
+      <!-- <b-row>
         <span class="form-title">
           {{
             this.$store.state.profile.favePlant === undefined
@@ -115,7 +122,7 @@
               : "Edit your profile"
           }}
         </span>
-      </b-row>
+      </b-row> -->
 
       <b-form @submit.prevent="saveProfile" id="profile-form">
         <b-form-group
@@ -225,6 +232,7 @@ export default {
             this.profile = {
               userId: this.$store.state.user.id,
             };
+            this.toggleForm();
           })
           .catch((err) => {
             alert(err + " problem creating profile!");
@@ -239,6 +247,7 @@ export default {
             this.profile = {
               userId: this.$store.state.user.id,
             };
+            this.toggleForm();
           })
           .catch((err) => {
             alert(err + " problem updating profile!");
@@ -282,6 +291,9 @@ export default {
 </script>
 
 <style>
+.plant-card {
+  margin-top: 1rem;
+}
 .card-footer > .row {
   /* background-color: var(--green);
   background-color: var(--orange); */

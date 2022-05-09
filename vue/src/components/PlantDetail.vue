@@ -1,6 +1,5 @@
 <template>
   <b-container fluid id="plant-detail">
-    <!-- Standard section header -->
     <b-row align-h="center">
       <p class="section-header">
         {{ plant.plantName }}
@@ -9,7 +8,7 @@
 
     <b-row class="plant-card" align-h="center">
       <b-card no-body class="overflow-hidden" style="max-width: 540px">
-        <b-row no-gutters>
+        <b-row no-gutters align-v="center">
           <b-col md="6">
             <b-card-img
               id="b-card-img"
@@ -39,6 +38,7 @@
               <b-button id="addPhotoBtn" size="sm"
                 >Add a photo
                 <b-avatar
+                  size="sm"
                   icon="camera-fill"
                   class="avatar-icon-camera"
                 ></b-avatar
@@ -49,6 +49,7 @@
       </b-card>
     </b-row>
 
+    <!-- todo: style this form and place it -->
     <form v-on:submit.prevent="editPlant" v-show="showDateForm === true">
       <label for="plantAge">Plant cared for since: </label>
       <input type="date" v-model="plant.plantAge" />
@@ -57,6 +58,7 @@
         Cancel
       </button>
     </form>
+
     <!-- Todo: figure our where "add info" feature lives -->
     {{ plant.infoUrl }}
     <a v-on:click="toggleInfoForm">{{
@@ -73,7 +75,9 @@
     <!-- End todo -->
 
     <p class="subsection-header">Recent waterings:</p>
-    <p class="no-content" v-show="waterings.length === 0">You have no waterings to display.</p>
+    <p class="no-content" v-show="waterings.length === 0">
+      You have no waterings to display.
+    </p>
     <b-list-group
       v-bind:treatment="treatment"
       v-for="treatment in waterings.slice(0, 5)"
@@ -93,6 +97,8 @@
           {{ formatDateDay(treatment.careDate.replace(/-/g, "\/")) }}
         </span>
         <b-avatar
+          v-b-tooltip.hover
+          title="Delete this treatment"
           icon="trash-fill"
           id="deleteTreatment"
           size="sm"
@@ -130,6 +136,8 @@
             {{ formatDateDay(treatment.careDate.replace(/-/g, "\/")) }}
           </span>
           <b-avatar
+            v-b-tooltip.hover
+            title="Delete this treatment"
             icon="trash-fill"
             id="deleteTreatment"
             size="sm"
@@ -167,6 +175,8 @@
           }}
         </span>
         <b-avatar
+          v-b-tooltip.hover
+          title="Delete this treatment"
           icon="trash-fill"
           id="deleteTreatment"
           size="sm"
@@ -208,6 +218,8 @@
             }}
           </span>
           <b-avatar
+            v-b-tooltip.hover
+            title="Delete this treatment"
             icon="trash-fill"
             id="deleteTreatment"
             size="sm"
@@ -220,24 +232,34 @@
 
     <!-- Notes section -->
     <p class="subsection-header">Notes on {{ plant.plantName }}:</p>
-    <p class="no-content" v-show="notes.length === 0">You have no notes to display.</p>
+    <p class="no-content" v-show="notes.length === 0">
+      You have no notes to display.
+    </p>
 
     <!-- Add a note with collapse -->
     <p>
-      <b-button id="toggleFormBtn" size="sm" v-b-toggle.collapse-form
+      <b-button id="toggleFormBtn" size="sm" v-b-toggle.collapse-note-form
         ><span class="when-open">Close form</span
         ><span class="when-closed">Add a note</span>
-        <b-avatar class="avatar-custom-note" icon="file-post"></b-avatar
+        <b-avatar
+          size="sm"
+          class="avatar-custom-note"
+          icon="file-post"
+        ></b-avatar
       ></b-button>
     </p>
 
-    <b-collapse id="collapse-form" class="mt-2">
+    <b-collapse id="collapse-note-form" class="mt-2">
       <b-form id="add-note-form" @submit.prevent="saveNote(note.note)">
         <b-form-group>
           <label for="note">My note:</label>
-          <b-form-textarea v-model="note.note"></b-form-textarea>
+          <b-form-textarea required v-model="note.note"></b-form-textarea>
         </b-form-group>
-        <b-button size="sm" id="cancel" @click="cancel" class="default"
+        <b-button
+          size="sm"
+          id="cancel"
+          @click="cancelForm($event)"
+          class="default"
           >Cancel</b-button
         >
         <b-button size="sm" type="submit" class="default">Save</b-button>
@@ -252,30 +274,29 @@
       no-body
       :header="formatDateDay(note.createdOn.replace(/-/g, '\/'))"
     >
-      <b-card-body v-show="showNoteForm === false">
+      <b-card-body>
         {{ note.note }}
-      </b-card-body>
-      <b-card-body v-show="showNoteForm === true">
-        <b-form v-on:submit.prevent="editNote(editedNote)">
-          <b-form-textarea v-model="editedNote.note"></b-form-textarea>
-          <b-button size="sm" id="cancel" @click="cancel" class="default"
-            >Cancel</b-button
-          >
-          <b-button size="sm" type="submit" class="default">Update</b-button>
-        </b-form>
       </b-card-body>
       <b-card-footer>
         <b-row align-v="center">
           <b-col class="text-center">
             <b-button id="addPhotoBtn" size="sm"
               >Add a photo
-              <b-avatar icon="camera-fill" class="avatar-icon-camera"></b-avatar
+              <b-avatar
+                size="sm"
+                icon="camera-fill"
+                class="avatar-icon-camera"
+              ></b-avatar
             ></b-button>
           </b-col>
           <b-col class="text-center middle">
             <b-button id="addPhotoBtn" size="sm" @click="toggleNoteForm(note)"
               >Edit note
-              <b-avatar icon="pencil-fill" class="avatar-icon-pencil"></b-avatar
+              <b-avatar
+                size="sm"
+                icon="pencil-fill"
+                class="avatar-icon-pencil"
+              ></b-avatar
             ></b-button>
           </b-col>
           <b-col>
@@ -285,31 +306,37 @@
               @click="deleteNote(note.noteId)"
             >
               Delete
-              <b-avatar icon="trash-fill" class="avatar-icon-trash"></b-avatar>
+              <b-avatar
+                size="sm"
+                icon="trash-fill"
+                class="avatar-icon-trash"
+              ></b-avatar>
             </b-button>
           </b-col>
         </b-row>
       </b-card-footer>
+
+      <b-card-body v-if="showNoteForm == note.noteId">
+        <b-form v-on:submit.prevent="editNote(note)">
+          <b-form-group>
+            <b-form-textarea v-model.lazy.trim="note.note" autofocus="true">
+            </b-form-textarea>
+          </b-form-group>
+          <b-button
+            size="sm"
+            id="cancelEdit"
+            @click="cancelForm($event, note)"
+            class="default"
+            >Cancel</b-button
+          >
+          <b-button size="sm" type="submit" class="default">Update</b-button>
+        </b-form>
+      </b-card-body>
     </b-card>
 
-    <div id="form-container">
-      <form
-        v-on:submit.prevent="editNote(editedNote)"
-        v-show="showNoteForm === true"
-      >
-        <label for="note">Edited note:</label>
-        <input type="text" v-model="editedNote.note" />
-        <button id="submit">Update</button>
-      </form>
-    </div>
-
     <p>
-      This page offers more details about a plant and the option to add dated
-      notes and additional information, such as a link to resources and a field
-      to enter the age of the plant (i.e., when you first started caring for the
-      plant, or when you planted it, if it's an outdoor plant). You can also add
-      a plant image here via Cloudinary, which will be the main art on the page.
-      You can also add photos to your notes.
+      Todo: Add Cloudinary. Add link for add/update info URL. Form for updating
+      plant age.
     </p>
   </b-container>
 </template>
@@ -318,14 +345,14 @@
 import plantNoteService from "../services/PlantNoteService";
 import plantService from "../services/PlantService";
 import treatmentService from "../services/TreatmentService";
+// import EditNote from "./EditNote.vue";
 export default {
   name: "plant-detail",
+  // components: { EditNote },
   data() {
     return {
       note: {},
-      //treatments: {},
-      // note: this new object "editedNote" might not be needed if the update function is moved into a new component.
-      editedNote: {},
+      savedNote: "",
       showNoteForm: false,
       showDateForm: false,
       showInfoForm: false,
@@ -404,15 +431,20 @@ export default {
         : (this.showDateForm = true);
     },
     toggleNoteForm(note) {
-      this.editedNote = note;
-      this.showNoteForm === true
-        ? (this.showNoteForm = false)
-        : (this.showNoteForm = true);
+      this.savedNote = note.note;
+      this.showNoteForm = note.noteId;
     },
-    // todo: make sure note is included here
-    cancelForm(event) {
+    cancelForm(event, note) {
       event.target.id === "cancelInfoForm"
         ? this.toggleInfoForm()
+        : event.target.id === "cancel"
+        ? this.$root.$emit(
+            "bv::toggle::collapse",
+            "collapse-note-form",
+            (this.note = {})
+          )
+        : event.target.id === "cancelEdit"
+        ? ((this.showNoteForm = false), (note.note = this.savedNote))
         : this.toggleDateForm();
     },
     editPlant() {
@@ -442,24 +474,33 @@ export default {
             this.$store.commit("ADD_NOTE", response.data);
           }
           this.note = {};
+          // Close the 'add note form' after saving a note:
+          this.$root.$emit(
+            "bv::toggle::collapse",
+            "collapse-note-form",
+            (this.note = {})
+          );
         })
         .catch((err) => {
           alert(err + " problem creating note!");
         });
     },
     editNote(editedNote) {
-      plantNoteService
-        .editNote(editedNote)
-        .then((response) => {
-          if (response.status == 200) {
-            this.$store.commit("EDIT_NOTE", editedNote);
-            this.showNoteForm = false;
-          }
-          this.editedNote = {};
-        })
-        .catch((err) => {
-          alert(err + " problem updating note!");
-        });
+      if (editedNote.note != this.savedNote) {
+        plantNoteService
+          .editNote(editedNote)
+          .then((response) => {
+            if (response.status == 200) {
+              this.$store.commit("EDIT_NOTE", editedNote);
+              this.showNoteForm = false;
+            }
+          })
+          .catch((err) => {
+            alert(err + " problem updating note!");
+          });
+      } else {
+        this.showNoteForm = false;
+      }
     },
     deleteNote(noteId) {
       this.modal = "";
@@ -528,6 +569,7 @@ export default {
 .no-content {
   padding: 10px;
   border: 2px solid var(--green);
+  border-radius: 0.2rem;
 }
 .card {
   border: 1px solid var(--gray);
@@ -574,17 +616,22 @@ export default {
 .avatar-custom#pest-treated {
   margin-right: 1rem;
 }
+.avatar-custom#sprayed {
+  background-color: var(--light);
+  border: 1px solid var(--orange);
+}
 .avatar-custom#pest-treated {
   background-color: var(--orange);
   border: 1px solid var(--green);
 }
 .avatar-custom#fertilized {
-  background-color: var(--light);
+  background-color: var(--yellow);
   border: 1px solid var(--green);
 }
 .avatar-custom#repotted {
   background-color: var(--platinum);
   border: 1px solid var(--green);
+  /* border: 1px solid var(--orange); */
 }
 .card#note-card {
   margin-bottom: 1rem;
@@ -601,5 +648,9 @@ export default {
 }
 #add-note-form {
   margin-bottom: 1rem;
+}
+.btn#cancelEdit {
+  margin-right: 1%;
+  background-color: var(--gray);
 }
 </style>
