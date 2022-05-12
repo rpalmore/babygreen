@@ -3,7 +3,8 @@
     <b-row align-h="center">
       <p class="section-header">
         {{
-          this.$store.state.profile.displayName === undefined
+          this.$store.state.profile.displayName === undefined ||
+          this.$store.state.profile.displayName === null
             ? this.$store.state.user.username
             : this.$store.state.profile.displayName
         }}&#8217;s plants

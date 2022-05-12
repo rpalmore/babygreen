@@ -3,11 +3,7 @@
     <b-row align-h="center">
       <p class="section-header">
         You look great in green,
-        {{
-          this.$store.state.profile.displayName === undefined
-            ? this.$store.state.user.username
-            : this.$store.state.profile.displayName
-        }}!
+        {{ name }}!
       </p>
     </b-row>
 
@@ -27,26 +23,13 @@
           <b-col md="6">
             <b-list-group flush>
               <b-list-group-item>
-                <span
-                  >My favorite plant:
-                  {{ this.$store.state.profile.favePlant }}</span
-                >
+                <span>My favorite plant: {{ profile.favePlant }}</span>
               </b-list-group-item>
               <b-list-group-item>
-                <span
-                  >My skill level:
-                  {{ this.$store.state.profile.skillLevel }}</span
-                >
+                <span>My skill level: {{ profile.skillLevel }}</span>
               </b-list-group-item>
               <b-list-group-item>
-                <span
-                  >I am tracking
-                  {{
-                    this.$store.state.plants.length === 1
-                      ? this.$store.state.plants.length + " plant"
-                      : this.$store.state.plants.length + " plants"
-                  }}!
-                </span>
+                <span>I am tracking {{ numPlants }}! </span>
               </b-list-group-item>
               <b-list-group-item v-if="treatments != ''">
                 <span
@@ -80,9 +63,11 @@
             </b-col>
             <b-col class="text-center middle">
               <b-button id="addPhotoBtn" size="sm" @click="toggleForm()"
-                >{{this.$store.state.profile.favePlant === undefined
-              ? "Create profile"
-              : "Edit profile" }}
+                >{{
+                  profile.favePlant === undefined
+                    ? "Create profile"
+                    : "Edit profile"
+                }}
                 <b-avatar
                   size="sm"
                   icon="pencil-fill"
@@ -110,31 +95,19 @@
     </b-row>
     <!-- End profile card -->
 
-    <!-- Create or edit your profile -->
-    <!-- Todo: Get existing data to display if edit profile (instead of create)
-    Look to Bird Nerds treatment here. -->
-    <b-container v-show="showProfileForm === true" fluid id="profile-form">
-      <!-- <b-row>
-        <span class="form-title">
-          {{
-            this.$store.state.profile.favePlant === undefined
-              ? "Create a profile"
-              : "Edit your profile"
-          }}
-        </span>
-      </b-row> -->
-
-      <b-form @submit.prevent="saveProfile" id="profile-form">
+    <b-container v-show="showProfileForm" fluid id="profile-form">
+      <b-form @submit.prevent="saveProfile()" id="profile-form">
         <b-form-group
           id="input-group-1"
           label="Display name:"
           label-for="input-1"
         >
           <b-form-input
+            required
             type="text"
             id="input-1"
             placeholder="Enter display name"
-            v-model="profile.displayName"
+            v-model="newProfile.displayName"
           ></b-form-input>
         </b-form-group>
         <b-form-group
@@ -143,10 +116,11 @@
           label-for="input-2"
         >
           <b-form-input
+            required
             type="text"
             id="input-2"
             placeholder="Your favorite plant"
-            v-model="profile.favePlant"
+            v-model="newProfile.favePlant"
           ></b-form-input>
         </b-form-group>
         <b-form-group
@@ -156,7 +130,7 @@
         >
           <b-form-select
             id="input-3"
-            v-model="profile.skillLevel"
+            v-model="newProfile.skillLevel"
             :options="skill"
             required
           ></b-form-select>
@@ -177,9 +151,12 @@ export default {
   name: "profile",
   data() {
     return {
-      profile: {
+      newProfile: {
         userId: this.$store.state.user.id,
       },
+      savedName: "",
+      savedFavePlant: "",
+      savedSkillLevel: "",
       showProfileForm: false,
       modal: "",
       skill: [
@@ -191,6 +168,20 @@ export default {
     };
   },
   computed: {
+    name() {
+      return this.profile.displayName === undefined ||
+        this.profile.displayName === null
+        ? this.$store.state.user.username
+        : this.profile.displayName;
+    },
+    numPlants() {
+      return this.$store.state.plants.length === 1
+        ? this.$store.state.plants.length + " plant"
+        : this.$store.state.plants.length + " plants";
+    },
+    profile() {
+      return this.$store.state.profile;
+    },
     treatments() {
       return this.$store.state.treatments;
     },
@@ -200,9 +191,14 @@ export default {
   },
   methods: {
     toggleForm() {
-      this.showProfileForm === true
-        ? (this.showProfileForm = false)
-        : (this.showProfileForm = true);
+      this.profile.favePlant != undefined
+        ? (this.newProfile = this.profile)
+        : this.newProfile;
+      this.showProfileForm = !this.showProfileForm;
+      // capturing existing data in order to revert back on cancel()
+      this.savedName = this.profile.displayName;
+      this.savedFavePlant = this.profile.favePlant;
+      this.savedSkillLevel = this.profile.skillLevel;
     },
     formatDateMonth(date) {
       const options = {
@@ -214,40 +210,41 @@ export default {
       return new Date(date).toLocaleDateString("en-US", options);
     },
     cancel() {
-      this.profile = {
+      this.newProfile = {
         userId: this.$store.state.user.id,
       };
-      this.toggleForm();
+      // reset data to saved values
+      if (this.profile.favePlant != undefined) {
+        this.profile.displayName = this.savedName;
+        this.profile.favePlant = this.savedFavePlant;
+        this.profile.skillLevel = this.savedSkillLevel;
+      }
+      this.showProfileForm = !this.showProfileForm;
     },
     saveProfile() {
-      // eslint-disable-next-line no-console
-      console.log(this.$store.state.profile.favePlant);
-      if (this.$store.state.profile.favePlant == undefined) {
+      if (this.profile.favePlant == undefined) {
         profileService
-          .createProfile(this.profile)
+          .createProfile(this.newProfile)
           .then((response) => {
             if (response.status === 201) {
-              this.$store.commit("SET_PROFILE", this.profile);
+              this.$store.commit("SET_PROFILE", this.newProfile);
             }
-            this.profile = {
+            this.newProfile = {
               userId: this.$store.state.user.id,
             };
-            this.toggleForm();
+            this.showProfileForm = !this.showProfileForm;
           })
           .catch((err) => {
             alert(err + " problem creating profile!");
           });
       } else {
         profileService
-          .editProfile(this.profile)
+          .editProfile(this.newProfile)
           .then((response) => {
             if (response.status === 200) {
-              this.$store.commit("SET_PROFILE", this.profile);
+              this.$store.commit("SET_PROFILE", this.newProfile);
             }
-            this.profile = {
-              userId: this.$store.state.user.id,
-            };
-            this.toggleForm();
+            this.showProfileForm = !this.showProfileForm;
           })
           .catch((err) => {
             alert(err + " problem updating profile!");
@@ -266,6 +263,10 @@ export default {
               .then((response) => {
                 if (response.status == 204) {
                   this.$store.commit("SET_PROFILE", userId);
+                  this.showProfileForm = false;
+                  this.newProfile = {
+                    userId: this.$store.state.user.id,
+                  };
                 }
               })
               .catch((err) => {

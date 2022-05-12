@@ -68,8 +68,6 @@ export default {
             profileService.getProfile().then((response) => {
               if (response.status == 200) {
                 this.$store.commit("SET_PROFILE", response.data);
-                // eslint-disable-next-line no-console
-                console.log(response.data);
               }
             });
             this.$store.state.profile.favePlant != undefined &&

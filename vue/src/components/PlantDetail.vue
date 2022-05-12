@@ -319,7 +319,7 @@
       <b-card-body v-if="showNoteForm == note.noteId">
         <b-form v-on:submit.prevent="editNote(note)">
           <b-form-group>
-            <b-form-textarea v-model.lazy.trim="note.note" autofocus="true">
+            <b-form-textarea v-model="note.note" autofocus="true">
             </b-form-textarea>
           </b-form-group>
           <b-button
@@ -421,14 +421,10 @@ export default {
       return new Date(date).toLocaleDateString("en-US", options);
     },
     toggleInfoForm() {
-      this.showInfoForm === true
-        ? (this.showInfoForm = false)
-        : (this.showInfoForm = true);
+      this.showInfoForm = !this.showInfoForm;
     },
     toggleDateForm() {
-      this.showDateForm === true
-        ? (this.showDateForm = false)
-        : (this.showDateForm = true);
+      this.showDateForm = !this.showDateForm;
     },
     toggleNoteForm(note) {
       this.savedNote = note.note;
@@ -589,15 +585,13 @@ export default {
 .avatar-icon-camera {
   background-color: var(--green);
 }
-.badge-secondary {
-  /* color: var(--dark); */
-}
 #toggleBtn {
   background-color: var(--orange);
   margin-top: 1rem;
 }
 #toggleBtn .badge {
   background-color: var(--light);
+  color: var(--dark);
 }
 #deleteTreatment {
   background-color: var(--orange);
