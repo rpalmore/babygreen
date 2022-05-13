@@ -7,6 +7,8 @@
       </p>
     </b-row>
 
+    <p>{{ imgUrl }}</p>
+
     <!-- Profile card -->
     <b-row class="plant-card" align-h="center">
       <b-card no-body class="overflow-hidden" style="max-width: 540px">
@@ -52,7 +54,7 @@
         <b-card-footer>
           <b-row align-v="center">
             <b-col class="text-center">
-              <b-button id="addPhotoBtn" size="sm"
+              <b-button id="profile" size="sm" @click="useCloudinary($event)"
                 >Add a photo
                 <b-avatar
                   size="sm"
@@ -147,6 +149,7 @@
 <script>
 import profileService from "../services/ProfileService";
 import treatmentService from "../services/TreatmentService";
+import photoService from "../services/PhotoService.js";
 export default {
   name: "profile",
   data() {
@@ -188,8 +191,40 @@ export default {
     latestTreatment() {
       return this.$store.state.latestTreatment;
     },
+    profileImg() {
+      return this.$store.state.profileImg;
+    },
   },
   methods: {
+    useCloudinary(event) {
+      photoService.myWidget.open();
+      this.$store.commit("SET_CLOUDINARY_SOURCE", event.target.id);
+      if (this.profile.favePlant == undefined) {
+        this.newProfile.profileImg = this.profileImg;
+        profileService
+          .createProfile(this.newProfile)
+          .then((response) => {
+            if (response.status === 201) {
+              this.$store.commit("SET_PROFILE", this.newProfile);
+            }
+          })
+          .catch((err) => {
+            alert(err + " problem creating profile!");
+          });
+      } else {
+        this.profile.profileImg = this.profileImg;
+        profileService
+          .editProfile(this.profile)
+          .then((response) => {
+            if (response.status === 200) {
+              this.$store.commit("SET_PROFILE", this.profile);
+            }
+          })
+          .catch((err) => {
+            alert(err + " problem updating profile!");
+          });
+      }
+    },
     toggleForm() {
       this.profile.favePlant != undefined
         ? (this.newProfile = this.profile)
