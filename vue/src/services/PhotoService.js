@@ -1,5 +1,5 @@
 import store from "../store/index.js";
-// import profileService from "./ProfileService.js";
+import profileService from "./ProfileService.js";
 const cloudName = "dgupilxum";
 const uploadPreset = "lbpxurzh";
 
@@ -17,34 +17,60 @@ const myWidget = window.cloudinary.createUploadWidget(
         styles: {
             palette:
             {
-                window: "#011627",
-                windowBorder: "#2EC4b6",
-                tabIcon: "#FF9F1C",
-                menuIcons: "#FF9F1C",
-                textDark: "#011627",
-                textLight: "#FDFFFC",
+                window: "#190B28",
+                windowBorder: "#BACDB0",
+                tabIcon: "#FFCB77",
+                menuIcons: "#FFCB77",
+                textDark: "#190B28",
+                textLight: "BACDB0",
                 link: "#FDFFFC",
-                action: "#FF9F1C",
+                action: "#FFCB77",
                 inactiveTabIcon: "#FDFFFC",
-                error: "#E71D36",
-                inProgress: "#FF9F1C",
+                error: "B74F6F",
+                inProgress: "#FFCB77",
                 complete: "#20B832",
-                sourceBg: "#011627"
+                sourceBg: "#190B28"
             },
         },
     },
     (error, result) => {
         if (!error && result && result.event === "success") {
-            // if widget was opened on profile page, do this:
             if (store.state.cloudinarySource === "profile") {
-                let profileImg = result.info.secure_url;
-                store.commit("SET_PROFILE_IMG", profileImg);
+                let profile = {
+                    userId: store.state.user.id,
+                    displayName: store.state.profile.displayName,
+                    profileImg: store.state.profile.profileImg,
+                    favePlant: store.state.profile.favePlant,
+                    skillLevel: store.state.profile.skillLevel
+                };
+                if (store.state.profile.favePlant === undefined && store.state.profile.profileImg === undefined) {
+                    profile.profileImg = result.info.secure_url;
+                    profileService
+                        .createProfile(profile)
+                        .then((response) => {
+                            if (response.status === 201) {
+                                store.commit("SET_PROFILE", profile);
+                            }
+                        })
+                        .catch((err) => {
+                            alert(err + " problem creating profile!");
+                        });
+                } else {
+                    profile.profileImg = result.info.secure_url;
+                    profileService
+                        .editProfile(profile)
+                        .then((response) => {
+                            if (response.status === 200) {
+                                store.commit("SET_PROFILE", profile);
+                            }
+                        })
+                        .catch((err) => {
+                            alert(err + " problem updating profile!");
+                        });
+                }
             }
         }
     });
-
-// trying this out to see how it functions
-// myWidget.close({quiet: true});
 
 export default {
     myWidget

@@ -584,6 +584,7 @@ export default {
 }
 .avatar-icon-camera {
   background-color: var(--green);
+  background-color: var(--yellow);
 }
 #toggleBtn {
   background-color: var(--orange);

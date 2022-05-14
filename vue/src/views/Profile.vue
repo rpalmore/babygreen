@@ -17,7 +17,7 @@
             <b-card-img
               fluid-grow
               id="b-card-img"
-              :src="require('@/assets/plant-placeholder.png')"
+              :src="selectImg"
               alt="Plant image"
               class="rounded-0"
             ></b-card-img>
@@ -55,7 +55,7 @@
           <b-row align-v="center">
             <b-col class="text-center">
               <b-button id="profile" size="sm" @click="useCloudinary($event)"
-                >Add a photo
+                >{{ profile.profileImg === undefined ? "Add a photo" : "Edit photo" }}
                 <b-avatar
                   size="sm"
                   icon="camera-fill"
@@ -155,7 +155,7 @@ export default {
   data() {
     return {
       newProfile: {
-        userId: this.$store.state.user.id,
+        userId: this.$store.state.user.id
       },
       savedName: "",
       savedFavePlant: "",
@@ -185,47 +185,26 @@ export default {
     profile() {
       return this.$store.state.profile;
     },
+    selectImg() {
+      return this.profile.profileImg === undefined ||
+        this.profile.profileImg === null
+        ? require("@/assets/plant-placeholder.png")
+        : this.profile.profileImg;
+    },
     treatments() {
       return this.$store.state.treatments;
     },
     latestTreatment() {
       return this.$store.state.latestTreatment;
     },
-    profileImg() {
-      return this.$store.state.profileImg;
-    },
   },
   methods: {
     useCloudinary(event) {
       photoService.myWidget.open();
       this.$store.commit("SET_CLOUDINARY_SOURCE", event.target.id);
-      if (this.profile.favePlant == undefined) {
-        this.newProfile.profileImg = this.profileImg;
-        profileService
-          .createProfile(this.newProfile)
-          .then((response) => {
-            if (response.status === 201) {
-              this.$store.commit("SET_PROFILE", this.newProfile);
-            }
-          })
-          .catch((err) => {
-            alert(err + " problem creating profile!");
-          });
-      } else {
-        this.profile.profileImg = this.profileImg;
-        profileService
-          .editProfile(this.profile)
-          .then((response) => {
-            if (response.status === 200) {
-              this.$store.commit("SET_PROFILE", this.profile);
-            }
-          })
-          .catch((err) => {
-            alert(err + " problem updating profile!");
-          });
-      }
     },
     toggleForm() {
+      this.newProfile.profileImg = this.profile.profileImg;
       this.profile.favePlant != undefined
         ? (this.newProfile = this.profile)
         : this.newProfile;
@@ -247,6 +226,7 @@ export default {
     cancel() {
       this.newProfile = {
         userId: this.$store.state.user.id,
+        profileImg: this.$store.state.profile.profileImg,
       };
       // reset data to saved values
       if (this.profile.favePlant != undefined) {
@@ -257,7 +237,7 @@ export default {
       this.showProfileForm = !this.showProfileForm;
     },
     saveProfile() {
-      if (this.profile.favePlant == undefined) {
+      if (this.profile.favePlant == undefined && this.profile.profileImg == undefined) {
         profileService
           .createProfile(this.newProfile)
           .then((response) => {
@@ -297,10 +277,10 @@ export default {
               .deleteProfile(userId)
               .then((response) => {
                 if (response.status == 204) {
-                  this.$store.commit("SET_PROFILE", userId);
+                  this.$store.commit("DELETE_PROFILE");
                   this.showProfileForm = false;
                   this.newProfile = {
-                    userId: this.$store.state.user.id,
+                    userId: this.$store.state.user.id
                   };
                 }
               })
@@ -340,6 +320,14 @@ export default {
 .text-center.middle.col {
   border-right: 1px solid var(--light);
   border-left: 1px solid var(--light);
+}
+#profile {
+  background-color: var(--light);
+  border: 1px solid var(--orange);
+  color: var(--dark);
+}
+.avatar-icon-camera {
+  background-color: var(--yellow);
 }
 .avatar-icon-pencil {
   border: 1px solid var(--orange);
