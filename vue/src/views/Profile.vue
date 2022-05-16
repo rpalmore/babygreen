@@ -2,7 +2,7 @@
   <b-container id="profile-view">
     <b-row align-h="center">
       <p class="section-header">
-        You look great in green,
+        {{ selectGreeting() }}
         {{ name }}!
       </p>
     </b-row>
@@ -31,7 +31,10 @@
                 <span>My skill level: {{ profile.skillLevel }}</span>
               </b-list-group-item>
               <b-list-group-item>
-                <span>I am tracking {{ numPlants }}! </span>
+                <span
+                  >I am tracking <span class="profileData">{{ numPlants }}</span
+                  >!
+                </span>
               </b-list-group-item>
               <b-list-group-item v-if="treatments != ''">
                 <span
@@ -41,11 +44,11 @@
                   {{
                     latestTreatment.numPlants == 1 ? " plant on " : "plants on "
                   }}
-                  {{
+                  <span class="profileData">{{
                     formatDateMonth(
                       latestTreatment.careDate.replace(/-/g, "\/")
                     )
-                  }}
+                  }}</span>
                 </span>
               </b-list-group-item>
             </b-list-group>
@@ -54,8 +57,16 @@
         <b-card-footer>
           <b-row align-v="center">
             <b-col class="text-center">
-              <b-button id="profile" size="sm" @click="useCloudinary($event)"
-                >{{ profile.profileImg === undefined ? "Add a photo" : "Edit photo" }}
+              <b-button
+                id="profile"
+                class="card-footer-btn"
+                size="sm"
+                @click="useCloudinary($event)"
+                >{{
+                  profile.profileImg === undefined
+                    ? "Add a photo"
+                    : "Edit photo"
+                }}
                 <b-avatar
                   size="sm"
                   icon="camera-fill"
@@ -64,7 +75,7 @@
               ></b-button>
             </b-col>
             <b-col class="text-center middle">
-              <b-button id="addPhotoBtn" size="sm" @click="toggleForm()"
+              <b-button class="card-footer-btn" size="sm" @click="toggleForm()"
                 >{{
                   profile.favePlant === undefined
                     ? "Create profile"
@@ -79,7 +90,7 @@
             </b-col>
             <b-col>
               <b-button
-                id="addPhotoBtn"
+                class="card-footer-btn"
                 size="sm"
                 @click="deleteProfile(profile.userId)"
               >
@@ -154,8 +165,13 @@ export default {
   name: "profile",
   data() {
     return {
+      greeting: [
+        "You look great in green, ",
+        "Happy planting, ",
+        "Nice thumbs, ",
+      ],
       newProfile: {
-        userId: this.$store.state.user.id
+        userId: this.$store.state.user.id,
       },
       savedName: "",
       savedFavePlant: "",
@@ -165,8 +181,8 @@ export default {
       skill: [
         { text: "Select One", value: null },
         "Seedling (Beginner)",
-        "Intermediate",
-        "Advanced",
+        "Sapling (Intermediate)",
+        "Sequoia (Advanced)",
       ],
     };
   },
@@ -199,6 +215,9 @@ export default {
     },
   },
   methods: {
+    selectGreeting() {
+      return this.greeting[Math.floor(Math.random() * this.greeting.length)];
+    },
     useCloudinary(event) {
       photoService.myWidget.open();
       this.$store.commit("SET_CLOUDINARY_SOURCE", event.target.id);
@@ -237,7 +256,10 @@ export default {
       this.showProfileForm = !this.showProfileForm;
     },
     saveProfile() {
-      if (this.profile.favePlant == undefined && this.profile.profileImg == undefined) {
+      if (
+        this.profile.favePlant == undefined &&
+        this.profile.profileImg == undefined
+      ) {
         profileService
           .createProfile(this.newProfile)
           .then((response) => {
@@ -280,7 +302,7 @@ export default {
                   this.$store.commit("DELETE_PROFILE");
                   this.showProfileForm = false;
                   this.newProfile = {
-                    userId: this.$store.state.user.id
+                    userId: this.$store.state.user.id,
                   };
                 }
               })
@@ -310,6 +332,10 @@ export default {
 .plant-card {
   margin-top: 1rem;
 }
+.profileData {
+  /* color: var(--orange); */
+  border-bottom: 1px solid var(--light);
+}
 .card-footer > .row {
   /* background-color: var(--green);
   background-color: var(--orange); */
@@ -320,11 +346,6 @@ export default {
 .text-center.middle.col {
   border-right: 1px solid var(--light);
   border-left: 1px solid var(--light);
-}
-#profile {
-  background-color: var(--light);
-  border: 1px solid var(--orange);
-  color: var(--dark);
 }
 .avatar-icon-camera {
   background-color: var(--yellow);

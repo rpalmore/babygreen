@@ -28,7 +28,6 @@ export default new Vuex.Store({
     latestTreatment: JSON.parse(localStorage.getItem('latestTreatment') || '{}'),
     latestWatering: JSON.parse(localStorage.getItem('latestWatering') || '{}'),
     notes: JSON.parse(localStorage.getItem('notes') || '{}'),
-    cloudinarySource: JSON.parse(localStorage.getItem('cloudinarySource')),
   },
   mutations: {
     SET_AUTH_TOKEN(state, token) {
@@ -48,10 +47,12 @@ export default new Vuex.Store({
       localStorage.removeItem('profile');
       state.profile = {};
     },
-    // so we know which component the widget was opened in ...
     SET_CLOUDINARY_SOURCE(state, payload) {
       state.cloudinarySource = payload;
-      localStorage.setItem('cloudinarySource', JSON.stringify(state.cloudinarySource));
+    },
+    SET_OBJECT(state, payload) {
+      console.log(payload);
+      state.object = payload;
     },
     ADD_PLANT(state, plant) {
       state.plants.unshift(plant);

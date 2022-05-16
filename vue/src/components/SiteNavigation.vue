@@ -50,6 +50,7 @@
         >
       </b-nav-item-dropdown>
     </b-nav>
+    <b-nav-text>baby green</b-nav-text>
   </b-card-header>
 </template>
 
@@ -66,15 +67,42 @@ export default {
 
 <style>
 #site-nav.card-header {
+  display: flex;
   background: url(../assets/avinash-kumar-1-unsplash-nav.webp) center center;
   background-size: cover;
   height: 100%;
   border-bottom: 3px solid var(--orange);
+  justify-content: space-between;
 }
+.nav {
+  align-items: center;
+}
+.nav-link {
+  background-color: var(--platinum);
+  opacity: .9;
+}
+/* a:hover {
+  color: var(--orange);
+} */
 .nav-pills .nav-link.active,
 .nav-pills .show > .nav-link,
 .dropdown-item.active,
 .dropdown-item:active {
   background-color: var(--green);
+}
+.navbar-text {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  background-color: var(--light);
+  /* background-color: var(--orange); */
+  color: var(--dark);
+  /* color: var(--light); */
+  opacity: .9;
+  padding: 0.5rem;
+  border: 1px solid var(--green);
+  border-radius: 0.25rem;
+  font-family: 'Lobster', cursive;
+  font-size: 1.1rem;
 }
 </style>

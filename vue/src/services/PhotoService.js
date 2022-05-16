@@ -1,5 +1,7 @@
 import store from "../store/index.js";
 import profileService from "./ProfileService.js";
+import plantService from "./PlantService.js";
+import plantNoteService from "./PlantNoteService.js";
 const cloudName = "dgupilxum";
 const uploadPreset = "lbpxurzh";
 
@@ -22,7 +24,7 @@ const myWidget = window.cloudinary.createUploadWidget(
                 tabIcon: "#FFCB77",
                 menuIcons: "#FFCB77",
                 textDark: "#190B28",
-                textLight: "BACDB0",
+                textLight: "#BACDB0",
                 link: "#FDFFFC",
                 action: "#FFCB77",
                 inactiveTabIcon: "#FDFFFC",
@@ -68,6 +70,26 @@ const myWidget = window.cloudinary.createUploadWidget(
                             alert(err + " problem updating profile!");
                         });
                 }
+            } else if (store.state.cloudinarySource === 'plant') {
+                let plant = store.state.object;
+                plant.plantImg = result.info.secure_url;
+                plantService.editPlant(plant).then((response) => {
+                    if (response.status === 200) {
+                        store.commit("EDIT_PLANT", plant);
+                    }
+                }).catch((err) => {
+                    alert(err + " problem updating plant!");
+                });
+            } else if (store.state.cloudinarySource === 'note') {
+                let note = store.state.object;
+                note.noteImg = result.info.secure_url;
+                plantNoteService.editNote(note).then((response) => {
+                    if (response.status === 200) {
+                        store.commit("EDIT_NOTE", note);
+                    }
+                }).catch((err) => {
+                    alert(err + " problem updating note!");
+                })
             }
         }
     });

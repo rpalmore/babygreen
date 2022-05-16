@@ -1,14 +1,7 @@
 <template>
   <b-container fluid id="plant-view">
     <b-row align-h="center">
-      <p class="section-header">
-        {{
-          this.$store.state.profile.displayName === undefined ||
-          this.$store.state.profile.displayName === null
-            ? this.$store.state.user.username
-            : this.$store.state.profile.displayName
-        }}&#8217;s plants
-      </p>
+      <p class="section-header">{{ name }}&#8217;s plants</p>
     </b-row>
     <p>
       To do: Filter by indoor/outdoor and text search for plants by name.
@@ -20,7 +13,7 @@
         ><span class="when-open">Close form</span
         ><span class="when-closed">Add a plant</span>
         <b-avatar
-          class="avatar-custom-reverse"
+          class="avatar-add-plant"
           :src="require('@/assets/leaf.png')"
         ></b-avatar
       ></b-button>
@@ -133,6 +126,12 @@ export default {
     };
   },
   computed: {
+    name() {
+      return this.$store.state.profile.displayName === undefined ||
+        this.$store.state.profile.displayName === null
+        ? this.$store.state.user.username
+        : this.$store.state.profile.displayName;
+    },
     plants() {
       return this.$store.state.plants;
     },
@@ -250,9 +249,10 @@ export default {
   background-color: var(--green);
   border: 1px solid var(--orange);
 }
-.avatar-custom-reverse {
+.avatar-add-plant {
   background-color: var(--light);
   background-color: var(--platinum);
+  background-color: var(--yellow);
   border: 1px solid var(--orange);
   margin-left: 3px;
 }

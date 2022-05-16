@@ -35,8 +35,12 @@
                 >.
                 <!-- Todo: Test that date display is correct without day of week -->
               </b-card-text>
-              <b-button id="addPhotoBtn" size="sm"
-                >Add a photo
+              <b-button
+                id="plant"
+                class="card-footer-btn"
+                size="sm"
+                @click="useCloudinary($event, plant)"
+                >{{ plant.plantImg === null ? "Add a photo" : "Edit photo" }}
                 <b-avatar
                   size="sm"
                   icon="camera-fill"
@@ -275,12 +279,29 @@
       :header="formatDateDay(note.createdOn.replace(/-/g, '\/'))"
     >
       <b-card-body>
-        {{ note.note }}
+        <b-row>
+          <b-col>
+            {{ note.note }}
+          </b-col>
+          <b-col md="6" v-if="note.noteImg != null">
+            <b-img
+              responsive
+              id="notePhoto"
+              right
+              :src="note.noteImg"
+              alt="Plant image"
+            ></b-img>
+          </b-col>
+        </b-row>
       </b-card-body>
       <b-card-footer>
         <b-row align-v="center">
           <b-col class="text-center">
-            <b-button id="addPhotoBtn" size="sm"
+            <b-button
+              id="note"
+              class="card-footer-btn"
+              size="sm"
+              @click="useCloudinary($event, note)"
               >Add a photo
               <b-avatar
                 size="sm"
@@ -290,7 +311,10 @@
             ></b-button>
           </b-col>
           <b-col class="text-center middle">
-            <b-button id="addPhotoBtn" size="sm" @click="toggleNoteForm(note)"
+            <b-button
+              class="card-footer-btn"
+              size="sm"
+              @click="toggleNoteForm(note)"
               >Edit note
               <b-avatar
                 size="sm"
@@ -301,7 +325,7 @@
           </b-col>
           <b-col>
             <b-button
-              id="addPhotoBtn"
+              class="card-footer-btn"
               size="sm"
               @click="deleteNote(note.noteId)"
             >
@@ -345,6 +369,7 @@
 import plantNoteService from "../services/PlantNoteService";
 import plantService from "../services/PlantService";
 import treatmentService from "../services/TreatmentService";
+import photoService from "../services/PhotoService";
 // import EditNote from "./EditNote.vue";
 export default {
   name: "plant-detail",
@@ -389,6 +414,11 @@ export default {
     },
   },
   methods: {
+    useCloudinary(event, item) {
+      photoService.myWidget.open();
+      this.$store.commit("SET_CLOUDINARY_SOURCE", event.target.id);
+      this.$store.commit("SET_OBJECT", item);
+    },
     selectPlantImg(plantImg) {
       return plantImg === null
         ? require("@/assets/plant-placeholder.png")
@@ -576,7 +606,8 @@ export default {
 #b-card-img {
   background-color: var(--orange);
 }
-#addPhotoBtn,
+.card-footer-btn,
+#plant,
 .avatar-icon-camera {
   background-color: var(--light);
   border: 1px solid var(--orange);
@@ -647,5 +678,9 @@ export default {
 .btn#cancelEdit {
   margin-right: 1%;
   background-color: var(--gray);
+}
+#notePhoto {
+  width: 20rem;
+  height: auto;
 }
 </style>
