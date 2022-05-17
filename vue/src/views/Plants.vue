@@ -236,6 +236,9 @@ export default {
   font-size: 1.5rem;
   font-weight: 300;
   color: var(--dark);
+  background-color: var(--light-shade1);
+  padding-right: 0.3rem;
+  padding-left: 0.3rem;
 }
 #toggleFormBtn {
   background-color: var(--green);

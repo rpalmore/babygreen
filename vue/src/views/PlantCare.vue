@@ -3,7 +3,7 @@
     <b-row align-h="center">
       <p class="section-header">TK header</p>
     </b-row>
-    
+
     <p>TODO: let user bulk delete care treatments by date?</p>
 
     <p v-if="this.$store.state.treatments.length == 0">
@@ -19,214 +19,224 @@
       </p>
 
       <!-- WATERING GROUP -->
-      <b-list-group
-        v-bind:treatment="treatment"
-        v-for="treatment in waterings"
-        v-bind:key="treatment.treatmentId"
-        v-show="uniqueDate == treatment.careDate"
-      >
-        <b-list-group-item
-          class="d-flex justify-content-between align-items-center"
+      <b-container>
+        <b-list-group
+          v-bind:treatment="treatment"
+          v-for="treatment in waterings"
+          v-bind:key="treatment.treatmentId"
+          v-show="uniqueDate == treatment.careDate"
         >
-          <span>
-            <b-avatar
-              class="avatar-custom"
-              v-bind:id="treatment.careType"
-              v-bind:src="selectImg(treatment.careType)"
-            ></b-avatar>
+          <b-list-group-item
+            class="d-flex justify-content-between align-items-center"
+          >
+            <span>
+              <b-avatar
+                class="avatar-custom"
+                v-bind:id="treatment.careType"
+                v-bind:src="selectImg(treatment.careType)"
+              ></b-avatar>
 
-            {{
-              treatment.careType.substring(0, 1).toUpperCase() +
-              treatment.careType.substring(1)
-            }}
-            <router-link
-              :to="{
-                name: 'plant-detail',
-                params: { plantId: treatment.plantId },
-              }"
-            >
               {{
-                uniqueDate === treatment.careDate ? treatment.plantName : " "
+                treatment.careType.substring(0, 1).toUpperCase() +
+                treatment.careType.substring(1)
               }}
-            </router-link>
-          </span>
-          <b-avatar
-            icon="trash-fill"
-            id="deleteTreatment"
-            size="sm"
-            v-on:click="deleteTreatment(treatment)"
-            href="#"
-          ></b-avatar>
-        </b-list-group-item>
-      </b-list-group>
+              <router-link
+                :to="{
+                  name: 'plant-detail',
+                  params: { plantId: treatment.plantId },
+                }"
+              >
+                {{
+                  uniqueDate === treatment.careDate ? treatment.plantName : " "
+                }}
+              </router-link>
+            </span>
+            <b-avatar
+              icon="trash-fill"
+              id="deleteTreatment"
+              size="sm"
+              v-on:click="deleteTreatment(treatment)"
+              href="#"
+            ></b-avatar>
+          </b-list-group-item>
+        </b-list-group>
+      </b-container>
 
       <!-- SPRAYED GROUP -->
-      <b-list-group
-        v-bind:treatment="treatment"
-        v-for="treatment in sprayings"
-        v-bind:key="treatment.treatmentId"
-        v-show="uniqueDate == treatment.careDate"
-      >
-        <b-list-group-item
-          class="d-flex justify-content-between align-items-center"
+      <b-container>
+        <b-list-group
+          v-bind:treatment="treatment"
+          v-for="treatment in sprayings"
+          v-bind:key="treatment.treatmentId"
+          v-show="uniqueDate == treatment.careDate"
         >
-          <span>
-            <b-avatar
-              class="avatar-custom"
-              v-bind:id="treatment.careType"
-              v-bind:src="selectImg(treatment.careType)"
-            ></b-avatar>
+          <b-list-group-item
+            class="d-flex justify-content-between align-items-center"
+          >
+            <span>
+              <b-avatar
+                class="avatar-custom"
+                v-bind:id="treatment.careType"
+                v-bind:src="selectImg(treatment.careType)"
+              ></b-avatar>
 
-            {{
-              treatment.careType.substring(0, 1).toUpperCase() +
-              treatment.careType.substring(1)
-            }}
-            <router-link
-              :to="{
-                name: 'plant-detail',
-                params: { plantId: treatment.plantId },
-              }"
-            >
               {{
-                uniqueDate === treatment.careDate ? treatment.plantName : " "
+                treatment.careType.substring(0, 1).toUpperCase() +
+                treatment.careType.substring(1)
               }}
-            </router-link>
-          </span>
-          <b-avatar
-            icon="trash-fill"
-            id="deleteTreatment"
-            size="sm"
-            v-on:click="deleteTreatment(treatment)"
-            href="#"
-          ></b-avatar>
-        </b-list-group-item>
-      </b-list-group>
+              <router-link
+                :to="{
+                  name: 'plant-detail',
+                  params: { plantId: treatment.plantId },
+                }"
+              >
+                {{
+                  uniqueDate === treatment.careDate ? treatment.plantName : " "
+                }}
+              </router-link>
+            </span>
+            <b-avatar
+              icon="trash-fill"
+              id="deleteTreatment"
+              size="sm"
+              v-on:click="deleteTreatment(treatment)"
+              href="#"
+            ></b-avatar>
+          </b-list-group-item>
+        </b-list-group>
+      </b-container>
 
       <!-- FERTILIZED GROUP -->
-      <b-list-group
-        v-bind:treatment="treatment"
-        v-for="treatment in fertilized"
-        v-bind:key="treatment.treatmentId"
-        v-show="uniqueDate == treatment.careDate"
-      >
-        <b-list-group-item
-          class="d-flex justify-content-between align-items-center"
+      <b-container>
+        <b-list-group
+          v-bind:treatment="treatment"
+          v-for="treatment in fertilized"
+          v-bind:key="treatment.treatmentId"
+          v-show="uniqueDate == treatment.careDate"
         >
-          <span>
-            <b-avatar
-              class="avatar-custom"
-              v-bind:id="treatment.careType"
-              v-bind:src="selectImg(treatment.careType)"
-            ></b-avatar>
+          <b-list-group-item
+            class="d-flex justify-content-between align-items-center"
+          >
+            <span>
+              <b-avatar
+                class="avatar-custom"
+                v-bind:id="treatment.careType"
+                v-bind:src="selectImg(treatment.careType)"
+              ></b-avatar>
 
-            {{
-              treatment.careType.substring(0, 1).toUpperCase() +
-              treatment.careType.substring(1)
-            }}
-            <router-link
-              :to="{
-                name: 'plant-detail',
-                params: { plantId: treatment.plantId },
-              }"
-            >
               {{
-                uniqueDate === treatment.careDate ? treatment.plantName : " "
+                treatment.careType.substring(0, 1).toUpperCase() +
+                treatment.careType.substring(1)
               }}
-            </router-link>
-          </span>
-          <b-avatar
-            icon="trash-fill"
-            id="deleteTreatment"
-            size="sm"
-            v-on:click="deleteTreatment(treatment)"
-            href="#"
-          ></b-avatar>
-        </b-list-group-item>
-      </b-list-group>
+              <router-link
+                :to="{
+                  name: 'plant-detail',
+                  params: { plantId: treatment.plantId },
+                }"
+              >
+                {{
+                  uniqueDate === treatment.careDate ? treatment.plantName : " "
+                }}
+              </router-link>
+            </span>
+            <b-avatar
+              icon="trash-fill"
+              id="deleteTreatment"
+              size="sm"
+              v-on:click="deleteTreatment(treatment)"
+              href="#"
+            ></b-avatar>
+          </b-list-group-item>
+        </b-list-group>
+      </b-container>
 
       <!-- PEST GROUP -->
-      <b-list-group
-        v-bind:treatment="treatment"
-        v-for="treatment in debugged"
-        v-bind:key="treatment.treatmentId"
-        v-show="uniqueDate == treatment.careDate"
-      >
-        <b-list-group-item
-          class="d-flex justify-content-between align-items-center"
+      <b-container>
+        <b-list-group
+          v-bind:treatment="treatment"
+          v-for="treatment in debugged"
+          v-bind:key="treatment.treatmentId"
+          v-show="uniqueDate == treatment.careDate"
         >
-          <span>
-            <b-avatar
-              class="avatar-custom"
-              v-bind:id="treatment.careType"
-              v-bind:src="selectImg(treatment.careType)"
-            ></b-avatar>
+          <b-list-group-item
+            class="d-flex justify-content-between align-items-center"
+          >
+            <span>
+              <b-avatar
+                class="avatar-custom"
+                v-bind:id="treatment.careType"
+                v-bind:src="selectImg(treatment.careType)"
+              ></b-avatar>
 
-            {{
-              treatment.careType.substring(0, 1).toUpperCase() +
-              treatment.careType.substring(1)
-            }}
-            <router-link
-              :to="{
-                name: 'plant-detail',
-                params: { plantId: treatment.plantId },
-              }"
-            >
               {{
-                uniqueDate === treatment.careDate ? treatment.plantName : " "
+                treatment.careType.substring(0, 1).toUpperCase() +
+                treatment.careType.substring(1)
               }}
-            </router-link>
-          </span>
-          <b-avatar
-            icon="trash-fill"
-            id="deleteTreatment"
-            size="sm"
-            v-on:click="deleteTreatment(treatment)"
-            href="#"
-          ></b-avatar>
-        </b-list-group-item>
-      </b-list-group>
+              <router-link
+                :to="{
+                  name: 'plant-detail',
+                  params: { plantId: treatment.plantId },
+                }"
+              >
+                {{
+                  uniqueDate === treatment.careDate ? treatment.plantName : " "
+                }}
+              </router-link>
+            </span>
+            <b-avatar
+              icon="trash-fill"
+              id="deleteTreatment"
+              size="sm"
+              v-on:click="deleteTreatment(treatment)"
+              href="#"
+            ></b-avatar>
+          </b-list-group-item>
+        </b-list-group>
+      </b-container>
 
       <!-- REPOTTED GROUP -->
-      <b-list-group
-        v-bind:treatment="treatment"
-        v-for="treatment in repotted"
-        v-bind:key="treatment.treatmentId"
-        v-show="uniqueDate == treatment.careDate"
-      >
-        <b-list-group-item
-          class="d-flex justify-content-between align-items-center"
+      <b-container>
+        <b-list-group
+          v-bind:treatment="treatment"
+          v-for="treatment in repotted"
+          v-bind:key="treatment.treatmentId"
+          v-show="uniqueDate == treatment.careDate"
         >
-          <span>
-            <b-avatar
-              class="avatar-custom"
-              v-bind:id="treatment.careType"
-              v-bind:src="selectImg(treatment.careType)"
-            ></b-avatar>
+          <b-list-group-item
+            class="d-flex justify-content-between align-items-center"
+          >
+            <span>
+              <b-avatar
+                class="avatar-custom"
+                v-bind:id="treatment.careType"
+                v-bind:src="selectImg(treatment.careType)"
+              ></b-avatar>
 
-            {{
-              treatment.careType.substring(0, 1).toUpperCase() +
-              treatment.careType.substring(1)
-            }}
-            <router-link
-              :to="{
-                name: 'plant-detail',
-                params: { plantId: treatment.plantId },
-              }"
-            >
               {{
-                uniqueDate === treatment.careDate ? treatment.plantName : " "
+                treatment.careType.substring(0, 1).toUpperCase() +
+                treatment.careType.substring(1)
               }}
-            </router-link>
-          </span>
-          <b-avatar
-            icon="trash-fill"
-            id="deleteTreatment"
-            size="sm"
-            v-on:click="deleteTreatment(treatment)"
-            href="#"
-          ></b-avatar>
-        </b-list-group-item>
-      </b-list-group>
+              <router-link
+                :to="{
+                  name: 'plant-detail',
+                  params: { plantId: treatment.plantId },
+                }"
+              >
+                {{
+                  uniqueDate === treatment.careDate ? treatment.plantName : " "
+                }}
+              </router-link>
+            </span>
+            <b-avatar
+              icon="trash-fill"
+              id="deleteTreatment"
+              size="sm"
+              v-on:click="deleteTreatment(treatment)"
+              href="#"
+            ></b-avatar>
+          </b-list-group-item>
+        </b-list-group>
+      </b-container>
     </b-list-group>
   </b-container>
 </template>
@@ -338,7 +348,7 @@ export default {
 </script>
 
 <style>
-/* #plant-care .list-group {
-  margin-bottom: 1rem;
+/* #plant-care {
+  max-width: 640px;
 } */
 </style>

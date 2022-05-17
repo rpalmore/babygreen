@@ -70,8 +70,8 @@ export default {
   display: flex;
   background: url(../assets/avinash-kumar-1-unsplash-nav.webp) center center;
   background-size: cover;
-  height: 100%;
-  border-bottom: 3px solid var(--orange);
+  /* height: 100%; */
+  border-bottom: 2px solid var(--orange);
   justify-content: space-between;
 }
 .nav {

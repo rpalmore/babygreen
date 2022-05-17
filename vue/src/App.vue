@@ -41,6 +41,7 @@ https://coolors.co/palette/729b79-475b63-2e2c2f-d34e24-f5e4d7 */
   --dark: #190b28;
   --orange: #b74f6f;
   --light: #bacdb0;
+  --light-shade1: #ACC3A1;
   /* Extra color for font where needed */
   --platinum: #ecedea;
   --yellow: #FFCB77;
@@ -71,7 +72,7 @@ https://coolors.co/palette/729b79-475b63-2e2c2f-d34e24-f5e4d7 */
   height: auto;
   border: 1px solid var(--dark);
   /* background-color: var(--light); */
-  border-top: 7px solid var(--grey);
+  border-top: 5px solid var(--grey);
   padding-bottom: 3rem;
   /* padding-top: 20px; */
 }

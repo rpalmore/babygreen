@@ -7,12 +7,12 @@
     </b-row>
 
     <b-row class="plant-card" align-h="center">
-      <b-card no-body class="overflow-hidden" style="max-width: 540px">
+      <b-card no-body class="overflow-hidden" style="max-width: 640px">
         <b-row no-gutters align-v="center">
           <b-col md="6">
             <b-card-img
               id="b-card-img"
-              v-bind:src="selectPlantImg(plant.plantImg)"
+              :src="selectPlantImg(plant.plantImg)"
               alt="Plant image"
               class="rounded-0"
             ></b-card-img>
@@ -21,12 +21,7 @@
             <b-card-body title="About me">
               <b-card-text>
                 I am an {{ plant.indoor == true ? "indoor" : "outdoor" }} plant
-                and have been in
-                {{
-                  this.$store.state.profile.displayName === undefined
-                    ? this.$store.state.user.username
-                    : this.$store.state.profile.displayName
-                }}&#8217;s care since
+                and have been in {{ name }}&#8217;s care since
                 <a v-on:click="toggleDateForm">{{
                   plant.plantAge == null
                     ? "today"
@@ -79,53 +74,15 @@
     <!-- End todo -->
 
     <p class="subsection-header">Recent waterings:</p>
-    <p class="no-content" v-show="waterings.length === 0">
+    <b-container v-show="waterings.length === 0">
       You have no waterings to display.
-    </p>
-    <b-list-group
-      v-bind:treatment="treatment"
-      v-for="treatment in waterings.slice(0, 5)"
-      v-bind:key="treatment.treatmentId"
-      v-show="waterings.length > 0"
-    >
-      <b-list-group-item
-        class="d-flex justify-content-between align-items-center"
-      >
-        <span>
-          <b-avatar
-            class="avatar-custom"
-            id="watered"
-            v-bind:src="require('@/assets/watering-can.png')"
-          ></b-avatar>
-
-          {{ formatDateDay(treatment.careDate.replace(/-/g, "\/")) }}
-        </span>
-        <b-avatar
-          v-b-tooltip.hover
-          title="Delete this treatment"
-          icon="trash-fill"
-          id="deleteTreatment"
-          size="sm"
-          v-on:click="deleteTreatment(treatment)"
-          href="#"
-        ></b-avatar>
-      </b-list-group-item>
-    </b-list-group>
-
-    <!-- Toggle to see more watering treatments -->
-    <p>
-      <b-button
-        v-if="waterings.length > 5"
-        id="toggleBtn"
-        size="sm"
-        v-b-toggle.collapse-1
-        >See <b-badge>{{ waterings.length - 5 }}</b-badge> more</b-button
-      >
-    </p>
-    <b-collapse id="collapse-1" class="mt-2">
+    </b-container>
+    <b-container>
       <b-list-group
-        v-for="treatment in waterings.slice(5)"
+        v-bind:treatment="treatment"
+        v-for="treatment in waterings.slice(0, 5)"
         v-bind:key="treatment.treatmentId"
+        v-show="waterings.length > 0"
       >
         <b-list-group-item
           class="d-flex justify-content-between align-items-center"
@@ -150,60 +107,58 @@
           ></b-avatar>
         </b-list-group-item>
       </b-list-group>
-    </b-collapse>
+
+      <!-- Toggle to see more watering treatments -->
+      <p>
+        <b-button
+          v-if="waterings.length > 5"
+          id="toggleBtn"
+          size="sm"
+          v-b-toggle.collapse-1
+          >See <b-badge>{{ waterings.length - 5 }}</b-badge> more</b-button
+        >
+      </p>
+      <b-collapse id="collapse-1" class="mt-2">
+        <b-list-group
+          v-for="treatment in waterings.slice(5)"
+          v-bind:key="treatment.treatmentId"
+        >
+          <b-list-group-item
+            class="d-flex justify-content-between align-items-center"
+          >
+            <span>
+              <b-avatar
+                class="avatar-custom"
+                id="watered"
+                v-bind:src="require('@/assets/watering-can.png')"
+              ></b-avatar>
+
+              {{ formatDateDay(treatment.careDate.replace(/-/g, "\/")) }}
+            </span>
+            <b-avatar
+              v-b-tooltip.hover
+              title="Delete this treatment"
+              icon="trash-fill"
+              id="deleteTreatment"
+              size="sm"
+              v-on:click="deleteTreatment(treatment)"
+              href="#"
+            ></b-avatar>
+          </b-list-group-item>
+        </b-list-group>
+      </b-collapse>
+    </b-container>
 
     <p class="subsection-header">Other recent treatments:</p>
-    <p class="no-content" v-show="otherTreatments.length === 0">
+    <b-container v-show="otherTreatments.length === 0">
       You have no other treatments to display.
-    </p>
-    <b-list-group
-      v-bind:treatment="treatment"
-      v-for="treatment in otherTreatments.slice(0, 5)"
-      v-bind:key="treatment.treatmentId"
-      v-show="otherTreatments.length > 0"
-    >
-      <b-list-group-item
-        class="d-flex justify-content-between align-items-center"
-      >
-        <span>
-          <b-avatar
-            class="avatar-custom"
-            v-bind:id="treatment.careType"
-            v-bind:src="selectImg(treatment.careType)"
-          ></b-avatar>
-
-          {{
-            formatDateDay(treatment.careDate.replace(/-/g, "\/")) +
-            ": " +
-            treatment.careType
-          }}
-        </span>
-        <b-avatar
-          v-b-tooltip.hover
-          title="Delete this treatment"
-          icon="trash-fill"
-          id="deleteTreatment"
-          size="sm"
-          v-on:click="deleteTreatment(treatment)"
-          href="#"
-        ></b-avatar>
-      </b-list-group-item>
-    </b-list-group>
-
-    <!-- Toggle to see additional treatments -->
-    <p>
-      <b-button
-        v-if="otherTreatments.length > 5"
-        id="toggleBtn"
-        size="sm"
-        v-b-toggle.collapse-2
-        >See <b-badge>{{ otherTreatments.length - 5 }}</b-badge> more</b-button
-      >
-    </p>
-    <b-collapse id="collapse-2" class="mt-2">
+    </b-container>
+    <b-container>
       <b-list-group
-        v-for="treatment in otherTreatments.slice(5)"
+        v-bind:treatment="treatment"
+        v-for="treatment in otherTreatments.slice(0, 5)"
         v-bind:key="treatment.treatmentId"
+        v-show="otherTreatments.length > 0"
       >
         <b-list-group-item
           class="d-flex justify-content-between align-items-center"
@@ -232,9 +187,55 @@
           ></b-avatar>
         </b-list-group-item>
       </b-list-group>
-    </b-collapse>
+
+      <!-- Toggle to see additional treatments -->
+      <p>
+        <b-button
+          v-if="otherTreatments.length > 5"
+          id="toggleBtn"
+          size="sm"
+          v-b-toggle.collapse-2
+          >See
+          <b-badge>{{ otherTreatments.length - 5 }}</b-badge> more</b-button
+        >
+      </p>
+      <b-collapse id="collapse-2" class="mt-2">
+        <b-list-group
+          v-for="treatment in otherTreatments.slice(5)"
+          v-bind:key="treatment.treatmentId"
+        >
+          <b-list-group-item
+            class="d-flex justify-content-between align-items-center"
+          >
+            <span>
+              <b-avatar
+                class="avatar-custom"
+                v-bind:id="treatment.careType"
+                v-bind:src="selectImg(treatment.careType)"
+              ></b-avatar>
+
+              {{
+                formatDateDay(treatment.careDate.replace(/-/g, "\/")) +
+                ": " +
+                treatment.careType
+              }}
+            </span>
+            <b-avatar
+              v-b-tooltip.hover
+              title="Delete this treatment"
+              icon="trash-fill"
+              id="deleteTreatment"
+              size="sm"
+              v-on:click="deleteTreatment(treatment)"
+              href="#"
+            ></b-avatar>
+          </b-list-group-item>
+        </b-list-group>
+      </b-collapse>
+    </b-container>
 
     <!-- Notes section -->
+
     <p class="subsection-header">Notes on {{ plant.plantName }}:</p>
     <p class="no-content" v-show="notes.length === 0">
       You have no notes to display.
@@ -271,92 +272,104 @@
     </b-collapse>
     <!-- End add a note -->
 
-    <b-card
-      id="note-card"
-      v-for="note in notes"
-      v-bind:key="note.noteId"
-      no-body
-      :header="formatDateDay(note.createdOn.replace(/-/g, '\/'))"
-    >
-      <b-card-body>
-        <b-row>
-          <b-col>
-            {{ note.note }}
+    <b-row class="note-card" align-h="center">
+      <b-card
+        id="note-card"
+        style="max-width: 640px"
+        v-for="note in notes"
+        v-bind:key="note.noteId"
+        no-body
+        class="overflow-hidden"
+        :header="formatDateDay(note.createdOn.replace(/-/g, '\/'))"
+      >
+        <b-row no-gutters>
+          <b-col md="6" v-if="note.noteImg != null">
+            <b-card-body>
+              <b-card-text>
+                {{ note.note }}
+              </b-card-text>
+            </b-card-body>
+          </b-col>
+          <b-col v-else>
+            <b-card-body>
+              <b-card-text>
+                {{ note.note }}
+              </b-card-text>
+            </b-card-body>
           </b-col>
           <b-col md="6" v-if="note.noteImg != null">
-            <b-img
-              responsive
+            <b-card-img
               id="notePhoto"
-              right
               :src="note.noteImg"
-              alt="Plant image"
-            ></b-img>
+              alt="Note image"
+              class="rounded-0"
+            ></b-card-img>
           </b-col>
         </b-row>
-      </b-card-body>
-      <b-card-footer>
-        <b-row align-v="center">
-          <b-col class="text-center">
-            <b-button
-              id="note"
-              class="card-footer-btn"
-              size="sm"
-              @click="useCloudinary($event, note)"
-              >Add a photo
-              <b-avatar
+        <b-card-footer>
+          <b-row align-v="center">
+            <b-col class="text-center">
+              <b-button
+                id="note"
+                class="card-footer-btn"
                 size="sm"
-                icon="camera-fill"
-                class="avatar-icon-camera"
-              ></b-avatar
-            ></b-button>
-          </b-col>
-          <b-col class="text-center middle">
-            <b-button
-              class="card-footer-btn"
-              size="sm"
-              @click="toggleNoteForm(note)"
-              >Edit note
-              <b-avatar
+                @click="useCloudinary($event, note)"
+                >{{ note.noteImg === null ? "Add a photo" : "Edit photo" }}
+                <b-avatar
+                  size="sm"
+                  icon="camera-fill"
+                  class="avatar-icon-camera"
+                ></b-avatar
+              ></b-button>
+            </b-col>
+            <b-col class="text-center middle">
+              <b-button
+                class="card-footer-btn"
                 size="sm"
-                icon="pencil-fill"
-                class="avatar-icon-pencil"
-              ></b-avatar
-            ></b-button>
-          </b-col>
-          <b-col>
-            <b-button
-              class="card-footer-btn"
-              size="sm"
-              @click="deleteNote(note.noteId)"
-            >
-              Delete
-              <b-avatar
+                @click="toggleNoteForm(note)"
+                >Edit note
+                <b-avatar
+                  size="sm"
+                  icon="pencil-fill"
+                  class="avatar-icon-pencil"
+                ></b-avatar
+              ></b-button>
+            </b-col>
+            <b-col>
+              <b-button
+                class="card-footer-btn"
                 size="sm"
-                icon="trash-fill"
-                class="avatar-icon-trash"
-              ></b-avatar>
-            </b-button>
-          </b-col>
-        </b-row>
-      </b-card-footer>
+                @click="deleteNote(note.noteId)"
+              >
+                Delete
+                <b-avatar
+                  size="sm"
+                  icon="trash-fill"
+                  class="avatar-icon-trash"
+                ></b-avatar>
+              </b-button>
+            </b-col>
+          </b-row>
+        </b-card-footer>
 
-      <b-card-body v-if="showNoteForm == note.noteId">
-        <b-form v-on:submit.prevent="editNote(note)">
-          <b-form-group>
-            <b-form-textarea v-model="note.note" autofocus="true">
-            </b-form-textarea>
-          </b-form-group>
-          <b-button
-            size="sm"
-            id="cancelEdit"
-            @click="cancelForm($event, note)"
-            class="default"
-            >Cancel</b-button
-          >
-          <b-button size="sm" type="submit" class="default">Update</b-button>
-        </b-form>
-      </b-card-body>
-    </b-card>
+        <b-card-body v-if="showNoteForm == note.noteId">
+          <b-form v-on:submit.prevent="editNote(note)">
+            <b-form-group>
+              <b-form-textarea v-model="note.note" autofocus="true">
+              </b-form-textarea>
+            </b-form-group>
+            <b-button
+              size="sm"
+              id="cancelEdit"
+              @click="cancelForm($event, note)"
+              class="default"
+              >Cancel</b-button
+            >
+            <b-button size="sm" type="submit" class="default">Update</b-button>
+          </b-form>
+        </b-card-body>
+      </b-card>
+    </b-row>
 
     <p>
       Todo: Add Cloudinary. Add link for add/update info URL. Form for updating
@@ -411,6 +424,12 @@ export default {
       return this.treatments.filter(
         (treatment) => treatment.careType != "watered"
       );
+    },
+    name() {
+      return this.$store.state.profile.displayName === undefined ||
+        this.$store.state.profile.displayName === null
+        ? this.$store.state.user.username
+        : this.$store.state.profile.displayName;
     },
   },
   methods: {
@@ -589,14 +608,17 @@ export default {
 </script>
 
 <style>
+#plant-detail {
+  /* max-width: 640px; */
+}
 #plant-detail > .row.plant-card {
   margin-top: 1rem;
 }
-.no-content {
+/* .no-content {
   padding: 10px;
   border: 2px solid var(--green);
   border-radius: 0.2rem;
-}
+} */
 .card {
   border: 1px solid var(--gray);
 }
@@ -630,10 +652,18 @@ export default {
   /* background-color: white;
   border: 2px solid var(--orange); */
 }
+/* .subsection-accent {
+  background-color: #ACC3A1;
+  padding-bottom: 0.3rem;
+} */
 .subsection-header {
   font-size: 1.3rem;
   font-weight: 400;
   margin-top: 1rem;
+  padding: 0.3rem;
+  padding-left: 1rem;
+  background-color: var(--light-shade1);
+  border-left: 5px solid var(--green);
 }
 .avatar-custom#watered,
 .avatar-custom#sprayed,
@@ -661,6 +691,7 @@ export default {
 }
 .card#note-card {
   margin-bottom: 1rem;
+  width: 100%;
 }
 .avatar-custom-note {
   color: var(--dark);
@@ -680,7 +711,7 @@ export default {
   background-color: var(--gray);
 }
 #notePhoto {
-  width: 20rem;
-  height: auto;
+  /* width: 20rem;
+  height: auto; */
 }
 </style>
