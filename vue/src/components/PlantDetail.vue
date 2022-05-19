@@ -22,56 +22,109 @@
               <b-card-text>
                 I am an {{ plant.indoor == true ? "indoor" : "outdoor" }} plant
                 and have been in {{ name }}&#8217;s care since
-                <a v-on:click="toggleDateForm">{{
-                  plant.plantAge == null
-                    ? "today"
-                    : formatDate(plant.plantAge.replace(/-/g, "\/"))
-                }}</a
+                <a
+                  v-b-tooltip.hover
+                  title="Edit date"
+                  v-b-toggle.collapse-date-form
+                  @click="toggleDateForm(plant)"
+                  >{{
+                    plant.plantAge == null
+                      ? "today"
+                      : formatDate(plant.plantAge.replace(/-/g, "\/"))
+                  }}</a
                 >.
-                <!-- Todo: Test that date display is correct without day of week -->
               </b-card-text>
+              <!-- FORM: edit plant.plantAge -->
+              <b-collapse id="collapse-date-form" class="mt-2">
+                <b-form @submit.prevent="editPlant()">
+                  <label class="sr-only" for="plantAge"
+                    >Plant cared for since:
+                  </label>
+                  <b-form-input
+                    type="date"
+                    v-model="plant.plantAge"
+                  ></b-form-input>
+                  <b-row id="dateFormBtnGroup" no-gutters>
+                    <b-button
+                      size="sm"
+                      id="cancelDateForm"
+                      @click="cancelForm($event, plant)"
+                      class="default"
+                      >Cancel</b-button
+                    >
+                    <b-button size="sm" type="submit" class="default"
+                      >Update</b-button
+                    >
+                  </b-row>
+                </b-form>
+              </b-collapse>
+              <b-card-text v-if="plant.infoUrl != null">
+                <b-link target="_blank" :href="plant.infoUrl"
+                  >Learn more about me here.<b-avatar
+                    size="sm"
+                    icon="link45deg"
+                    class="avatar-icon-link"
+                  ></b-avatar
+                ></b-link>
+              </b-card-text>
+              <!-- Todo: Test that date display is correct without day of week -->
+            </b-card-body>
+          </b-col>
+        </b-row>
+        <b-card-footer>
+          <b-row align-v="center">
+            <b-col class="text-center">
               <b-button
                 id="plant"
                 class="card-footer-btn"
                 size="sm"
                 @click="useCloudinary($event, plant)"
-                >{{ plant.plantImg === null ? "Add a photo" : "Edit photo" }}
+                >{{ plant.plantImg === null ? "Add a photo" : "Swap photo" }}
                 <b-avatar
                   size="sm"
                   icon="camera-fill"
                   class="avatar-icon-camera"
                 ></b-avatar
               ></b-button>
-            </b-card-body>
-          </b-col>
-        </b-row>
+            </b-col>
+            <b-col class="text-center middle">
+              <b-button
+                class="card-footer-btn"
+                size="sm"
+                @click="toggleEditForm(plant)"
+                v-b-toggle.collapse-edit-form
+                >Edit plant
+                <b-avatar
+                  size="sm"
+                  icon="pencil-fill"
+                  class="avatar-icon-pencil"
+                ></b-avatar
+              ></b-button>
+            </b-col>
+            <b-col>
+              <b-button
+                v-b-tooltip.hover
+                title="Delete this plant"
+                class="card-footer-btn"
+                size="sm"
+                @click="deletePlant()"
+              >
+                Delete
+                <b-avatar
+                  size="sm"
+                  icon="trash-fill"
+                  class="avatar-icon-trash"
+                ></b-avatar>
+              </b-button>
+            </b-col>
+          </b-row>
+        </b-card-footer>
       </b-card>
     </b-row>
 
-    <!-- todo: style this form and place it -->
-    <form v-on:submit.prevent="editPlant" v-show="showDateForm === true">
-      <label for="plantAge">Plant cared for since: </label>
-      <input type="date" v-model="plant.plantAge" />
-      <button id="submit">Update</button>
-      <button v-on:click.prevent="cancelForm($event)" id="cancelDateForm">
-        Cancel
-      </button>
-    </form>
-
-    <!-- Todo: figure our where "add info" feature lives -->
-    {{ plant.infoUrl }}
-    <a v-on:click="toggleInfoForm">{{
-      plant.infoUrl == null ? "Add link" : "(edit link)"
-    }}</a>
-    <form v-on:submit.prevent="editPlant" v-show="showInfoForm === true">
-      <label for="infoUrl">Add an external link: </label>
-      <input type="text" v-model="plant.infoUrl" />
-      <button id="submit">Save</button>
-      <button v-on:click.prevent="cancelForm($event)" id="cancelInfoForm">
-        Cancel
-      </button>
-    </form>
-    <!-- End todo -->
+    <b-collapse id="collapse-edit-form" class="mt-2">
+      <EditPlant @cancelEditForm="cancelForm($event, plant)" />
+    </b-collapse>
 
     <p class="subsection-header">Recent waterings:</p>
     <b-container v-show="waterings.length === 0">
@@ -108,7 +161,7 @@
         </b-list-group-item>
       </b-list-group>
 
-      <!-- Toggle to see more watering treatments -->
+      <!-- TOGGLE: see more watering treatments -->
       <p>
         <b-button
           v-if="waterings.length > 5"
@@ -188,7 +241,7 @@
         </b-list-group-item>
       </b-list-group>
 
-      <!-- Toggle to see additional treatments -->
+      <!-- TOGGLE: see additional treatments -->
       <p>
         <b-button
           v-if="otherTreatments.length > 5"
@@ -314,7 +367,7 @@
                 class="card-footer-btn"
                 size="sm"
                 @click="useCloudinary($event, note)"
-                >{{ note.noteImg === null ? "Add a photo" : "Edit photo" }}
+                >{{ note.noteImg === null ? "Add a photo" : "Swap photo" }}
                 <b-avatar
                   size="sm"
                   icon="camera-fill"
@@ -370,11 +423,6 @@
         </b-card-body>
       </b-card>
     </b-row>
-
-    <p>
-      Todo: Add Cloudinary. Add link for add/update info URL. Form for updating
-      plant age.
-    </p>
   </b-container>
 </template>
 
@@ -384,16 +432,19 @@ import plantService from "../services/PlantService";
 import treatmentService from "../services/TreatmentService";
 import photoService from "../services/PhotoService";
 // import EditNote from "./EditNote.vue";
+import EditPlant from "./EditPlant.vue";
 export default {
   name: "plant-detail",
-  // components: { EditNote },
+  components: { EditPlant },
   data() {
     return {
       note: {},
       savedNote: "",
+      savedDate: "",
+      savedName: "",
+      savedUrl: "",
+      savedLocation: "",
       showNoteForm: false,
-      showDateForm: false,
-      showInfoForm: false,
       modal: "",
     };
   },
@@ -472,16 +523,26 @@ export default {
     toggleInfoForm() {
       this.showInfoForm = !this.showInfoForm;
     },
-    toggleDateForm() {
-      this.showDateForm = !this.showDateForm;
+    toggleDateForm(plant) {
+      this.savedDate = plant.plantAge;
     },
     toggleNoteForm(note) {
       this.savedNote = note.note;
       this.showNoteForm = note.noteId;
     },
-    cancelForm(event, note) {
-      event.target.id === "cancelInfoForm"
-        ? this.toggleInfoForm()
+    toggleEditForm(plant) {
+      this.savedDate = plant.plantAge;
+      this.savedName = plant.plantName;
+      this.savedUrl = plant.infoUrl;
+      this.savedLocation = plant.indoor;
+    },
+    cancelForm(event, object) {
+      event.target.id === "cancelDateForm"
+        ? this.$root.$emit(
+            "bv::toggle::collapse",
+            "collapse-date-form",
+            (object.plantAge = this.savedDate)
+          )
         : event.target.id === "cancel"
         ? this.$root.$emit(
             "bv::toggle::collapse",
@@ -489,8 +550,17 @@ export default {
             (this.note = {})
           )
         : event.target.id === "cancelEdit"
-        ? ((this.showNoteForm = false), (note.note = this.savedNote))
-        : this.toggleDateForm();
+        ? ((this.showNoteForm = false), (object.note = this.savedNote))
+        : event.target.id === "cancelEditForm"
+        ? this.$root.$emit(
+            "bv::toggle::collapse",
+            "collapse-edit-form",
+            ((object.plantAge = this.savedDate),
+            (object.plantName = this.savedName),
+            (object.infoUrl = this.savedUrl),
+            (object.indoor = this.savedLocation))
+          )
+        : alert(event.target.id);
     },
     editPlant() {
       plantService
@@ -498,12 +568,36 @@ export default {
         .then((response) => {
           if (response.status == 200) {
             this.$store.commit("EDIT_PLANT", this.plant);
-            this.showDateForm = false;
             this.showInfoForm = false;
+            // Close the 'edit date form' after updating:
+            this.$root.$emit("bv::toggle::collapse", "collapse-date-form");
           }
         })
         .catch((err) => {
           alert(err + " problem editing plant!");
+        });
+    },
+    deletePlant() {
+      this.modal = "";
+      this.$bvModal
+        .msgBoxConfirm(
+          "Are you sure you want to delete this plant and all associated treatments?"
+        )
+        .then((value) => {
+          this.modal = value;
+          if (value === true) {
+            plantService
+              .deletePlant(this.plantId)
+              .then((response) => {
+                if (response.status == 204) {
+                  this.$store.commit("DELETE_PLANT", this.plantId);
+                  this.$router.push("/plants");
+                }
+              })
+              .catch((err) => {
+                alert(err + " problem deleting plant!");
+              });
+          }
         });
     },
     saveNote(note) {
@@ -672,6 +766,11 @@ export default {
 .avatar-custom#pest-treated {
   margin-right: 1rem;
 }
+.avatar-icon-link {
+  margin-left: 0.3rem;
+  background-color: var(--green);
+  border: 1px solid var(--orange);
+}
 .avatar-custom#sprayed {
   background-color: var(--light);
   border: 1px solid var(--orange);
@@ -706,9 +805,14 @@ export default {
 #add-note-form {
   margin-bottom: 1rem;
 }
-.btn#cancelEdit {
+.btn#cancelEdit,
+.btn#cancelDateForm,
+#cancelEditForm {
   margin-right: 1%;
   background-color: var(--gray);
+}
+#dateFormBtnGroup {
+  margin-top: 0.3rem;
 }
 #notePhoto {
   /* width: 20rem;

@@ -88,7 +88,7 @@
 <script>
 import AddPlant from "../components/AddPlant.vue";
 import LogCare from "../components/LogCare.vue";
-import plantService from "../services/PlantService";
+// import plantService from "../services/PlantService";
 import treatmentService from "../services/TreatmentService";
 export default {
   components: { AddPlant, LogCare },
@@ -116,7 +116,7 @@ export default {
         },
         {
           key: "plantImg",
-          label: "Image",
+          label: "",
         },
       ],
       showForm: false,
@@ -170,26 +170,26 @@ export default {
       this.newPlant = plant;
       this.showForm === true ? (this.showForm = false) : (this.showForm = true);
     },
-    deletePlant(plantId) {
-      this.modal = "";
-      this.$bvModal
-        .msgBoxConfirm("Are you sure you want to delete this plant?")
-        .then((value) => {
-          this.modal = value;
-          if (value === true) {
-            plantService
-              .deletePlant(plantId)
-              .then((response) => {
-                if (response.status == 204) {
-                  this.$store.commit("DELETE_PLANT", plantId);
-                }
-              })
-              .catch((err) => {
-                alert(err + " problem deleting plant!");
-              });
-          }
-        });
-    },
+    // deletePlant(plantId) {
+    //   this.modal = "";
+    //   this.$bvModal
+    //     .msgBoxConfirm("Are you sure you want to delete this plant?")
+    //     .then((value) => {
+    //       this.modal = value;
+    //       if (value === true) {
+    //         plantService
+    //           .deletePlant(plantId)
+    //           .then((response) => {
+    //             if (response.status == 204) {
+    //               this.$store.commit("DELETE_PLANT", plantId);
+    //             }
+    //           })
+    //           .catch((err) => {
+    //             alert(err + " problem deleting plant!");
+    //           });
+    //       }
+    //     });
+    // },
     formatDateDay(date) {
       const options = {
         weekday: "long",

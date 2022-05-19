@@ -65,7 +65,7 @@
                 >{{
                   profile.profileImg === undefined
                     ? "Add a photo"
-                    : "Edit photo"
+                    : "Swap photo"
                 }}
                 <b-avatar
                   size="sm"
