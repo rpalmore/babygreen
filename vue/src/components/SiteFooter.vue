@@ -1,6 +1,9 @@
 <template>
   <b-container id="footer" fluid>
     Created and maintained by Rebecca Palmore
+    <b-link target="_blank" href="https://github.com/rpalmore/babygreen"
+      ><b-avatar icon="github" class="avatar-icon-github"> </b-avatar
+    ></b-link>
   </b-container>
 </template>
 
@@ -20,5 +23,9 @@ export default {
   text-align: center;
   color: var(--light);
   font-weight: 300;
+}
+.avatar-icon-github {
+  background-color: var(--dark);
+  border: 2px solid var(--green);
 }
 </style>

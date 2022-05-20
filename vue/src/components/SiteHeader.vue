@@ -2,11 +2,11 @@
 <div>
   <b-jumbotron
     header="baby green"
-    lead="TK tagline"
+    lead="Tools for a lush life"
   >
   <hr class="my-4">
-    <b-button class="default" :to="{ name: 'login' }">Sign In</b-button>&nbsp;
-    <b-button class="default" :to="{ name: 'register' }">Register</b-button>
+    <b-button class="default" :to="{ name: 'login' }">Sign In</b-button>
+    <b-button id="btnRight" class="default" :to="{ name: 'register' }">Register</b-button>
   </b-jumbotron>
   </div>
 </template>
@@ -28,6 +28,9 @@ height: 100%;
 .my-4 {
   width: 50%;
   margin-left: 0;
+}
+#btnRight {
+  margin-left: 0.3rem;
 }
 /* .btn {
   background-color: var(--green);

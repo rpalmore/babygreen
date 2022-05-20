@@ -32,7 +32,11 @@
               </b-list-group-item>
               <b-list-group-item>
                 <span
-                  >I am tracking <span class="profileData">{{ numPlants }}</span
+                  >I am tracking
+                  <span class="profileData"
+                    ><router-link :to="{ name: 'plants' }">{{
+                      numPlants
+                    }}</router-link></span
                   >!
                 </span>
               </b-list-group-item>
@@ -42,13 +46,16 @@
                   {{ latestTreatment.careType }}
                   {{ latestTreatment.numPlants }}
                   {{
-                    latestTreatment.numPlants == 1 ? " plant on " : "plants on "
-                  }}
-                  <span class="profileData">{{
-                    formatDateMonth(
-                      latestTreatment.careDate.replace(/-/g, "\/")
-                    )
-                  }}</span>
+                    latestTreatment.numPlants == 1
+                      ? " plant on "
+                      : "plants on "
+                  }}<router-link :to="{ name: 'plant-care' }">
+                    <span class="profileData">{{
+                      formatDateMonth(
+                        latestTreatment.careDate.replace(/-/g, "\/")
+                      )
+                    }}</span></router-link
+                  >
                 </span>
               </b-list-group-item>
             </b-list-group>
@@ -334,7 +341,7 @@ export default {
 }
 .profileData {
   /* color: var(--orange); */
-  border-bottom: 1px solid var(--light);
+  /* border-bottom: 1px solid var(--light); */
 }
 .card-footer > .row {
   /* background-color: var(--green);
