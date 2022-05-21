@@ -339,14 +339,6 @@ export default {
 .plant-card {
   margin-top: 1rem;
 }
-.profileData {
-  /* color: var(--orange); */
-  /* border-bottom: 1px solid var(--light); */
-}
-.card-footer > .row {
-  /* background-color: var(--green);
-  background-color: var(--orange); */
-}
 .card-footer .btn {
   width: 100%;
 }
@@ -366,7 +358,6 @@ export default {
   border: 1px solid var(--green);
   border: 1px solid var(--platinum);
   background-color: var(--orange);
-  /* color: var(--dark); */
 }
 #profile-form {
   margin-top: 1rem;

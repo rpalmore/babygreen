@@ -1,10 +1,10 @@
 <template>
   <b-container fluid id="plant-care">
     <b-row align-h="center">
-      <p class="section-header">TK header</p>
+      <p class="section-header">Recent treatments</p>
     </b-row>
 
-    <p>TODO: let user bulk delete care treatments by date?</p>
+    <!-- TODO: let user bulk delete care treatments by date? -->
 
     <p v-if="this.$store.state.treatments.length == 0">
       You have not logged any treatments.
@@ -62,11 +62,11 @@
         </b-list-group>
       </b-container>
 
-      <!-- SPRAYED GROUP -->
+      <!-- MISTED GROUP -->
       <b-container>
         <b-list-group
           v-bind:treatment="treatment"
-          v-for="treatment in sprayings"
+          v-for="treatment in mistings"
           v-bind:key="treatment.treatmentId"
           v-show="uniqueDate == treatment.careDate"
         >
@@ -254,9 +254,9 @@ export default {
         (treatment) => treatment.careType == "watered"
       );
     },
-    sprayings() {
+    mistings() {
       return this.treatments.filter(
-        (treatment) => treatment.careType == "sprayed"
+        (treatment) => treatment.careType == "misted"
       );
     },
     fertilized() {
@@ -302,7 +302,7 @@ export default {
     selectImg(careType) {
       return careType === "watered"
         ? require("@/assets/watering-can.png")
-        : careType === "sprayed"
+        : careType === "misted"
         ? require("@/assets/spray-bottle.png")
         : careType === "repotted"
         ? require("@/assets/plant-pot.png")
@@ -331,7 +331,6 @@ export default {
         });
     },
   },
-  // does 'mounted' improve performance over 'created'? Testing.
   mounted() {
     treatmentService
       .getAllTreatments()
@@ -348,7 +347,4 @@ export default {
 </script>
 
 <style>
-/* #plant-care {
-  max-width: 640px;
-} */
 </style>

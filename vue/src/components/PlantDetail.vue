@@ -495,7 +495,7 @@ export default {
         : plantImg;
     },
     selectImg(careType) {
-      return careType === "sprayed"
+      return careType === "misted"
         ? require("@/assets/spray-bottle.png")
         : careType === "repotted"
         ? require("@/assets/plant-pot.png")
@@ -702,17 +702,9 @@ export default {
 </script>
 
 <style>
-#plant-detail {
-  /* max-width: 640px; */
-}
 #plant-detail > .row.plant-card {
   margin-top: 1rem;
 }
-/* .no-content {
-  padding: 10px;
-  border: 2px solid var(--green);
-  border-radius: 0.2rem;
-} */
 .card {
   border: 1px solid var(--gray);
 }
@@ -743,13 +735,7 @@ export default {
 }
 #deleteTreatment {
   background-color: var(--orange);
-  /* background-color: white;
-  border: 2px solid var(--orange); */
 }
-/* .subsection-accent {
-  background-color: #ACC3A1;
-  padding-bottom: 0.3rem;
-} */
 .subsection-header {
   font-size: 1.3rem;
   font-weight: 400;
@@ -760,7 +746,7 @@ export default {
   border-left: 5px solid var(--green);
 }
 .avatar-custom#watered,
-.avatar-custom#sprayed,
+.avatar-custom#misted,
 .avatar-custom#repotted,
 .avatar-custom#fertilized,
 .avatar-custom#pest-treated {
@@ -771,7 +757,7 @@ export default {
   background-color: var(--green);
   border: 1px solid var(--orange);
 }
-.avatar-custom#sprayed {
+.avatar-custom#misted {
   background-color: var(--light);
   border: 1px solid var(--orange);
 }
@@ -813,9 +799,5 @@ export default {
 }
 #dateFormBtnGroup {
   margin-top: 0.3rem;
-}
-#notePhoto {
-  /* width: 20rem;
-  height: auto; */
 }
 </style>

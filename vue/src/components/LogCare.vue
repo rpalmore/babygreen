@@ -52,7 +52,7 @@ export default {
       },
       options: [
         { text: "Watered", value: "watered" },
-        { text: "Sprayed", value: "sprayed" },
+        { text: "Misted", value: "misted" },
         { text: "Repotted", value: "repotted" },
         { text: "Pest-treated", value: "pest-treated" },
         { text: "Fertilized", value: "fertilized" },

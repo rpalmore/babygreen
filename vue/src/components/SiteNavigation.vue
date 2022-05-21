@@ -1,7 +1,6 @@
 <template>
   <b-card-header id="site-nav" header-tag="nav" v-if="$store.state.token != ''">
     <b-nav pills>
-      <!-- <b-nav-text>baby green</b-nav-text> -->
       <b-nav-item-dropdown
         id="nav-dropdown"
         text="My Plants"
@@ -70,7 +69,6 @@ export default {
   display: flex;
   background: url(../assets/avinash-kumar-1-unsplash-nav.webp) center center;
   background-size: cover;
-  /* height: 100%; */
   border-bottom: 2px solid var(--orange);
   justify-content: space-between;
 }
@@ -95,9 +93,7 @@ export default {
   align-items: center;
   text-align: center;
   background-color: var(--light);
-  /* background-color: var(--orange); */
   color: var(--dark);
-  /* color: var(--light); */
   opacity: .9;
   padding: 0.5rem;
   border: 1px solid var(--green);

@@ -4,11 +4,6 @@
       <p class="section-header">{{ name }}&#8217;s plants</p>
     </b-row>
     <p>
-      To do: Filter by indoor/outdoor and text search for plants by name.
-      <!-- {{ plants }} -->
-      <!-- {{ latestWatering }} -->
-    </p>
-    <p>
       <b-button id="toggleFormBtn" size="sm" v-b-toggle.collapse-form
         ><span class="when-open">Close form</span
         ><span class="when-closed">Add a plant</span>
@@ -67,17 +62,6 @@
         ></b-avatar>
       </template>
     </b-table>
-
-    <!-- leaving for reference in case I decide to add back to Plants.vue -->
-    <!-- <b-container id="plant-list">
-      <b-col>
-        <a v-on:click="deletePlant(plant.plantId)">&#10006;</a> |
-        <a v-on:click.prevent="toggleForm(plant)">{{
-          showForm === true ? "cancel" : "edit"
-        }}</a>
-      </b-col>
-    </b-container> -->
-
     <LogCare
       v-bind:selectedPlantIds="selectedPlantIds"
       @form-sent="updateSelectedIds"
@@ -159,8 +143,6 @@ export default {
             this.selectedPlantIds.push(this.plants[i].plantId);
           }
         }
-        // eslint-disable-next-line no-console
-        // console.log(this.selectedPlantIds);
       } else {
         this.selectedPlantIds = [];
         this.checkAll = false;
@@ -170,26 +152,6 @@ export default {
       this.newPlant = plant;
       this.showForm === true ? (this.showForm = false) : (this.showForm = true);
     },
-    // deletePlant(plantId) {
-    //   this.modal = "";
-    //   this.$bvModal
-    //     .msgBoxConfirm("Are you sure you want to delete this plant?")
-    //     .then((value) => {
-    //       this.modal = value;
-    //       if (value === true) {
-    //         plantService
-    //           .deletePlant(plantId)
-    //           .then((response) => {
-    //             if (response.status == 204) {
-    //               this.$store.commit("DELETE_PLANT", plantId);
-    //             }
-    //           })
-    //           .catch((err) => {
-    //             alert(err + " problem deleting plant!");
-    //           });
-    //       }
-    //     });
-    // },
     formatDateDay(date) {
       const options = {
         weekday: "long",
@@ -206,24 +168,11 @@ export default {
       .then((response) => {
         if (response.status == 200) {
           this.$store.commit("SET_LATEST_WATERING", response.data);
-          //eslint-disable-next-line no-console
-          // console.log(response.data);
         }
       })
       .catch((err) => {
         alert(err + " problem getting latest waterings!");
       });
-
-    // Best to get plants at login. Otherwise, list of plants is tied to
-    // most recent user. Even if you clear the list at logout via the store, it *might* mean that
-    // a user's plant list won't appear until they get to this page -- problematic if
-    // you are directed *first* to the profile page.
-
-    // plantService.getAllPlants().then((response) => {
-    //   if (response.status == 200) {
-    //     this.$store.commit("SET_PLANTS", response.data);
-    //   }
-    // });
   },
 };
 </script>
@@ -242,7 +191,6 @@ export default {
 }
 #toggleFormBtn {
   background-color: var(--green);
-  color: var(--dark);
   color: var(--platinum);
   border: 1px solid var(--orange);
   font-size: 1rem;
@@ -253,8 +201,6 @@ export default {
   border: 1px solid var(--orange);
 }
 .avatar-add-plant {
-  background-color: var(--light);
-  background-color: var(--platinum);
   background-color: var(--yellow);
   border: 1px solid var(--orange);
   margin-left: 3px;
