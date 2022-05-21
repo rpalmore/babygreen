@@ -4,7 +4,6 @@
     <SiteNavigation v-if="$store.state.token != ''" />
 
     <b-container fluid id="container-main">
-      <!-- <span id="branding">baby green</span> -->
       <router-view />
       <About v-if="$store.state.token == ''" />
     </b-container>
@@ -66,22 +65,13 @@ https://coolors.co/palette/729b79-475b63-2e2c2f-d34e24-f5e4d7 */
   /* background-color: var(--dark); */
 }
 #container-main {
-  background-color: var(--grey);
   background-color: var(--light);
   min-height: 86vh;
   height: auto;
   border: 1px solid var(--dark);
-  /* background-color: var(--light); */
   border-top: 5px solid var(--grey);
   padding-bottom: 3rem;
-  /* padding-top: 20px; */
 }
-/* span#branding {
-  display: flex;
-  justify-content: end;
-  color: var(--orange);
-  font-weight: bold;
-} */
 h2 {
   color: var(--dark);
 }
@@ -98,7 +88,6 @@ a {
   background-color: var(--orange);
   border-right: 3px solid var(--dark);
   border-left: 3px solid var(--dark);
-  color: var(--light);
   color: var(--dark);
 }
 </style>
