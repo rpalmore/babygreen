@@ -5,9 +5,10 @@ import Login from '../views/Login.vue'
 import Logout from '../views/Logout.vue'
 import Register from '../views/Register.vue'
 import Profile from '../views/Profile.vue'
+import AddPlant from '../views/AddPlant.vue'
 import Plants from '../views/Plants.vue'
 import PlantDetail from '../components/PlantDetail.vue'
-import PlantCare from '../views/PlantCare.vue'
+import Care from '../views/Care.vue'
 import About from '../views/About.vue'
 import store from '../store/index'
 
@@ -84,6 +85,14 @@ const router = new Router({
       }
     },
     {
+      path: "/add-plant",
+      name: "add-plant",
+      component: AddPlant,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
       path: "/plants/:plantId",
       name: "plant-detail",
       component: PlantDetail,
@@ -93,8 +102,8 @@ const router = new Router({
     },
     {
       path: "/plant-care",
-      name: "plant-care",
-      component: PlantCare,
+      name: "care",
+      component: Care,
       meta: {
         requiresAuth: true
       }

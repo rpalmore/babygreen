@@ -8,11 +8,12 @@
         left
       >
         <b-dropdown-item
-          :to="{ name: 'plants' }"
+          :to="{ name: 'add-plant' }"
           exact
           exact-active-class="active"
-          >All Plants</b-dropdown-item
+          >Add a plant</b-dropdown-item
         >
+        <b-dropdown-divider></b-dropdown-divider>
         <b-dropdown-item
           v-bind:plant="plant"
           v-for="plant in plants"
@@ -23,11 +24,11 @@
           >{{ plant.plantName }}</b-dropdown-item
         >
       </b-nav-item-dropdown>
-      <b-nav-item :to="{ name: 'plant-care' }" exact exact-active-class="active"
-        >Plant Care</b-nav-item
-      >
-      <b-nav-item :to="{ name: 'profile' }" exact exact-active-class="active"
-        >Profile</b-nav-item
+      <b-nav-item :to="{ name: 'plants' }" exact exact-active-class="active"
+        >Log Care
+      </b-nav-item>
+      <b-nav-item :to="{ name: 'care' }" exact exact-active-class="active"
+        >Treatments</b-nav-item
       >
       <b-nav-item-dropdown
         id="nav-dropdown"
@@ -35,6 +36,12 @@
         toggle-class="nav-link-custom"
         left
       >
+        <b-dropdown-item
+          :to="{ name: 'profile' }"
+          exact
+          exact-active-class="active"
+          >Profile</b-dropdown-item
+        >
         <b-dropdown-item
           :to="{ name: 'about' }"
           exact
@@ -77,7 +84,7 @@ export default {
 }
 .nav-link {
   background-color: var(--platinum);
-  opacity: .9;
+  opacity: 0.9;
 }
 /* a:hover {
   color: var(--orange);
@@ -94,11 +101,11 @@ export default {
   text-align: center;
   background-color: var(--light);
   color: var(--dark);
-  opacity: .9;
+  opacity: 0.9;
   padding: 0.5rem;
   border: 1px solid var(--green);
   border-radius: 0.25rem;
-  font-family: 'Lobster', cursive;
+  font-family: "Lobster", cursive;
   font-size: 1.1rem;
 }
 </style>

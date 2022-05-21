@@ -70,7 +70,7 @@
 </template>
 
 <script>
-import AddPlant from "../components/AddPlant.vue";
+import AddPlant from "../components/PlantForm.vue";
 import LogCare from "../components/LogCare.vue";
 // import plantService from "../services/PlantService";
 import treatmentService from "../services/TreatmentService";

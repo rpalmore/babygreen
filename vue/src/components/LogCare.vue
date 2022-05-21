@@ -13,7 +13,7 @@
       </b-form-group>
       <b-form-group label="Date of care:">
         <b-row align-v="center">
-          <b-col sm="10">
+          <b-col>
             <b-form-input
               v-bind:disabled="btnDisabled"
               required
@@ -24,7 +24,7 @@
             >
             </b-form-input>
           </b-col>
-          <b-col sm="2">
+          <b-col>
             <b-button
               size="sm"
               v-bind:disabled="btnDisabled"
@@ -111,4 +111,7 @@ export default {
 </script>
 
 <style>
+#log-care {
+  margin-top: 1.5rem;
+}
 </style>

@@ -26,7 +26,7 @@
 <script>
 import plantService from "../services/PlantService";
 export default {
-  name: "add-plant",
+  name: "plant-form",
   data() {
     return {
       plant: {
@@ -49,6 +49,9 @@ export default {
           this.plant = {
             userId: this.$store.state.user.id,
           };
+          if (this.$route.name === 'add-plant') {
+            this.$router.push("/plants");
+          }
         })
         .catch((err) => {
           alert(err + " problem creating plant!");

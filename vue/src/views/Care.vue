@@ -52,6 +52,8 @@
               </router-link>
             </span>
             <b-avatar
+              v-b-tooltip.hover
+              title="Delete treatment"
               icon="trash-fill"
               id="deleteTreatment"
               size="sm"
@@ -96,6 +98,8 @@
               </router-link>
             </span>
             <b-avatar
+              v-b-tooltip.hover
+              title="Delete treatment"
               icon="trash-fill"
               id="deleteTreatment"
               size="sm"
@@ -140,6 +144,8 @@
               </router-link>
             </span>
             <b-avatar
+              v-b-tooltip.hover
+              title="Delete treatment"
               icon="trash-fill"
               id="deleteTreatment"
               size="sm"
@@ -184,6 +190,8 @@
               </router-link>
             </span>
             <b-avatar
+              v-b-tooltip.hover
+              title="Delete treatment"
               icon="trash-fill"
               id="deleteTreatment"
               size="sm"
