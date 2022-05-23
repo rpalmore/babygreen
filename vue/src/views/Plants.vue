@@ -18,7 +18,7 @@
     </b-collapse>
 
     <!-- plants table -->
-    <b-table striped hover :items="plants" :fields="fields">
+    <b-table hover responsive sort-icon-left :items="plants" :fields="fields">
       <template #head(selectAll)="data">
         <b-form-checkbox
           v-bind:value="data.checkAll"
@@ -204,5 +204,8 @@ export default {
   background-color: var(--yellow);
   border: 1px solid var(--orange);
   margin-left: 3px;
+}
+thead {
+  /* border: 1px solid var(--orange); */
 }
 </style>

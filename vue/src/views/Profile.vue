@@ -355,7 +355,6 @@ export default {
   color: var(--dark);
 }
 .avatar-icon-trash {
-  border: 1px solid var(--green);
   border: 1px solid var(--platinum);
   background-color: var(--orange);
 }

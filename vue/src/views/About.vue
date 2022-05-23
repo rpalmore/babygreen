@@ -27,7 +27,7 @@
       >
         <b-card-text>
           With the click of a button, you can record every plant treatment, such
-          as watering, misting and feeding, so you never lost track of their
+          as watering, misting and feeding, so you never lose track of their
           care and special needs&mdash;however temperamental they may be.
         </b-card-text>
       </b-card>

@@ -26,16 +26,15 @@
           v-bind:key="treatment.treatmentId"
           v-show="uniqueDate == treatment.careDate"
         >
-          <b-list-group-item
-            class="d-flex justify-content-between align-items-center"
-          >
-            <span>
+          <b-list-group-item class="d-flex align-items-center">
+            <b-col>
               <b-avatar
                 class="avatar-custom"
                 v-bind:id="treatment.careType"
                 v-bind:src="selectImg(treatment.careType)"
               ></b-avatar>
-
+            </b-col>
+            <b-col>
               {{
                 treatment.careType.substring(0, 1).toUpperCase() +
                 treatment.careType.substring(1)
@@ -50,16 +49,18 @@
                   uniqueDate === treatment.careDate ? treatment.plantName : " "
                 }}
               </router-link>
-            </span>
-            <b-avatar
-              v-b-tooltip.hover
-              title="Delete treatment"
-              icon="trash-fill"
-              id="deleteTreatment"
-              size="sm"
-              v-on:click="deleteTreatment(treatment)"
-              href="#"
-            ></b-avatar>
+            </b-col>
+            <b-col class="delete">
+              <b-avatar
+                v-b-tooltip.hover
+                title="Delete treatment"
+                icon="trash-fill"
+                id="deleteTreatment"
+                size="sm"
+                v-on:click="deleteTreatment(treatment)"
+                href="#"
+              ></b-avatar>
+            </b-col>
           </b-list-group-item>
         </b-list-group>
       </b-container>
@@ -72,16 +73,15 @@
           v-bind:key="treatment.treatmentId"
           v-show="uniqueDate == treatment.careDate"
         >
-          <b-list-group-item
-            class="d-flex justify-content-between align-items-center"
-          >
-            <span>
+          <b-list-group-item class="d-flex align-items-center">
+            <b-col>
               <b-avatar
                 class="avatar-custom"
                 v-bind:id="treatment.careType"
                 v-bind:src="selectImg(treatment.careType)"
               ></b-avatar>
-
+            </b-col>
+            <b-col>
               {{
                 treatment.careType.substring(0, 1).toUpperCase() +
                 treatment.careType.substring(1)
@@ -96,16 +96,18 @@
                   uniqueDate === treatment.careDate ? treatment.plantName : " "
                 }}
               </router-link>
-            </span>
-            <b-avatar
-              v-b-tooltip.hover
-              title="Delete treatment"
-              icon="trash-fill"
-              id="deleteTreatment"
-              size="sm"
-              v-on:click="deleteTreatment(treatment)"
-              href="#"
-            ></b-avatar>
+            </b-col>
+            <b-col class="delete">
+              <b-avatar
+                v-b-tooltip.hover
+                title="Delete treatment"
+                icon="trash-fill"
+                id="deleteTreatment"
+                size="sm"
+                v-on:click="deleteTreatment(treatment)"
+                href="#"
+              ></b-avatar>
+            </b-col>
           </b-list-group-item>
         </b-list-group>
       </b-container>
@@ -118,16 +120,15 @@
           v-bind:key="treatment.treatmentId"
           v-show="uniqueDate == treatment.careDate"
         >
-          <b-list-group-item
-            class="d-flex justify-content-between align-items-center"
-          >
-            <span>
+          <b-list-group-item class="d-flex align-items-center">
+            <b-col>
               <b-avatar
                 class="avatar-custom"
                 v-bind:id="treatment.careType"
                 v-bind:src="selectImg(treatment.careType)"
               ></b-avatar>
-
+            </b-col>
+            <b-col>
               {{
                 treatment.careType.substring(0, 1).toUpperCase() +
                 treatment.careType.substring(1)
@@ -142,16 +143,18 @@
                   uniqueDate === treatment.careDate ? treatment.plantName : " "
                 }}
               </router-link>
-            </span>
-            <b-avatar
-              v-b-tooltip.hover
-              title="Delete treatment"
-              icon="trash-fill"
-              id="deleteTreatment"
-              size="sm"
-              v-on:click="deleteTreatment(treatment)"
-              href="#"
-            ></b-avatar>
+            </b-col>
+            <b-col class="delete">
+              <b-avatar
+                v-b-tooltip.hover
+                title="Delete treatment"
+                icon="trash-fill"
+                id="deleteTreatment"
+                size="sm"
+                v-on:click="deleteTreatment(treatment)"
+                href="#"
+              ></b-avatar>
+            </b-col>
           </b-list-group-item>
         </b-list-group>
       </b-container>
@@ -164,16 +167,15 @@
           v-bind:key="treatment.treatmentId"
           v-show="uniqueDate == treatment.careDate"
         >
-          <b-list-group-item
-            class="d-flex justify-content-between align-items-center"
-          >
-            <span>
+          <b-list-group-item class="d-flex align-items-center">
+            <b-col>
               <b-avatar
                 class="avatar-custom"
                 v-bind:id="treatment.careType"
                 v-bind:src="selectImg(treatment.careType)"
               ></b-avatar>
-
+            </b-col>
+            <b-col>
               {{
                 treatment.careType.substring(0, 1).toUpperCase() +
                 treatment.careType.substring(1)
@@ -188,16 +190,18 @@
                   uniqueDate === treatment.careDate ? treatment.plantName : " "
                 }}
               </router-link>
-            </span>
-            <b-avatar
-              v-b-tooltip.hover
-              title="Delete treatment"
-              icon="trash-fill"
-              id="deleteTreatment"
-              size="sm"
-              v-on:click="deleteTreatment(treatment)"
-              href="#"
-            ></b-avatar>
+            </b-col>
+            <b-col class="delete">
+              <b-avatar
+                v-b-tooltip.hover
+                title="Delete treatment"
+                icon="trash-fill"
+                id="deleteTreatment"
+                size="sm"
+                v-on:click="deleteTreatment(treatment)"
+                href="#"
+              ></b-avatar>
+            </b-col>
           </b-list-group-item>
         </b-list-group>
       </b-container>
@@ -210,16 +214,15 @@
           v-bind:key="treatment.treatmentId"
           v-show="uniqueDate == treatment.careDate"
         >
-          <b-list-group-item
-            class="d-flex justify-content-between align-items-center"
-          >
-            <span>
+          <b-list-group-item class="d-flex align-items-center">
+            <b-col>
               <b-avatar
                 class="avatar-custom"
                 v-bind:id="treatment.careType"
                 v-bind:src="selectImg(treatment.careType)"
               ></b-avatar>
-
+            </b-col>
+            <b-col>
               {{
                 treatment.careType.substring(0, 1).toUpperCase() +
                 treatment.careType.substring(1)
@@ -234,14 +237,16 @@
                   uniqueDate === treatment.careDate ? treatment.plantName : " "
                 }}
               </router-link>
-            </span>
-            <b-avatar
-              icon="trash-fill"
-              id="deleteTreatment"
-              size="sm"
-              v-on:click="deleteTreatment(treatment)"
-              href="#"
-            ></b-avatar>
+            </b-col>
+            <b-col class="delete">
+              <b-avatar
+                icon="trash-fill"
+                id="deleteTreatment"
+                size="sm"
+                v-on:click="deleteTreatment(treatment)"
+                href="#"
+              ></b-avatar>
+            </b-col>
           </b-list-group-item>
         </b-list-group>
       </b-container>

@@ -67,7 +67,6 @@
                   ></b-avatar
                 ></b-link>
               </b-card-text>
-              <!-- Todo: Test that date display is correct without day of week -->
             </b-card-body>
           </b-col>
         </b-row>
@@ -79,7 +78,7 @@
                 class="card-footer-btn"
                 size="sm"
                 @click="useCloudinary($event, plant)"
-                >{{ plant.plantImg === null ? "Add a photo" : "Swap photo" }}
+                >{{ plant.plantImg === null ? "Add photo" : "Swap photo" }}
                 <b-avatar
                   size="sm"
                   icon="camera-fill"
@@ -137,27 +136,28 @@
         v-bind:key="treatment.treatmentId"
         v-show="waterings.length > 0"
       >
-        <b-list-group-item
-          class="d-flex justify-content-between align-items-center"
-        >
-          <span>
+        <b-list-group-item class="d-flex align-items-center">
+          <b-col>
             <b-avatar
               class="avatar-custom"
               id="watered"
               v-bind:src="require('@/assets/watering-can.png')"
             ></b-avatar>
-
+          </b-col>
+          <b-col>
             {{ formatDateDay(treatment.careDate.replace(/-/g, "\/")) }}
-          </span>
-          <b-avatar
-            v-b-tooltip.hover
-            title="Delete this treatment"
-            icon="trash-fill"
-            id="deleteTreatment"
-            size="sm"
-            v-on:click="deleteTreatment(treatment)"
-            href="#"
-          ></b-avatar>
+          </b-col>
+          <b-col class="delete">
+            <b-avatar
+              v-b-tooltip.hover
+              title="Delete this treatment"
+              icon="trash-fill"
+              id="deleteTreatment"
+              size="sm"
+              v-on:click="deleteTreatment(treatment)"
+              href="#"
+            ></b-avatar>
+          </b-col>
         </b-list-group-item>
       </b-list-group>
 
@@ -176,27 +176,28 @@
           v-for="treatment in waterings.slice(5)"
           v-bind:key="treatment.treatmentId"
         >
-          <b-list-group-item
-            class="d-flex justify-content-between align-items-center"
-          >
-            <span>
+          <b-list-group-item class="d-flex align-items-center">
+            <b-col>
               <b-avatar
                 class="avatar-custom"
                 id="watered"
                 v-bind:src="require('@/assets/watering-can.png')"
               ></b-avatar>
-
+            </b-col>
+            <b-col>
               {{ formatDateDay(treatment.careDate.replace(/-/g, "\/")) }}
-            </span>
-            <b-avatar
-              v-b-tooltip.hover
-              title="Delete this treatment"
-              icon="trash-fill"
-              id="deleteTreatment"
-              size="sm"
-              v-on:click="deleteTreatment(treatment)"
-              href="#"
-            ></b-avatar>
+            </b-col>
+            <b-col class="delete">
+              <b-avatar
+                v-b-tooltip.hover
+                title="Delete this treatment"
+                icon="trash-fill"
+                id="deleteTreatment"
+                size="sm"
+                v-on:click="deleteTreatment(treatment)"
+                href="#"
+              ></b-avatar>
+            </b-col>
           </b-list-group-item>
         </b-list-group>
       </b-collapse>
@@ -213,31 +214,29 @@
         v-bind:key="treatment.treatmentId"
         v-show="otherTreatments.length > 0"
       >
-        <b-list-group-item
-          class="d-flex justify-content-between align-items-center"
-        >
-          <span>
+        <b-list-group-item class="d-flex align-items-center">
+          <b-col>
             <b-avatar
               class="avatar-custom"
               v-bind:id="treatment.careType"
               v-bind:src="selectImg(treatment.careType)"
             ></b-avatar>
-
-            {{
-              formatDateDay(treatment.careDate.replace(/-/g, "\/")) +
-              ": " +
-              treatment.careType
-            }}
-          </span>
-          <b-avatar
-            v-b-tooltip.hover
-            title="Delete this treatment"
-            icon="trash-fill"
-            id="deleteTreatment"
-            size="sm"
-            v-on:click="deleteTreatment(treatment)"
-            href="#"
-          ></b-avatar>
+          </b-col>
+          <b-col>
+            {{ formatDateDay(treatment.careDate.replace(/-/g, "\/")) + ":" }}
+            {{ treatment.careType }}
+          </b-col>
+          <b-col class="delete">
+            <b-avatar
+              v-b-tooltip.hover
+              title="Delete this treatment"
+              icon="trash-fill"
+              id="deleteTreatment"
+              size="sm"
+              v-on:click="deleteTreatment(treatment)"
+              href="#"
+            ></b-avatar>
+          </b-col>
         </b-list-group-item>
       </b-list-group>
 
@@ -257,31 +256,29 @@
           v-for="treatment in otherTreatments.slice(5)"
           v-bind:key="treatment.treatmentId"
         >
-          <b-list-group-item
-            class="d-flex justify-content-between align-items-center"
-          >
-            <span>
+          <b-list-group-item class="d-flex align-items-center">
+            <b-col>
               <b-avatar
                 class="avatar-custom"
                 v-bind:id="treatment.careType"
                 v-bind:src="selectImg(treatment.careType)"
               ></b-avatar>
-
-              {{
-                formatDateDay(treatment.careDate.replace(/-/g, "\/")) +
-                ": " +
-                treatment.careType
-              }}
-            </span>
-            <b-avatar
-              v-b-tooltip.hover
-              title="Delete this treatment"
-              icon="trash-fill"
-              id="deleteTreatment"
-              size="sm"
-              v-on:click="deleteTreatment(treatment)"
-              href="#"
-            ></b-avatar>
+            </b-col>
+            <b-col>
+              {{ formatDateDay(treatment.careDate.replace(/-/g, "\/")) + ": " }}
+              {{ treatment.careType }}
+            </b-col>
+            <b-col class="delete">
+              <b-avatar
+                v-b-tooltip.hover
+                title="Delete this treatment"
+                icon="trash-fill"
+                id="deleteTreatment"
+                size="sm"
+                v-on:click="deleteTreatment(treatment)"
+                href="#"
+              ></b-avatar>
+            </b-col>
           </b-list-group-item>
         </b-list-group>
       </b-collapse>
@@ -290,12 +287,12 @@
     <!-- Notes section -->
 
     <p class="subsection-header">Notes on {{ plant.plantName }}:</p>
-    <p class="no-content" v-show="notes.length === 0">
+    <b-container v-show="notes.length === 0">
       You have no notes to display.
-    </p>
+    </b-container>
 
     <!-- Add a note with collapse -->
-    <p>
+    <div id="add-note-btn">
       <b-button id="toggleFormBtn" size="sm" v-b-toggle.collapse-note-form
         ><span class="when-open">Close form</span
         ><span class="when-closed">Add a note</span>
@@ -305,23 +302,25 @@
           icon="file-post"
         ></b-avatar
       ></b-button>
-    </p>
+    </div>
 
     <b-collapse id="collapse-note-form" class="mt-2">
-      <b-form id="add-note-form" @submit.prevent="saveNote(note.note)">
-        <b-form-group>
-          <label for="note">My note:</label>
-          <b-form-textarea required v-model="note.note"></b-form-textarea>
-        </b-form-group>
-        <b-button
-          size="sm"
-          id="cancel"
-          @click="cancelForm($event)"
-          class="default"
-          >Cancel</b-button
-        >
-        <b-button size="sm" type="submit" class="default">Save</b-button>
-      </b-form>
+      <b-container>
+        <b-form id="add-note-form" @submit.prevent="saveNote(note.note)">
+          <b-form-group>
+            <label for="note">My note:</label>
+            <b-form-textarea required v-model="note.note"></b-form-textarea>
+          </b-form-group>
+          <b-button
+            size="sm"
+            id="cancel"
+            @click="cancelForm($event)"
+            class="default"
+            >Cancel</b-button
+          >
+          <b-button size="sm" type="submit" class="default">Save</b-button>
+        </b-form>
+      </b-container>
     </b-collapse>
     <!-- End add a note -->
 
@@ -367,7 +366,7 @@
                 class="card-footer-btn"
                 size="sm"
                 @click="useCloudinary($event, note)"
-                >{{ note.noteImg === null ? "Add a photo" : "Swap photo" }}
+                >{{ note.noteImg === null ? "Add photo" : "Swap photo" }}
                 <b-avatar
                   size="sm"
                   icon="camera-fill"
@@ -722,7 +721,6 @@ export default {
   color: var(--dark);
 }
 .avatar-icon-camera {
-  background-color: var(--green);
   background-color: var(--yellow);
 }
 #toggleBtn {
@@ -736,6 +734,10 @@ export default {
 #deleteTreatment {
   background-color: var(--orange);
 }
+.delete {
+  display: flex;
+  justify-content: end;
+}
 .subsection-header {
   font-size: 1.3rem;
   font-weight: 400;
@@ -744,13 +746,6 @@ export default {
   padding-left: 1rem;
   background-color: var(--light-shade1);
   border-left: 5px solid var(--green);
-}
-.avatar-custom#watered,
-.avatar-custom#misted,
-.avatar-custom#repotted,
-.avatar-custom#fertilized,
-.avatar-custom#pest-treated {
-  margin-right: 1rem;
 }
 .avatar-icon-link {
   margin-left: 0.3rem;
@@ -772,7 +767,6 @@ export default {
 .avatar-custom#repotted {
   background-color: var(--platinum);
   border: 1px solid var(--green);
-  /* border: 1px solid var(--orange); */
 }
 .card#note-card {
   margin-bottom: 1rem;
@@ -788,8 +782,18 @@ export default {
 .not-collapsed > .when-closed {
   display: none;
 }
+#add-note-btn {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
 #add-note-form {
   margin-bottom: 1rem;
+  padding-top: 0.3rem;
+  padding-bottom: 0.3rem;
+}
+#collapse-note-form {
+  background-color: var(--light-shade1);
+  border-left: 5px solid var(--green);
 }
 .btn#cancelEdit,
 .btn#cancelDateForm,

@@ -70,7 +70,7 @@ export default {
                 this.$store.commit("SET_PROFILE", response.data);
               }
             });
-            this.$store.state.profile.favePlant != undefined &&
+            this.$store.state.profile.favePlant != undefined || 
             this.$store.state.profile.favePlant != null
               ? this.$router.push("/plants")
               : this.$router.push("/profile");
