@@ -69,7 +69,7 @@ https://coolors.co/palette/729b79-475b63-2e2c2f-d34e24-f5e4d7 */
   min-height: 86vh;
   height: auto;
   border: 1px solid var(--dark);
-  border-top: 5px solid var(--grey);
+  border-top: 5px solid var(--dark);
   padding-bottom: 3rem;
 }
 h2 {

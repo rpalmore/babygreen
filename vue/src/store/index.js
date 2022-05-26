@@ -51,7 +51,6 @@ export default new Vuex.Store({
       state.cloudinarySource = payload;
     },
     SET_OBJECT(state, payload) {
-      console.log(payload);
       state.object = payload;
     },
     ADD_PLANT(state, plant) {

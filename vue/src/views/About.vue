@@ -13,7 +13,7 @@
           Your site. Your plants. We’ll create a dedicated page for each of
           them, where you can add photos, notes and a link to your favorite
           external resource for tips. We'll even track how long each plant has
-          been in your care, and whether it’s living indoors or outside.
+          been in your care and whether it’s living indoors or outside.
         </b-card-text>
       </b-card>
 
@@ -41,7 +41,7 @@
         <b-card-text>
           Congrats&mdash;you’ve just upped your plant parent powers! Now you can
           embrace the benefits of your green space without guilty feelings
-          taking root over the last time you gave your cactus a drink.
+          taking root over the last time you gave your cactus a drink. (Um, yeah ... we’ve been there too.)
         </b-card-text>
       </b-card>
     </b-card-group>
