@@ -2,16 +2,14 @@ import store from "../store/index.js";
 import profileService from "./ProfileService.js";
 import plantService from "./PlantService.js";
 import plantNoteService from "./PlantNoteService.js";
-const cloudName = "dgupilxum";
-const uploadPreset = "lbpxurzh";
-
+import keys from "../../keys.js";
 
 const myWidget = window.cloudinary.createUploadWidget(
     {
-        cloudName: cloudName,
-        uploadPreset: uploadPreset,
+        cloudName: keys.keys.cloudName,
+        uploadPreset: keys.keys.uploadPreset,
         sources: ["local", "url", "camera", "image_search", "google_drive", "unsplash", "facebook", "dropbox", "instagram"],
-        googleApiKey: "AIzaSyARtFCDkKcXMjbEZz19w45A-jeG00286jU",
+        googleApiKey: keys.keys.googleKey,
         showAdvancedOptions: true,
         searchByRights: true,
         cropping: true,
