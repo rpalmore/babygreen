@@ -5,7 +5,6 @@
 
     <b-container fluid id="container-main">
       <router-view />
-      <About v-if="$store.state.token == ''" />
     </b-container>
 
     <SiteFooter />
@@ -16,10 +15,9 @@
 import SiteNavigation from "./components/SiteNavigation.vue";
 import SiteHeader from "./components/SiteHeader.vue";
 import SiteFooter from "./components/SiteFooter.vue";
-import About from "./views/About.vue";
 
 export default {
-  components: { SiteNavigation, SiteHeader, About, SiteFooter },
+  components: { SiteNavigation, SiteHeader, SiteFooter },
 };
 </script>
 

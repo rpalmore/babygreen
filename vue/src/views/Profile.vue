@@ -7,8 +7,6 @@
       </p>
     </b-row>
 
-    <p>{{ imgUrl }}</p>
-
     <!-- Profile card -->
     <b-row class="plant-card" align-h="center">
       <b-card no-body class="overflow-hidden" style="max-width: 540px">
@@ -70,7 +68,7 @@
                 size="sm"
                 @click="useCloudinary($event)"
                 >{{
-                  profile.profileImg === undefined
+                  profile.profileImg === null
                     ? "Add a photo"
                     : "Swap photo"
                 }}

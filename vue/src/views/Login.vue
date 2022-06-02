@@ -33,6 +33,7 @@
       </b-form-input>
       <b-button class="default" type="submit">Submit</b-button>
     </b-form>
+    <About />
   </b-container>
 </template>
 
@@ -40,9 +41,10 @@
 import authService from "../services/AuthService";
 import plantService from "../services/PlantService";
 import profileService from "../services/ProfileService";
+import About from "./About.vue";
 export default {
   name: "login",
-  components: {},
+  components: { About },
   data() {
     return {
       user: {

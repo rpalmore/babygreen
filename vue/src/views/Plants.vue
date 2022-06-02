@@ -18,7 +18,7 @@
     </b-collapse>
 
     <!-- plants table -->
-    <b-table hover responsive sort-icon-left :items="plants" :fields="fields">
+    <b-table hover responsive outlined sort-icon-left :items="plants" :fields="fields">
       <template #head(selectAll)="data">
         <b-form-checkbox
           v-bind:value="data.checkAll"
@@ -58,6 +58,7 @@
       <template #cell(plantImg)="data">
         <b-avatar
           class="avatar-custom"
+          size="lg"
           v-bind:src="selectImg(data.item.plantImg)"
         ></b-avatar>
       </template>
@@ -207,5 +208,8 @@ export default {
 }
 thead {
   /* border: 1px solid var(--orange); */
+}
+.table td {
+  vertical-align: middle;
 }
 </style>
