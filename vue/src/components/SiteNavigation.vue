@@ -13,6 +13,13 @@
           exact-active-class="active"
           >Add a plant</b-dropdown-item
         >
+        <b-dropdown-item
+          v-if="this.$store.state.plants.length > 0"
+          :to="{ name: 'gallery' }"
+          exact
+          exact-active-class="active"
+          >All plants</b-dropdown-item
+        >
         <b-dropdown-divider></b-dropdown-divider>
         <b-dropdown-item
           v-bind:plant="plant"
@@ -41,6 +48,12 @@
           exact
           exact-active-class="active"
           >Profile</b-dropdown-item
+        >
+        <b-dropdown-item
+          :to="{ name: 'settings' }"
+          exact
+          exact-active-class="active"
+          >Settings</b-dropdown-item
         >
         <b-dropdown-item
           :to="{ name: 'about' }"

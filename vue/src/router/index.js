@@ -1,14 +1,17 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Login from '../views/Login.vue'
-import Logout from '../views/Logout.vue'
-import Register from '../views/Register.vue'
-import Profile from '../views/Profile.vue'
-import AddPlant from '../views/AddPlant.vue'
-import Plants from '../views/Plants.vue'
-import PlantDetail from '../components/PlantDetail.vue'
-import Care from '../views/Care.vue'
-import About from '../views/About.vue'
+const Login = () => import('../views/Login.vue')
+const Logout = () => import('../views/Logout.vue')
+const Register = () => import('../views/Register.vue')
+const Profile = () => import('../views/Profile.vue')
+const AddPlant = () => import('../views/AddPlant.vue')
+const Plants = () => import('../views/Plants.vue')
+const PlantDetail = () => import('../components/PlantDetail.vue')
+const Care = () => import('../views/Care.vue')
+const About = () => import('../views/About.vue')
+const Gallery = () => import('../views/Gallery.vue')
+const Reset = () => import('../views/Reset.vue')
+const Settings = () => import('../views/Settings.vue')
 import store from '../store/index'
 
 Vue.use(Router)
@@ -51,6 +54,14 @@ const router = new Router({
       }
     },
     {
+      path: "/reset",
+      name: "password-reset",
+      component: Reset,
+      meta: {
+        requiresAuth: false
+      }
+    },
+    {
       path: "/about",
       name: "about",
       component: About,
@@ -70,6 +81,14 @@ const router = new Router({
       path: "/profile",
       name: "profile",
       component: Profile,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: "/settings",
+      name: "settings",
+      component: Settings,
       meta: {
         requiresAuth: true
       }
@@ -106,7 +125,18 @@ const router = new Router({
         requiresAuth: true
       }
     },
-  ]
+    {
+      path: "/gallery",
+      name: "gallery",
+      component: Gallery,
+      meta: {
+        requiresAuth: true
+      }
+    },
+  ],
+  scrollBehavior() {
+    document.getElementById('app').scrollIntoView({ behavior: "smooth" });
+  }
 })
 
 router.beforeEach((to, from, next) => {
@@ -121,5 +151,4 @@ router.beforeEach((to, from, next) => {
     next();
   }
 });
-
 export default router;

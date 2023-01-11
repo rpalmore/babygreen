@@ -1,7 +1,6 @@
 package com.techelevator.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
+import java.sql.Date;
 import java.time.LocalDate;
 
 public class Note {
@@ -10,6 +9,7 @@ public class Note {
     private String note;
     private String noteImg;
     private LocalDate createdOn;
+    // private Date createdOn;
 
     public int getNoteId() {
         return noteId;

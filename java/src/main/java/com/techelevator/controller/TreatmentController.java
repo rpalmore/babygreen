@@ -10,6 +10,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -71,6 +73,10 @@ public class TreatmentController {
         plantTreatmentDao.deletePlantTreatment(plantId, careId);
     }
 
-
+    @RequestMapping(path="/deleteTreatmentByDate/{careDate}", method=RequestMethod.DELETE)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteTreatmentByDate(@PathVariable String careDate ) {
+        plantTreatmentDao.deletePlantTreatmentsByDate(LocalDate.parse(careDate));
+    }
 
 }

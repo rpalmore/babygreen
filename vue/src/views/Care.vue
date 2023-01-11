@@ -4,29 +4,24 @@
       <p class="section-header">Recent treatments</p>
     </b-row>
 
-    <!-- TODO: let user bulk delete care treatments by date? -->
-
-    <p v-if="this.$store.state.treatments.length == 0">
-      You have not logged any treatments.
+    <p class="default-message" v-if="this.$store.state.treatments.length == 0">
+      You have not logged any treatments. Start by adding a plant!
     </p>
 
     <b-list-group
-      v-for="uniqueDate in formatTreatment()"
+      v-for="uniqueDate in formatTreatment().slice(0,5)"
       v-bind:key="uniqueDate.itemId"
     >
       <p class="subsection-header">
         {{ formatDateDay(uniqueDate.replace(/-/g, "\/")) }}
       </p>
-
-      <!-- WATERING GROUP -->
-      <b-container>
+      <b-container class="list-container">
         <b-list-group
           v-bind:treatment="treatment"
-          v-for="treatment in waterings"
+          v-for="treatment in treatments"
           v-bind:key="treatment.treatmentId"
-          v-show="uniqueDate == treatment.careDate"
         >
-          <b-list-group-item class="d-flex align-items-center">
+          <b-list-group-item v-if="uniqueDate == treatment.careDate" class="d-flex align-items-center">
             <b-col>
               <b-avatar
                 class="avatar-custom"
@@ -39,218 +34,102 @@
                 treatment.careType.substring(0, 1).toUpperCase() +
                 treatment.careType.substring(1)
               }}
-              <router-link
+              <b-link
                 :to="{
                   name: 'plant-detail',
                   params: { plantId: treatment.plantId },
                 }"
               >
                 {{
-                  uniqueDate === treatment.careDate ? treatment.plantName : " "
+                  treatment.plantName
                 }}
-              </router-link>
+              </b-link>
             </b-col>
             <b-col class="delete">
               <b-avatar
+                button
                 v-b-tooltip.hover
                 title="Delete treatment"
                 icon="trash-fill"
                 id="deleteTreatment"
                 size="sm"
-                v-on:click="deleteTreatment(treatment)"
-                href="#"
-              ></b-avatar>
-            </b-col>
-          </b-list-group-item>
-        </b-list-group>
-      </b-container>
-
-      <!-- MISTED GROUP -->
-      <b-container>
-        <b-list-group
-          v-bind:treatment="treatment"
-          v-for="treatment in mistings"
-          v-bind:key="treatment.treatmentId"
-          v-show="uniqueDate == treatment.careDate"
-        >
-          <b-list-group-item class="d-flex align-items-center">
-            <b-col>
-              <b-avatar
-                class="avatar-custom"
-                v-bind:id="treatment.careType"
-                v-bind:src="selectImg(treatment.careType)"
-              ></b-avatar>
-            </b-col>
-            <b-col>
-              {{
-                treatment.careType.substring(0, 1).toUpperCase() +
-                treatment.careType.substring(1)
-              }}
-              <router-link
-                :to="{
-                  name: 'plant-detail',
-                  params: { plantId: treatment.plantId },
-                }"
-              >
-                {{
-                  uniqueDate === treatment.careDate ? treatment.plantName : " "
-                }}
-              </router-link>
-            </b-col>
-            <b-col class="delete">
-              <b-avatar
-                v-b-tooltip.hover
-                title="Delete treatment"
-                icon="trash-fill"
-                id="deleteTreatment"
-                size="sm"
-                v-on:click="deleteTreatment(treatment)"
-                href="#"
-              ></b-avatar>
-            </b-col>
-          </b-list-group-item>
-        </b-list-group>
-      </b-container>
-
-      <!-- FERTILIZED GROUP -->
-      <b-container>
-        <b-list-group
-          v-bind:treatment="treatment"
-          v-for="treatment in fertilized"
-          v-bind:key="treatment.treatmentId"
-          v-show="uniqueDate == treatment.careDate"
-        >
-          <b-list-group-item class="d-flex align-items-center">
-            <b-col>
-              <b-avatar
-                class="avatar-custom"
-                v-bind:id="treatment.careType"
-                v-bind:src="selectImg(treatment.careType)"
-              ></b-avatar>
-            </b-col>
-            <b-col>
-              {{
-                treatment.careType.substring(0, 1).toUpperCase() +
-                treatment.careType.substring(1)
-              }}
-              <router-link
-                :to="{
-                  name: 'plant-detail',
-                  params: { plantId: treatment.plantId },
-                }"
-              >
-                {{
-                  uniqueDate === treatment.careDate ? treatment.plantName : " "
-                }}
-              </router-link>
-            </b-col>
-            <b-col class="delete">
-              <b-avatar
-                v-b-tooltip.hover
-                title="Delete treatment"
-                icon="trash-fill"
-                id="deleteTreatment"
-                size="sm"
-                v-on:click="deleteTreatment(treatment)"
-                href="#"
-              ></b-avatar>
-            </b-col>
-          </b-list-group-item>
-        </b-list-group>
-      </b-container>
-
-      <!-- PEST GROUP -->
-      <b-container>
-        <b-list-group
-          v-bind:treatment="treatment"
-          v-for="treatment in debugged"
-          v-bind:key="treatment.treatmentId"
-          v-show="uniqueDate == treatment.careDate"
-        >
-          <b-list-group-item class="d-flex align-items-center">
-            <b-col>
-              <b-avatar
-                class="avatar-custom"
-                v-bind:id="treatment.careType"
-                v-bind:src="selectImg(treatment.careType)"
-              ></b-avatar>
-            </b-col>
-            <b-col>
-              {{
-                treatment.careType.substring(0, 1).toUpperCase() +
-                treatment.careType.substring(1)
-              }}
-              <router-link
-                :to="{
-                  name: 'plant-detail',
-                  params: { plantId: treatment.plantId },
-                }"
-              >
-                {{
-                  uniqueDate === treatment.careDate ? treatment.plantName : " "
-                }}
-              </router-link>
-            </b-col>
-            <b-col class="delete">
-              <b-avatar
-                v-b-tooltip.hover
-                title="Delete treatment"
-                icon="trash-fill"
-                id="deleteTreatment"
-                size="sm"
-                v-on:click="deleteTreatment(treatment)"
-                href="#"
-              ></b-avatar>
-            </b-col>
-          </b-list-group-item>
-        </b-list-group>
-      </b-container>
-
-      <!-- REPOTTED GROUP -->
-      <b-container>
-        <b-list-group
-          v-bind:treatment="treatment"
-          v-for="treatment in repotted"
-          v-bind:key="treatment.treatmentId"
-          v-show="uniqueDate == treatment.careDate"
-        >
-          <b-list-group-item class="d-flex align-items-center">
-            <b-col>
-              <b-avatar
-                class="avatar-custom"
-                v-bind:id="treatment.careType"
-                v-bind:src="selectImg(treatment.careType)"
-              ></b-avatar>
-            </b-col>
-            <b-col>
-              {{
-                treatment.careType.substring(0, 1).toUpperCase() +
-                treatment.careType.substring(1)
-              }}
-              <router-link
-                :to="{
-                  name: 'plant-detail',
-                  params: { plantId: treatment.plantId },
-                }"
-              >
-                {{
-                  uniqueDate === treatment.careDate ? treatment.plantName : " "
-                }}
-              </router-link>
-            </b-col>
-            <b-col class="delete">
-              <b-avatar
-                icon="trash-fill"
-                id="deleteTreatment"
-                size="sm"
-                v-on:click="deleteTreatment(treatment)"
-                href="#"
+                @click="deleteTreatment(treatment)"
               ></b-avatar>
             </b-col>
           </b-list-group-item>
         </b-list-group>
       </b-container>
     </b-list-group>
+     <a v-b-toggle href="#treatment-dates" @click.prevent>
+      <p class="subsection-header" v-if="formatTreatment().length > 5">
+        <span class="when-closed">See </span>
+        <span class="when-open">Hide </span>
+        <b-badge id="treatmentDateCount">{{ formatTreatment().length - 5 }}</b-badge> 
+        more treatment dates and details.
+      </p>
+     </a>
+    <b-collapse id="treatment-dates" class="mt-2">
+      <b-list-group
+      v-for="uniqueDate in formatTreatment().slice(5)"
+      v-bind:key="uniqueDate.itemId"
+    >
+      <p class="subsection-header additional-treatments">
+        {{ formatDateDay(uniqueDate.replace(/-/g, "\/")) }}
+              <b-avatar
+                button
+                v-b-tooltip.hover
+                title="Delete all treatments by date"
+                icon="trash-fill"
+                id="deleteTreatmentByDate"
+                size="sm"
+                @click="deleteTreatmentByDate(uniqueDate)"
+              ></b-avatar>
+      </p>
+      <b-container class="list-container">
+        <b-list-group
+          v-bind:treatment="treatment"
+          v-for="treatment in treatments"
+          v-bind:key="treatment.treatmentId"
+        >
+          <b-list-group-item v-if="uniqueDate == treatment.careDate" class="d-flex align-items-center">
+            <b-col>
+              <b-avatar
+                class="avatar-custom"
+                v-bind:id="treatment.careType"
+                v-bind:src="selectImg(treatment.careType)"
+              ></b-avatar>
+            </b-col>
+            <b-col>
+              {{
+                treatment.careType.substring(0, 1).toUpperCase() +
+                treatment.careType.substring(1)
+              }}
+              <router-link
+                :to="{
+                  name: 'plant-detail',
+                  params: { plantId: treatment.plantId },
+                }"
+              >
+                {{
+                  treatment.plantName
+                }}
+              </router-link>
+            </b-col>
+            <b-col class="delete">
+             <b-avatar
+                button
+                v-b-tooltip.hover
+                title="Delete treatment"
+                icon="trash-fill"
+                id="deleteTreatment"
+                size="sm"
+                @click="deleteTreatment(treatment)"
+              ></b-avatar>
+            </b-col>
+          </b-list-group-item>
+        </b-list-group>
+      </b-container>
+    </b-collapse>
   </b-container>
 </template>
 
@@ -258,34 +137,10 @@
 import treatmentService from "../services/TreatmentService";
 export default {
   name: "care",
+  components: {},
   computed: {
     treatments() {
       return this.$store.state.treatments;
-    },
-    waterings() {
-      return this.treatments.filter(
-        (treatment) => treatment.careType == "watered"
-      );
-    },
-    mistings() {
-      return this.treatments.filter(
-        (treatment) => treatment.careType == "misted"
-      );
-    },
-    fertilized() {
-      return this.treatments.filter(
-        (treatment) => treatment.careType == "fertilized"
-      );
-    },
-    debugged() {
-      return this.treatments.filter(
-        (treatment) => treatment.careType == "pest-treated"
-      );
-    },
-    repotted() {
-      return this.treatments.filter(
-        (treatment) => treatment.careType == "repotted"
-      );
     },
   },
   data() {
@@ -343,8 +198,30 @@ export default {
           }
         });
     },
+    deleteTreatmentByDate(date) {
+      this.modal = "";
+      this.$bvModal
+        .msgBoxConfirm(
+          "Are you sure you want to delete all treatments on this date?"
+        )
+        .then((value) => {
+          this.modal = value;
+          if (value === true) {
+            treatmentService
+              .deleteTreatmentByDate(date)
+              .then((response) => {
+                if (response.status == 204) {
+                  this.$store.commit("DELETE_TREATMENT_BY_DATE", date);
+                }
+              })
+              .catch((err) => {
+                alert(err + " problem deleting treatment!");
+              });
+          }
+        });
+    },
   },
-  mounted() {
+  created() {
     treatmentService
       .getAllTreatments()
       .then((response) => {
@@ -360,4 +237,24 @@ export default {
 </script>
 
 <style>
+#treatmentDateCount {
+  background-color: var(--orange);
+}
+.treatmentDetails {
+  width: 90%;
+}
+#deleteTreatmentByDate {
+  background-color: var(--grey);
+  border: 1px solid var(--orange);
+  margin-right: 2%;
+}
+.additional-treatments {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.collapsed .when-open,
+.not-collapsed .when-closed {
+  display: none;
+}
 </style>

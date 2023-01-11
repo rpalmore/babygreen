@@ -23,6 +23,10 @@ export default {
 
     deleteTreatment(plantId, careId) {
         return axios.delete('/deleteTreatment/' + plantId + '/' + careId)
+    },
+
+    deleteTreatmentByDate(date) {
+        return axios.delete('/deleteTreatmentByDate/' + date)
     }
 
 }

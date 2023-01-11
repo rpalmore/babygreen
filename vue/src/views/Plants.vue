@@ -3,7 +3,7 @@
     <b-row align-h="center">
       <p class="section-header">{{ name }}&#8217;s plants</p>
     </b-row>
-    <p>
+    <!-- <p>
       <b-button id="toggleFormBtn" size="sm" v-b-toggle.collapse-form
         ><span class="when-open">Close form</span
         ><span class="when-closed">Add a plant</span>
@@ -12,13 +12,21 @@
           :src="require('@/assets/leaf.png')"
         ></b-avatar
       ></b-button>
-    </p>
+    </p> -->
     <b-collapse id="collapse-form" class="mt-2">
       <AddPlant />
     </b-collapse>
 
     <!-- plants table -->
-    <b-table hover responsive outlined sort-icon-left :items="plants" :fields="fields">
+    <b-table
+      id="plant-table"
+      hover
+      responsive
+      outlined
+      sort-icon-left
+      :items="combinedDataTables"
+      :fields="fields"
+    >
       <template #head(selectAll)="data">
         <b-form-checkbox
           v-bind:value="data.checkAll"
@@ -45,15 +53,11 @@
         {{ data.item.indoor === true ? "indoor" : "outdoor" }}
       </template>
       <template #cell(careDate)="data">
-        <span
-          v-for="treatment in latestWatering"
-          v-bind:key="treatment.treatmentId"
-          >{{
-            data.item.plantId === treatment.plantId
-              ? formatDateDay(treatment.careDate.replace(/-/g, "\/"))
-              : " "
-          }}</span
-        >
+        {{
+          !!data.item.careDate
+            ? formatDateDay(data.item.careDate.replace(/-/g, "\/"))
+            : ""
+        }}
       </template>
       <template #cell(plantImg)="data">
         <b-avatar
@@ -73,8 +77,9 @@
 <script>
 import AddPlant from "../components/PlantForm.vue";
 import LogCare from "../components/LogCare.vue";
-// import plantService from "../services/PlantService";
+import plantService from "../services/PlantService";
 import treatmentService from "../services/TreatmentService";
+//import profileService from "../services/ProfileService";
 export default {
   components: { AddPlant, LogCare },
   name: "plants",
@@ -123,6 +128,16 @@ export default {
     latestWatering() {
       return this.$store.state.latestWatering;
     },
+    combinedDataTables() {
+      return Array.from(this.plants).map((p) => {
+        let obj = Object.assign({}, p);
+        let item = this.latestWatering.find((w) => w.plantId === obj.plantId);
+        if (item) {
+          Object.assign(obj, item);
+        }
+        return obj;
+      });
+    }
   },
   methods: {
     selectImg(plantImg) {
@@ -139,9 +154,9 @@ export default {
     },
     selectAll() {
       if (this.checkAll === true) {
-        for (let i = 0; i < this.plants.length; i++) {
-          if (!this.selectedPlantIds.includes(this.plants[i].plantId)) {
-            this.selectedPlantIds.push(this.plants[i].plantId);
+        for (let i = 0; i < this.combinedDataTables.length; i++) {
+          if (!this.selectedPlantIds.includes(this.combinedDataTables[i].plantId)) {
+            this.selectedPlantIds.push(this.combinedDataTables[i].plantId);
           }
         }
       } else {
@@ -174,28 +189,51 @@ export default {
       .catch((err) => {
         alert(err + " problem getting latest waterings!");
       });
+    treatmentService
+      .getAllTreatments()
+      .then((response) => {
+        if (response.status == 200) {
+          this.$store.commit("SET_TREATMENTS", response.data);
+        }
+      })
+      .catch((err) => {
+        alert(err + " problem getting treatments!");
+      });
+    plantService
+      .getAllPlants()
+      .then((response) => {
+        if (response.status == 200) {
+          this.$store.commit("SET_PLANTS", response.data);
+        }
+      })
+      .catch((err) => {
+        alert(err + " problem getting plants!");
+      });
+    // profileService
+    //   .getProfile()
+    //   .then((response) => {
+    //     if (response.status == 200) {
+    //       this.$store.commit("SET_PROFILE", response.data);
+    //     }
+    //   })
+    //   .catch((err) => {
+    //     alert(err + " problem getting profile!");
+    //   });
   },
 };
 </script>
 
 <style>
-.section-header {
-  border-top: 3px solid var(--orange);
-  border-bottom: 3px solid var(--orange);
-  margin-top: 20px;
-  font-size: 1.5rem;
-  font-weight: 300;
-  color: var(--dark);
-  background-color: var(--light-shade1);
-  padding-right: 0.3rem;
-  padding-left: 0.3rem;
-}
 #toggleFormBtn {
   background-color: var(--green);
   color: var(--platinum);
   border: 1px solid var(--orange);
   font-size: 1rem;
   min-width: 142px;
+}
+.collapsed > .when-open,
+.not-collapsed > .when-closed {
+  display: none;
 }
 .avatar-custom {
   background-color: var(--green);
@@ -206,8 +244,8 @@ export default {
   border: 1px solid var(--orange);
   margin-left: 3px;
 }
-thead {
-  /* border: 1px solid var(--orange); */
+#plant-table {
+  margin-top: 1rem;
 }
 .table td {
   vertical-align: middle;

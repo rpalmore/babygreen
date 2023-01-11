@@ -97,6 +97,10 @@ export default new Vuex.Store({
       state.treatments = state.treatments.filter((t) => t.plantId != treatment.plantId || t.careId != treatment.careId);
       localStorage.setItem('treatments', JSON.stringify(state.treatments));
     },
+    DELETE_TREATMENT_BY_DATE(state, date) {
+      state.treatments = state.treatments.filter((d) => d.careDate != date);
+      localStorage.setItem('treatments', JSON.stringify(state.treatments));
+    },
     ADD_NOTE(state, note) {
       state.notes.unshift(note);
       localStorage.setItem('notes', JSON.stringify(state.notes));
@@ -116,6 +120,9 @@ export default new Vuex.Store({
     LOGOUT(state) {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
+      localStorage.removeItem('profile');
+      localStorage.removeItem('plants');
+      localStorage.removeItem('treatments');
       state.token = '';
       state.user = {};
       axios.defaults.headers.common = {};

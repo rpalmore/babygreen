@@ -15,9 +15,7 @@ export default {
 
 <style>
 #footer {
-  /* background-color: var(--grey); */
   background-color: var(--dark);
-  /* border-top: 1px solid var(--orange); */
   border-top: 5px solid var(--green);
   border-bottom: 3px solid var(--green);
   text-align: center;

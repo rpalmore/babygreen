@@ -3,7 +3,9 @@ package com.techelevator.dao;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
+import com.techelevator.model.Authority;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
@@ -63,11 +65,11 @@ public class JdbcUserDao implements UserDao {
     }
 
     @Override
-    public boolean create(String username, String password, String role) {
+    public boolean create(String username, String email, String password, String role) {
         boolean userCreated = false;
 
         // create user
-        String insertUser = "insert into users (username,password_hash,role) values(?,?,?)";
+        String insertUser = "insert into users (username,password_hash,role,email) values(?,?,?,?)";
         String password_hash = new BCryptPasswordEncoder().encode(password);
         String ssRole = "ROLE_" + role.toUpperCase();
 
@@ -78,6 +80,7 @@ public class JdbcUserDao implements UserDao {
                     ps.setString(1, username);
                     ps.setString(2, password_hash);
                     ps.setString(3, ssRole);
+                    ps.setString(4, email);
                     return ps;
                 }
                 , keyHolder) == 1;
@@ -86,12 +89,32 @@ public class JdbcUserDao implements UserDao {
         return userCreated;
     }
 
+
+    @Override
+    public void editUser(User updatedUser) {
+
+        String password_hash = "";
+        String existing_password = getUserById(updatedUser.getId()).getPassword();
+
+        if (existing_password.equals(updatedUser.getPassword())) {
+            password_hash = updatedUser.getPassword();
+        } else {
+            password_hash = new BCryptPasswordEncoder().encode(updatedUser.getPassword());
+        }
+
+        String sql = "UPDATE users " +
+                "SET username = ?, password_hash = ?, email = ? " +
+                "WHERE user_id = ?";
+        jdbcTemplate.update(sql, updatedUser.getUsername(), password_hash, updatedUser.getEmail(), updatedUser.getId());
+    }
+
     private User mapRowToUser(SqlRowSet rs) {
         User user = new User();
         user.setId(rs.getLong("user_id"));
         user.setUsername(rs.getString("username"));
         user.setPassword(rs.getString("password_hash"));
         user.setAuthorities(rs.getString("role"));
+        user.setEmail(rs.getString("email"));
         user.setActivated(true);
         return user;
     }

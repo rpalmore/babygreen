@@ -1,7 +1,7 @@
 <template>
   <b-container fluid id="register">
     <p class="section-header-about">
-      {{ registrationErrors ? registrationErrors : "Create Account" }}
+      {{ registrationErrors ? registrationErrorMsg : "Create Account" }}
     </p>
     <b-form inline @submit.prevent="register">
       <label for="username" class="sr-only">Username</label>
@@ -11,6 +11,15 @@
         class="mb-2 mr-sm-2 mb-sm-0"
         placeholder="Username"
         v-model="user.username"
+        required
+      ></b-form-input>
+      <label for="username" class="sr-only">Email</label>
+      <b-form-input
+        type="email"
+        id="email"
+        class="mb-2 mr-sm-2 mb-sm-0"
+        placeholder="you@email.com"
+        v-model="user.email"
         required
       ></b-form-input>
       <label for="password" class="sr-only">Password</label>
@@ -47,6 +56,7 @@ export default {
     return {
       user: {
         username: "",
+        email: "",
         password: "",
         confirmPassword: "",
         role: "user",
@@ -59,7 +69,7 @@ export default {
     register() {
       if (this.user.password != this.user.confirmPassword) {
         this.registrationErrors = true;
-        this.registrationErrorMsg = "Password & Confirm Password do not match.";
+        this.registrationErrorMsg = "Password and Confirm Password do not match.";
       } else {
         authService
           .register(this.user)
@@ -75,7 +85,11 @@ export default {
             const response = error.response;
             this.registrationErrors = true;
             if (response.status === 400) {
-              this.registrationErrorMsg = "Bad Request: Validation Errors";
+              if (response.data.message == "User Already Exists.") {
+                this.registrationErrorMsg = "Account already exists. Please sign in.";
+              } else {
+                this.registrationErrorMsg = "Bad Request: Validation Errors";
+              }
             }
           });
       }
@@ -87,6 +101,3 @@ export default {
   },
 };
 </script>
-
-<style>
-</style>

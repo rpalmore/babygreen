@@ -16,7 +16,7 @@ TO plant_db_owner;
 CREATE USER plant_db_appuser
 WITH PASSWORD 'finalcapstone';
 
-GRANT SELECT, INSERT, UPDATE, DELETE
+GRANT SELECT, INSERT, UPDATE, DELETE, ALTER
 ON ALL TABLES IN SCHEMA public
 TO plant_db_appuser;
 

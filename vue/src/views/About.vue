@@ -10,10 +10,7 @@
         img-top
       >
         <b-card-text>
-          Your site. Your plants. We’ll create a dedicated page for each of
-          them, where you can add photos, notes and a link to your favorite
-          external resource for tips. We'll even track how long each plant has
-          been in your care and whether it’s living indoors or outside.
+          Your site. Your plants. We create a dedicated page for each of them, where you can add photos, notes and keep track of recent waterings and other care. We also keep tabs on each plant’s location&mdash;indoors or outside&mdash;and how long it’s been in your care.
         </b-card-text>
       </b-card>
 
@@ -39,9 +36,8 @@
         img-top
       >
         <b-card-text>
-          Congrats&mdash;you’ve just upped your plant parent powers! Now you can
-          embrace the benefits of your green space without guilty feelings
-          taking root over the last time you gave your cactus a drink. (Um, yeah ... we’ve been there too.)
+          Congrats&mdash;you’ve just upped your plant-parenting powers! Now you can
+          embrace the benefits of your green space, guilt free, while staying up to date on treatments and growth.
         </b-card-text>
       </b-card>
     </b-card-group>

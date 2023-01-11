@@ -38,7 +38,7 @@
                   >!
                 </span>
               </b-list-group-item>
-              <b-list-group-item v-if="treatments != ''">
+              <b-list-group-item v-if="treatments.length > 0">
                 <span
                   >I most recently
                   {{ latestTreatment.careType }}
@@ -47,7 +47,7 @@
                     latestTreatment.numPlants == 1
                       ? " plant on "
                       : "plants on "
-                  }}<router-link :to="{ name: 'plant-care' }">
+                  }}<router-link :to="{ name: 'care' }">
                     <span class="profileData">{{
                       formatDateMonth(
                         latestTreatment.careDate.replace(/-/g, "\/")
@@ -67,11 +67,7 @@
                 class="card-footer-btn"
                 size="sm"
                 @click="useCloudinary($event)"
-                >{{
-                  profile.profileImg === null
-                    ? "Add a photo"
-                    : "Swap photo"
-                }}
+                >{{ !!profile.profileImg ? "Swap photo" : "Add a photo" }}
                 <b-avatar
                   size="sm"
                   icon="camera-fill"
@@ -80,7 +76,12 @@
               ></b-button>
             </b-col>
             <b-col class="text-center middle">
-              <b-button class="card-footer-btn" size="sm" @click="toggleForm()"
+              <b-button
+                class="card-footer-btn"
+                size="sm"
+                :disabled="isEditing"
+                @click="toggleForm()"
+                v-b-toggle.collapse-edit-form
                 >{{
                   profile.favePlant === undefined
                     ? "Create profile"
@@ -113,7 +114,9 @@
     </b-row>
     <!-- End profile card -->
 
-    <b-container v-show="showProfileForm" fluid id="profile-form">
+    <!-- Edit profile -->
+    <b-collapse id="collapse-edit-form" class="mt-2">
+      <b-row align-h="center">
       <b-form @submit.prevent="saveProfile()" id="profile-form">
         <b-form-group
           id="input-group-1"
@@ -153,12 +156,22 @@
             required
           ></b-form-select>
         </b-form-group>
-        <b-button size="sm" id="cancel" @click="cancel" class="default"
+        <b-button
+          size="sm"
+          id="cancel"
+          @click="cancel"
+          class="default mb-2 mr-sm-2 mb-sm-0"
           >Cancel</b-button
         >
-        <b-button size="sm" type="submit" class="default">Save</b-button>
+        <b-button size="sm" type="submit" class="default">{{
+                  profile.favePlant === undefined
+                    ? "Save"
+                    : "Update"
+                }}</b-button>
       </b-form>
-    </b-container>
+      </b-row>
+    </b-collapse>
+    <!-- End edit profile -->
   </b-container>
 </template>
 
@@ -175,13 +188,13 @@ export default {
         "Happy planting, ",
         "Nice thumbs, ",
       ],
+      isEditing: false,
       newProfile: {
         userId: this.$store.state.user.id,
       },
       savedName: "",
       savedFavePlant: "",
       savedSkillLevel: "",
-      showProfileForm: false,
       modal: "",
       skill: [
         { text: "Select One", value: null },
@@ -209,7 +222,7 @@ export default {
     selectImg() {
       return this.profile.profileImg === undefined ||
         this.profile.profileImg === null
-        ? require("@/assets/plant-placeholder.png")
+        ? require("@/assets/CandaceStone_Pixabay.png")
         : this.profile.profileImg;
     },
     treatments() {
@@ -232,20 +245,19 @@ export default {
       this.profile.favePlant != undefined
         ? (this.newProfile = this.profile)
         : this.newProfile;
-      this.showProfileForm = !this.showProfileForm;
       // capturing existing data in order to revert back on cancel()
       this.savedName = this.profile.displayName;
       this.savedFavePlant = this.profile.favePlant;
       this.savedSkillLevel = this.profile.skillLevel;
     },
     formatDateMonth(date) {
-      const options = {
-        // weekday: "long",
-        // year: "numeric",
-        month: "long",
-        day: "numeric",
-      };
-      return new Date(date).toLocaleDateString("en-US", options);
+      if (date) {
+        const options = {
+          month: "long",
+          day: "numeric",
+        };
+        return new Date(date).toLocaleDateString("en-US", options);
+      }
     },
     cancel() {
       this.newProfile = {
@@ -258,7 +270,7 @@ export default {
         this.profile.favePlant = this.savedFavePlant;
         this.profile.skillLevel = this.savedSkillLevel;
       }
-      this.showProfileForm = !this.showProfileForm;
+    this.$root.$emit("bv::toggle::collapse", "collapse-edit-form");
     },
     saveProfile() {
       if (
@@ -270,11 +282,11 @@ export default {
           .then((response) => {
             if (response.status === 201) {
               this.$store.commit("SET_PROFILE", this.newProfile);
+              this.$root.$emit("bv::toggle::collapse", "collapse-edit-form");
             }
             this.newProfile = {
               userId: this.$store.state.user.id,
             };
-            this.showProfileForm = !this.showProfileForm;
           })
           .catch((err) => {
             alert(err + " problem creating profile!");
@@ -285,8 +297,8 @@ export default {
           .then((response) => {
             if (response.status === 200) {
               this.$store.commit("SET_PROFILE", this.newProfile);
+              this.$root.$emit("bv::toggle::collapse", "collapse-edit-form");
             }
-            this.showProfileForm = !this.showProfileForm;
           })
           .catch((err) => {
             alert(err + " problem updating profile!");
@@ -305,7 +317,7 @@ export default {
               .then((response) => {
                 if (response.status == 204) {
                   this.$store.commit("DELETE_PROFILE");
-                  this.showProfileForm = false;
+                  this.$root.$emit("bv::toggle::collapse", "collapse-edit-form");
                   this.newProfile = {
                     userId: this.$store.state.user.id,
                   };
@@ -319,6 +331,16 @@ export default {
     },
   },
   created() {
+    profileService
+      .getProfile()
+      .then((response) => {
+        if (response.status == 200) {
+          this.$store.commit("SET_PROFILE", response.data);
+        }
+      })
+      .catch((err) => {
+        alert(err + " problem getting profile!");
+      });
     treatmentService
       .getLatestTreatment()
       .then((response) => {
@@ -330,6 +352,15 @@ export default {
         alert(err + " problem getting latest treatment!");
       });
   },
+  mounted() {
+    this.$root.$on("bv::collapse::state", (collapseId, isJustShown) => {
+      if (collapseId == 'collapse-edit-form' && isJustShown) {
+        this.isEditing = true;
+      } else {
+        this.isEditing = false;
+      }
+    });
+  },
 };
 </script>
 
@@ -337,36 +368,21 @@ export default {
 .plant-card {
   margin-top: 1rem;
 }
-.card-footer .btn {
-  width: 100%;
-}
 .text-center.middle.col {
   border-right: 1px solid var(--light);
   border-left: 1px solid var(--light);
 }
-.avatar-icon-camera {
-  background-color: var(--yellow);
-}
-.avatar-icon-pencil {
-  border: 1px solid var(--orange);
-  background-color: var(--platinum);
-  color: var(--dark);
-}
-.avatar-icon-trash {
-  border: 1px solid var(--platinum);
-  background-color: var(--orange);
-}
 #profile-form {
   margin-top: 1rem;
   margin-bottom: 1rem;
+  max-width: 540px;
+  width: 100%;
+  background-color: var(--light-shade1);
+  padding: 0.5rem;
 }
 .form-title {
   font-size: 1.3rem;
   border-top: 1px solid var(--orange);
   border-bottom: 1px solid var(--orange);
-}
-.btn#cancel {
-  margin-right: 1%;
-  background-color: var(--gray);
 }
 </style>

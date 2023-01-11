@@ -27,8 +27,8 @@ public class JdbcNoteDao implements NoteDao {
         String sql = "SELECT note_id, notes.plant_id, note, note_img, created_on " +
                 "FROM notes " +
                 "JOIN plants on plants.plant_id = notes.plant_id " +
-                "WHERE plants.user_id = ? " +
-                "ORDER BY note_id DESC";
+                "WHERE plants.user_id = ?" +
+                "ORDER BY created_on DESC";
         SqlRowSet results = template.queryForRowSet(sql, userId);
 
         while (results.next()) {
@@ -50,9 +50,9 @@ public class JdbcNoteDao implements NoteDao {
     public Note createNote(Note newNote) {
 
         String sql = "INSERT INTO notes(plant_id, note, note_img, created_on) " +
-                "VALUES(?, ?, ?, DEFAULT) RETURNING note_id";
+                "VALUES(?, ?, ?, ?) RETURNING note_id";
         int noteId = template.queryForObject(sql, Integer.class, newNote.getPlantId(), newNote.getNote(),
-               newNote.getNoteImg());
+               newNote.getNoteImg(), newNote.getCreatedOn());
 
         newNote.setNoteId(noteId);
         return newNote;

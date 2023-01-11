@@ -4,6 +4,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
+import java.time.LocalDate;
+import java.util.Date;
 
 @Component
 public class JdbcPlantTreatmentDao implements PlantTreatmentDao {
@@ -33,7 +35,17 @@ public class JdbcPlantTreatmentDao implements PlantTreatmentDao {
             template.update(sql3, careId);
         }
 
+    }
 
+    @Override
+    public void deletePlantTreatmentsByDate(LocalDate careDate) {
+        String sql = "DELETE FROM plants_treatments " +
+                "WHERE care_id IN (SELECT care_id FROM treatments WHERE care_date = ?)";
+        template.update(sql, careDate);
+
+        String sql2 = "DELETE FROM treatments " +
+                "WHERE care_date = ?";
+        template.update(sql2, careDate);
     }
 
 }

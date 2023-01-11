@@ -42,7 +42,7 @@
         class="default"
         >Cancel</b-button
       >
-      <b-button size="sm" type="submit" class="default">Save</b-button>
+      <b-button size="sm" type="submit" class="default">Update</b-button>
     </b-form>
   </b-row>
 </template>

@@ -1,5 +1,8 @@
 <template>
   <b-container id="add-plant">
+    <b-row align-h="center">
+      <p class="section-header">Add a plant</p>
+    </b-row>
     <PlantForm />
   </b-container>
 </template>
@@ -15,6 +18,8 @@ export default {
 <style>
 #add-plant {
   justify-content: center;
-  margin-top: 35px;
+}
+#add-plant .section-header {
+  margin-bottom: 2rem;
 }
 </style>

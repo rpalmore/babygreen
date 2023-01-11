@@ -73,9 +73,9 @@ public class JdbcPlantDao implements PlantDao {
     public Plant createPlant(Plant newPlant) {
 
         String sql = "INSERT INTO plants(user_id, plant_img, plant_name, indoor, info_url, plant_age) " +
-                "VALUES(?, ?, ?, ?, ?, DEFAULT) RETURNING plant_id";
+                "VALUES(?, ?, ?, ?, ?, ?) RETURNING plant_id";
         int plantId = template.queryForObject(sql, Integer.class, newPlant.getUserId(), newPlant.getPlantImg(),
-                newPlant.getPlantName(), newPlant.getIndoor(), newPlant.getInfoUrl());
+                newPlant.getPlantName(), newPlant.getIndoor(), newPlant.getInfoUrl(), newPlant.getPlantAge());
 
         newPlant.setPlantId(plantId);
         return newPlant;

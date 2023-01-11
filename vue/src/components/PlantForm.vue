@@ -32,6 +32,7 @@ export default {
       plant: {
         userId: this.$store.state.user.id,
       },
+      today: new Date(),
       options: [
         { text: "Indoor", value: true },
         { text: "Outdoor", value: false },
@@ -39,7 +40,23 @@ export default {
     };
   },
   methods: {
+    formatDateUI(date) {
+      const options = {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      };
+      return new Date(date).toLocaleDateString("en-US", options);
+    },
+    formatDate() {
+        const dd = String(this.today.getDate()).padStart(2, "0");
+        const mm = String(this.today.getMonth() + 1).padStart(2, "0");
+        const yyyy = this.today.getFullYear();
+        this.today = yyyy + "-" + mm + "-" + dd;
+    },
     addPlant() {
+      this.formatDate();
+        this.plant.plantAge = this.today;
       plantService
         .createPlant(this.plant)
         .then((response) => {
@@ -70,5 +87,6 @@ export default {
 <style>
 #add-plant-form {
   margin-bottom: 1rem;
+  gap: 0.3rem;
 }
 </style>

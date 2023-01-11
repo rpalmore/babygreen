@@ -3,7 +3,7 @@ import axios from 'axios';
 export default {
 
     getNotes() {
-        return axios.get('/plants/notes');
+        return axios.get('/plants/notes/');
     },
 
     createNote(note) {

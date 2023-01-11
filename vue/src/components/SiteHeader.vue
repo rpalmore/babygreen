@@ -1,18 +1,26 @@
 <template>
   <div>
-    <b-jumbotron header="baby green" lead="Tools for a lush life" title="(Photo by Scott Webb / Unsplash)">
+    <b-jumbotron
+      header="baby green"
+      lead="Tools for a lush life"
+      title="(Photo by Scott Webb / Unsplash)"
+    >
       <hr class="my-4" />
-      <b-button class="default" :to="{ name: 'login' }">Sign In</b-button>
-      <b-button id="btnRight" class="default" :to="{ name: 'register' }"
-        >Register</b-button
-      >
+      <b-row no-gutters>
+        <b-button id="btnRegister" class="default" :to="{ name: 'register' }"
+          >Register</b-button
+        >
+        <b-button id="btnLogin" class="default" :to="{ name: 'login' }"
+          >Sign In</b-button
+        >
+      </b-row>
     </b-jumbotron>
   </div>
 </template>
 
 <script>
 export default {
-  name: "site-header",
+  name: "site-header"
 };
 </script>
 
@@ -26,11 +34,13 @@ export default {
   width: 50%;
   margin-left: 0;
 }
-#btnRight {
-  margin-left: 0.3rem;
+.jumbotron .row {
+  gap: 0.3rem;
 }
-h1,
-.lead {
+#btnLogin {
+  min-width: 88px;
+}
+h1, .lead {
   color: var(--dark);
 }
 </style>

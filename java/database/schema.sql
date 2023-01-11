@@ -41,7 +41,7 @@ CREATE TABLE plants (
     plant_name varchar(200),
     indoor BOOLEAN NOT NULL,
     info_url varchar(500),
-    plant_age DATE DEFAULT CURRENT_DATE NOT NULL,
+    plant_age date NOT NULL,
     CONSTRAINT PK_plant PRIMARY KEY(plant_id),
     CONSTRAINT FK_user FOREIGN KEY(user_id)
     REFERENCES users(user_id)
@@ -52,7 +52,7 @@ CREATE TABLE notes (
     plant_id int NOT NULL,
     note TEXT,
     note_img VARCHAR(500),
-    created_on DATE DEFAULT CURRENT_DATE NOT NULL,
+    created_on date NOT NULL,
     CONSTRAINT PK_note PRIMARY KEY(note_id),
     CONSTRAINT FK_plant FOREIGN KEY(plant_id)
     REFERENCES plants(plant_id)

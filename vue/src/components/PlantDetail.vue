@@ -27,14 +27,10 @@
                   title="Edit date"
                   v-b-toggle.collapse-date-form
                   @click="toggleDateForm(plant)"
-                  >{{
-                    plant.plantAge == null
-                      ? "today"
-                      : formatDate(plant.plantAge.replace(/-/g, "\/"))
-                  }}</a
+                  >{{ formatDateDay(plant.plantAge.replace(/-/g, '\/')) }}</a
                 >.
               </b-card-text>
-              <!-- FORM: edit plant.plantAge -->
+              <!-- FORM: edit plantAge -->
               <b-collapse id="collapse-date-form" class="mt-2">
                 <b-form @submit.prevent="editPlant()">
                   <label class="sr-only" for="plantAge"
@@ -58,6 +54,7 @@
                   </b-row>
                 </b-form>
               </b-collapse>
+              <!-- end plant age edit form -->
               <b-card-text v-if="plant.infoUrl != null">
                 <b-link target="_blank" :href="plant.infoUrl"
                   >Learn more about me here.<b-avatar
@@ -90,6 +87,7 @@
               <b-button
                 class="card-footer-btn"
                 size="sm"
+                :disabled="isEditingPlant"
                 @click="toggleEditForm(plant)"
                 v-b-toggle.collapse-edit-form
                 >Edit plant
@@ -168,7 +166,9 @@
           id="toggleBtn"
           size="sm"
           v-b-toggle.collapse-1
-          >See <b-badge>{{ waterings.length - 5 }}</b-badge> more</b-button
+          >
+           <span class="when-closed">See </span>
+           <span class="when-open">Hide </span> <b-badge>{{ waterings.length - 5 }}</b-badge> more</b-button
         >
       </p>
       <b-collapse id="collapse-1" class="mt-2">
@@ -247,7 +247,9 @@
           id="toggleBtn"
           size="sm"
           v-b-toggle.collapse-2
-          >See
+          >
+           <span class="when-closed">See </span>
+           <span class="when-open">Hide </span>
           <b-badge>{{ otherTreatments.length - 5 }}</b-badge> more</b-button
         >
       </p>
@@ -304,23 +306,9 @@
       ></b-button>
     </div>
 
+    <!-- Add a note -->
     <b-collapse id="collapse-note-form" class="mt-2">
-      <b-container>
-        <b-form id="add-note-form" @submit.prevent="saveNote(note.note)">
-          <b-form-group>
-            <label for="note">My note:</label>
-            <b-form-textarea required v-model="note.note"></b-form-textarea>
-          </b-form-group>
-          <b-button
-            size="sm"
-            id="cancel"
-            @click="cancelForm($event)"
-            class="default"
-            >Cancel</b-button
-          >
-          <b-button size="sm" type="submit" class="default">Save</b-button>
-        </b-form>
-      </b-container>
+      <NoteForm v-bind:plantId="plantId" />
     </b-collapse>
     <!-- End add a note -->
 
@@ -332,7 +320,7 @@
         v-bind:key="note.noteId"
         no-body
         class="overflow-hidden"
-        :header="formatDateDay(note.createdOn.replace(/-/g, '\/'))"
+       :header="formatDateDay(note.createdOn.replace(/-/g, '\/'))"
       >
         <b-row no-gutters>
           <b-col md="6" v-if="note.noteImg != null">
@@ -366,7 +354,7 @@
                 class="card-footer-btn"
                 size="sm"
                 @click="useCloudinary($event, note)"
-                >{{ note.noteImg === null ? "Add photo" : "Swap photo" }}
+                >{{ note.noteImg == null ? "Add photo" : "Swap photo" }}
                 <b-avatar
                   size="sm"
                   icon="camera-fill"
@@ -379,6 +367,8 @@
                 class="card-footer-btn"
                 size="sm"
                 @click="toggleNoteForm(note)"
+                v-b-toggle.collapse-note-edit-form
+                :disabled="showNoteForm == note.noteId ? isEditingNote : null"
                 >Edit note
                 <b-avatar
                   size="sm"
@@ -404,7 +394,8 @@
           </b-row>
         </b-card-footer>
 
-        <b-card-body v-if="showNoteForm == note.noteId">
+       <b-collapse v-if="showNoteForm == note.noteId" id="collapse-note-edit-form" class="mt-2">
+        <b-card-body>
           <b-form v-on:submit.prevent="editNote(note)">
             <b-form-group>
               <b-form-textarea v-model="note.note" autofocus="true">
@@ -420,6 +411,7 @@
             <b-button size="sm" type="submit" class="default">Update</b-button>
           </b-form>
         </b-card-body>
+       </b-collapse>
       </b-card>
     </b-row>
   </b-container>
@@ -432,9 +424,10 @@ import treatmentService from "../services/TreatmentService";
 import photoService from "../services/PhotoService";
 // import EditNote from "./EditNote.vue";
 import EditPlant from "./EditPlant.vue";
+import NoteForm from "./NoteForm.vue";
 export default {
   name: "plant-detail",
-  components: { EditPlant },
+  components: { EditPlant, NoteForm },
   data() {
     return {
       note: {},
@@ -444,6 +437,8 @@ export default {
       savedUrl: "",
       savedLocation: "",
       showNoteForm: false,
+      isEditingNote: false,
+      isEditingPlant: false,
       modal: "",
     };
   },
@@ -490,7 +485,7 @@ export default {
     },
     selectPlantImg(plantImg) {
       return plantImg === null
-        ? require("@/assets/plant-placeholder.png")
+        ? require("@/assets/CandaceStone_Pixabay.png")
         : plantImg;
     },
     selectImg(careType) {
@@ -527,6 +522,7 @@ export default {
     },
     toggleNoteForm(note) {
       this.savedNote = note.note;
+      this.savedDate = note.createdOn;
       this.showNoteForm = note.noteId;
     },
     toggleEditForm(plant) {
@@ -542,14 +538,12 @@ export default {
             "collapse-date-form",
             (object.plantAge = this.savedDate)
           )
-        : event.target.id === "cancel"
+        : event.target.id === "cancelEdit"
         ? this.$root.$emit(
             "bv::toggle::collapse",
-            "collapse-note-form",
-            (this.note = {})
-          )
-        : event.target.id === "cancelEdit"
-        ? ((this.showNoteForm = false), (object.note = this.savedNote))
+            "collapse-edit-note-form",
+            (object.note = this.savedNote),
+            (this.showNoteForm = false))
         : event.target.id === "cancelEditForm"
         ? this.$root.$emit(
             "bv::toggle::collapse",
@@ -558,7 +552,7 @@ export default {
             (object.plantName = this.savedName),
             (object.infoUrl = this.savedUrl),
             (object.indoor = this.savedLocation))
-          )
+        )
         : alert(event.target.id);
     },
     editPlant() {
@@ -599,35 +593,12 @@ export default {
           }
         });
     },
-    saveNote(note) {
-      this.note = {
-        plantId: this.plantId,
-        note: note,
-        createdOn: new Date(),
-      };
-      plantNoteService
-        .createNote(this.note)
-        .then((response) => {
-          if (response.status == 201) {
-            this.$store.commit("ADD_NOTE", response.data);
-          }
-          this.note = {};
-          // Close the 'add note form' after saving a note:
-          this.$root.$emit(
-            "bv::toggle::collapse",
-            "collapse-note-form",
-            (this.note = {})
-          );
-        })
-        .catch((err) => {
-          alert(err + " problem creating note!");
-        });
-    },
     editNote(editedNote) {
       if (editedNote.note != this.savedNote) {
         plantNoteService
           .editNote(editedNote)
           .then((response) => {
+            editedNote.createdOn = this.savedDate;
             if (response.status == 200) {
               this.$store.commit("EDIT_NOTE", editedNote);
               this.showNoteForm = false;
@@ -694,34 +665,32 @@ export default {
         alert(err + " problem getting treatments!");
       });
     plantNoteService.getNotes().then((response) => {
+      if (response.status == 200) {
       this.$store.commit("SET_NOTES", response.data);
+      }
+    })
+    .catch((err) => {
+      alert(err + " problem getting notes!");
     });
   },
+    mounted() {
+      this.$root.$on('bv::collapse::state', (collapseId, isJustShown) => {
+      if (collapseId == 'collapse-note-edit-form' && isJustShown) {
+        this.isEditingNote = true;
+      } else if (collapseId == 'collapse-edit-form' && isJustShown) {
+        this.isEditingPlant = true;
+      } else {
+        this.isEditingNote = false;
+        this.isEditingPlant = false;
+      }
+    })
+  }
 };
 </script>
 
 <style>
 #plant-detail > .row.plant-card {
   margin-top: 1rem;
-}
-.card {
-  border: 1px solid var(--gray);
-}
-.card-title {
-  font-weight: 350;
-}
-#b-card-img {
-  background-color: var(--orange);
-}
-.card-footer-btn,
-#plant,
-.avatar-icon-camera {
-  background-color: var(--light);
-  border: 1px solid var(--orange);
-  color: var(--dark);
-}
-.avatar-icon-camera {
-  background-color: var(--yellow);
 }
 #toggleBtn {
   background-color: var(--orange);
@@ -731,6 +700,13 @@ export default {
   background-color: var(--light);
   color: var(--dark);
 }
+#toggleFormBtn {
+  background-color: var(--green);
+  color: var(--platinum);
+  border: 1px solid var(--orange);
+  font-size: 1rem;
+  min-width: 142px;
+}
 #deleteTreatment {
   background-color: var(--orange);
 }
@@ -738,35 +714,10 @@ export default {
   display: flex;
   justify-content: end;
 }
-.subsection-header {
-  font-size: 1.3rem;
-  font-weight: 400;
-  margin-top: 1rem;
-  padding: 0.3rem;
-  padding-left: 1rem;
-  background-color: var(--light-shade1);
-  border-left: 5px solid var(--green);
-}
 .avatar-icon-link {
   margin-left: 0.3rem;
   background-color: var(--green);
   border: 1px solid var(--orange);
-}
-.avatar-custom#misted {
-  background-color: var(--light);
-  border: 1px solid var(--orange);
-}
-.avatar-custom#pest-treated {
-  background-color: var(--orange);
-  border: 1px solid var(--green);
-}
-.avatar-custom#fertilized {
-  background-color: var(--yellow);
-  border: 1px solid var(--green);
-}
-.avatar-custom#repotted {
-  background-color: var(--platinum);
-  border: 1px solid var(--green);
 }
 .card#note-card {
   margin-bottom: 1rem;
@@ -789,13 +740,14 @@ export default {
 #add-note-form {
   margin-bottom: 1rem;
   padding-top: 0.3rem;
-  padding-bottom: 0.3rem;
+  padding-bottom: 0.6rem;
 }
 #collapse-note-form {
   background-color: var(--light-shade1);
   border-left: 5px solid var(--green);
 }
 .btn#cancelEdit,
+.btn#cancelNote,
 .btn#cancelDateForm,
 #cancelEditForm {
   margin-right: 1%;
