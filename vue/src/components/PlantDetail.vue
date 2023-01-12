@@ -27,7 +27,7 @@
                   title="Edit date"
                   v-b-toggle.collapse-date-form
                   @click="toggleDateForm(plant)"
-                  >{{ formatDateDay(plant.plantAge.replace(/-/g, '\/')) }}</a
+                  >{{ formatDate(plant.plantAge.replace(/-/g, '\/')) }}</a
                 >.
               </b-card-text>
               <!-- FORM: edit plantAge -->
@@ -422,6 +422,7 @@ import plantNoteService from "../services/PlantNoteService";
 import plantService from "../services/PlantService";
 import treatmentService from "../services/TreatmentService";
 import photoService from "../services/PhotoService";
+import profileService from "../services/ProfileService";
 // import EditNote from "./EditNote.vue";
 import EditPlant from "./EditPlant.vue";
 import NoteForm from "./NoteForm.vue";
@@ -672,6 +673,16 @@ export default {
     .catch((err) => {
       alert(err + " problem getting notes!");
     });
+    profileService
+      .getProfile()
+      .then((response) => {
+        if (response.status == 200) {
+          this.$store.commit("SET_PROFILE", response.data);
+        }
+      })
+      .catch((err) => {
+        alert(err + " problem getting profile!");
+      });
   },
     mounted() {
       this.$root.$on('bv::collapse::state', (collapseId, isJustShown) => {

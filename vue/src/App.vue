@@ -76,9 +76,9 @@ a:hover {
   color: var(--dark);
 }
 .btn#cancel {
-  /* margin-right: 1%; */
   background-color: var(--gray);
-}.card {
+}
+.card {
   border: 1px solid var(--gray);
 }
 .card-title {
@@ -92,8 +92,22 @@ a:hover {
   border: 1px solid var(--orange);
   color: var(--dark);
 }
+.card-footer-btn:hover {
+  background-color: var(--light-shade1);
+  border: 1px solid var(--green);
+  color: var(--dark);
+}
 .card-footer .btn {
   width: 100%;
+}
+.card-footer-btn.disabled {
+  border: 1px solid var(--dark);
+}
+.card-footer-btn.disabled:hover {
+  border: 1px solid var(--dark);
+  background-color: #6c757d;
+  opacity: .65;
+  color: #fff;
 }
 #deleteTreatment {
   background-color: var(--orange);

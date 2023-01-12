@@ -1,4 +1,5 @@
 <template>
+<b-container id="add-plant-container">
   <b-form inline @submit.prevent="addPlant" id="add-plant-form">
     <label class="sr-only" for="plantName">Plant Name</label>
     <b-form-input
@@ -16,11 +17,14 @@
       :aria-describedby="ariaDescribedby"
       name="radio-inline"
     ></b-form-radio-group>
-    <b-button size="sm" id="cancel" @click="cancel" class="default"
+    <b-row id="btn-group">
+    <b-button size="sm" id="cancel-plant" @click="cancel" class="default"
       >Cancel</b-button
     >
     <b-button size="sm" type="submit" class="default">Save</b-button>
+    </b-row>
   </b-form>
+</b-container>
 </template>
 
 <script>
@@ -85,8 +89,21 @@ export default {
 </script>
 
 <style>
+#add-plant-container {
+  background-color: var(--light-shade1);
+  border-left: 5px solid var(--green);
+}
 #add-plant-form {
-  margin-bottom: 1rem;
+  padding: 15px 0 15px 0;
   gap: 0.3rem;
+}
+#cancel-plant {
+  margin-right: 1%;
+  background-color: var(--gray);
+}
+#btn-group {
+  width: 100%;
+  margin-top: 0.3rem;
+  margin-left: 0;
 }
 </style>
