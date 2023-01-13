@@ -79,7 +79,7 @@ import AddPlant from "../components/PlantForm.vue";
 import LogCare from "../components/LogCare.vue";
 import plantService from "../services/PlantService";
 import treatmentService from "../services/TreatmentService";
-//import profileService from "../services/ProfileService";
+import profileService from "../services/ProfileService";
 export default {
   components: { AddPlant, LogCare },
   name: "plants",
@@ -209,16 +209,16 @@ export default {
       .catch((err) => {
         alert(err + " problem getting plants!");
       });
-    // profileService
-    //   .getProfile()
-    //   .then((response) => {
-    //     if (response.status == 200) {
-    //       this.$store.commit("SET_PROFILE", response.data);
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     alert(err + " problem getting profile!");
-    //   });
+    profileService
+      .getProfile()
+      .then((response) => {
+        if (response.status == 200) {
+          this.$store.commit("SET_PROFILE", response.data);
+        }
+      })
+      .catch((err) => {
+        alert(err + " problem getting profile!");
+      });
   },
 };
 </script>
