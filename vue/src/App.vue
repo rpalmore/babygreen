@@ -77,6 +77,7 @@ a:hover {
 }
 .btn#cancel {
   background-color: var(--gray);
+  margin-right: 1%;
 }
 .card {
   border: 1px solid var(--gray);
@@ -91,15 +92,17 @@ a:hover {
   background-color: var(--light);
   border: 1px solid var(--orange);
   color: var(--dark);
+  height: 100%;
+  width: 100%;
 }
 .card-footer-btn:hover {
   background-color: var(--light-shade1);
   border: 1px solid var(--green);
   color: var(--dark);
 }
-.card-footer .btn {
+/* .card-footer .btn {
   width: 100%;
-}
+} */
 .card-footer-btn.disabled {
   border: 1px solid var(--dark);
 }

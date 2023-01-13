@@ -60,7 +60,7 @@
           </b-col>
         </b-row>
         <b-card-footer>
-          <b-row align-v="center">
+          <b-row class="card-footer-row">
             <b-col class="text-center">
               <b-button
                 id="profile"
@@ -96,7 +96,7 @@
             </b-col>
             <b-col>
               <b-button
-                class="card-footer-btn"
+                class="card-footer-btn delete-profile"
                 size="sm"
                 @click="deleteProfile(profile.userId)"
               >
@@ -104,7 +104,7 @@
                 <b-avatar
                   size="sm"
                   icon="trash-fill"
-                  class="avatar-icon-trash"
+                  class="avatar-icon-trash delete-profile"
                 ></b-avatar>
               </b-button>
             </b-col>
@@ -160,7 +160,7 @@
           size="sm"
           id="cancel"
           @click="cancel"
-          class="default mb-2 mr-sm-2 mb-sm-0"
+          class="default"
           >Cancel</b-button
         >
         <b-button size="sm" type="submit" class="default">{{
@@ -368,9 +368,22 @@ export default {
 .plant-card {
   margin-top: 1rem;
 }
+.card-footer-row {
+  /* align-items: flex-end; */
+  height: 100%;
+}
 .text-center.middle.col {
   border-right: 1px solid var(--light);
   border-left: 1px solid var(--light);
+}
+.card-footer-btn.delete-profile {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center
+}
+.avatar-icon-trash.delete-profile {
+  margin: 3px;
 }
 #profile-form {
   margin-top: 1rem;
