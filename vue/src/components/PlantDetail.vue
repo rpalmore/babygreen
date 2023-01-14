@@ -6,118 +6,13 @@
       </p>
     </b-row>
 
-    <b-row class="plant-card" align-h="center">
-      <b-card no-body class="overflow-hidden" style="max-width: 640px">
-        <b-row no-gutters align-v="center">
-          <b-col md="6">
-            <b-card-img
-              id="b-card-img"
-              :src="selectPlantImg(plant.plantImg)"
-              alt="Plant image"
-              class="rounded-0"
-            ></b-card-img>
-          </b-col>
-          <b-col md="6">
-            <b-card-body title="About me">
-              <b-card-text>
-                I am an {{ plant.indoor == true ? "indoor" : "outdoor" }} plant
-                and have been in {{ name }}&#8217;s care since
-                <a
-                  v-b-tooltip.hover
-                  title="Edit date"
-                  v-b-toggle.collapse-date-form
-                  @click="toggleDateForm(plant)"
-                  >{{ formatDate(plant.plantAge.replace(/-/g, '\/')) }}</a
-                >.
-              </b-card-text>
-              <!-- FORM: edit plantAge -->
-              <b-collapse id="collapse-date-form" class="mt-2">
-                <b-form @submit.prevent="editPlant()">
-                  <label class="sr-only" for="plantAge"
-                    >Plant cared for since:
-                  </label>
-                  <b-form-input
-                    type="date"
-                    v-model="plant.plantAge"
-                  ></b-form-input>
-                  <b-row id="dateFormBtnGroup" no-gutters>
-                    <b-button
-                      size="sm"
-                      id="cancelDateForm"
-                      @click="cancelForm($event, plant)"
-                      class="default"
-                      >Cancel</b-button
-                    >
-                    <b-button size="sm" type="submit" class="default"
-                      >Update</b-button
-                    >
-                  </b-row>
-                </b-form>
-              </b-collapse>
-              <!-- end plant age edit form -->
-              <b-card-text v-if="plant.infoUrl != null">
-                <b-link target="_blank" :href="plant.infoUrl"
-                  >Learn more about me here.<b-avatar
-                    size="sm"
-                    icon="link45deg"
-                    class="avatar-icon-link"
-                  ></b-avatar
-                ></b-link>
-              </b-card-text>
-            </b-card-body>
-          </b-col>
-        </b-row>
-        <b-card-footer>
-          <b-row align-v="center">
-            <b-col class="text-center">
-              <b-button
-                id="plant"
-                class="card-footer-btn"
-                size="sm"
-                @click="useCloudinary($event, plant)"
-                >{{ plant.plantImg === null ? "Add photo" : "Swap photo" }}
-                <b-avatar
-                  size="sm"
-                  icon="camera-fill"
-                  class="avatar-icon-camera"
-                ></b-avatar
-              ></b-button>
-            </b-col>
-            <b-col class="text-center middle">
-              <b-button
-                class="card-footer-btn"
-                size="sm"
-                :disabled="isEditingPlant"
-                @click="toggleEditForm(plant)"
-                v-b-toggle.collapse-edit-form
-                >Edit plant
-                <b-avatar
-                  size="sm"
-                  icon="pencil-fill"
-                  class="avatar-icon-pencil"
-                ></b-avatar
-              ></b-button>
-            </b-col>
-            <b-col>
-              <b-button
-                v-b-tooltip.hover
-                title="Delete this plant"
-                class="card-footer-btn"
-                size="sm"
-                @click="deletePlant()"
-              >
-                Delete
-                <b-avatar
-                  size="sm"
-                  icon="trash-fill"
-                  class="avatar-icon-trash"
-                ></b-avatar>
-              </b-button>
-            </b-col>
-          </b-row>
-        </b-card-footer>
-      </b-card>
-    </b-row>
+    <PlantCard
+      v-bind:plantId="plantId"
+      v-bind:isEditingPlant="isEditingPlant"
+      @cancelDateForm="cancelForm($event, plant)"
+      @toggleDate="toggleDateForm(plant)"
+      @toggleEdit="toggleEditForm(plant)"
+    />
 
     <b-collapse id="collapse-edit-form" class="mt-2">
       <EditPlant @cancelEditForm="cancelForm($event, plant)" />
@@ -166,9 +61,10 @@
           id="toggleBtn"
           size="sm"
           v-b-toggle.collapse-1
-          >
-           <span class="when-closed">See </span>
-           <span class="when-open">Hide </span> <b-badge>{{ waterings.length - 5 }}</b-badge> more</b-button
+        >
+          <span class="when-closed">See </span>
+          <span class="when-open">Hide </span>
+          <b-badge>{{ waterings.length - 5 }}</b-badge> more</b-button
         >
       </p>
       <b-collapse id="collapse-1" class="mt-2">
@@ -247,9 +143,9 @@
           id="toggleBtn"
           size="sm"
           v-b-toggle.collapse-2
-          >
-           <span class="when-closed">See </span>
-           <span class="when-open">Hide </span>
+        >
+          <span class="when-closed">See </span>
+          <span class="when-open">Hide </span>
           <b-badge>{{ otherTreatments.length - 5 }}</b-badge> more</b-button
         >
       </p>
@@ -320,7 +216,7 @@
         v-bind:key="note.noteId"
         no-body
         class="overflow-hidden"
-       :header="formatDateDay(note.createdOn.replace(/-/g, '\/'))"
+        :header="formatDateDay(note.createdOn.replace(/-/g, '\/'))"
       >
         <b-row no-gutters>
           <b-col md="6" v-if="note.noteImg != null">
@@ -394,24 +290,30 @@
           </b-row>
         </b-card-footer>
 
-       <b-collapse v-if="showNoteForm == note.noteId" id="collapse-note-edit-form" class="mt-2">
-        <b-card-body>
-          <b-form v-on:submit.prevent="editNote(note)">
-            <b-form-group>
-              <b-form-textarea v-model="note.note" autofocus="true">
-              </b-form-textarea>
-            </b-form-group>
-            <b-button
-              size="sm"
-              id="cancelEdit"
-              @click="cancelForm($event, note)"
-              class="default"
-              >Cancel</b-button
-            >
-            <b-button size="sm" type="submit" class="default">Update</b-button>
-          </b-form>
-        </b-card-body>
-       </b-collapse>
+        <b-collapse
+          v-if="showNoteForm == note.noteId"
+          id="collapse-note-edit-form"
+          class="mt-2"
+        >
+          <b-card-body>
+            <b-form v-on:submit.prevent="editNote(note)">
+              <b-form-group>
+                <b-form-textarea v-model="note.note" autofocus="true">
+                </b-form-textarea>
+              </b-form-group>
+              <b-button
+                size="sm"
+                id="cancelEdit"
+                @click="cancelForm($event, note)"
+                class="default"
+                >Cancel</b-button
+              >
+              <b-button size="sm" type="submit" class="default"
+                >Update</b-button
+              >
+            </b-form>
+          </b-card-body>
+        </b-collapse>
       </b-card>
     </b-row>
   </b-container>
@@ -425,9 +327,10 @@ import photoService from "../services/PhotoService";
 // import EditNote from "./EditNote.vue";
 import EditPlant from "./EditPlant.vue";
 import NoteForm from "./NoteForm.vue";
+import PlantCard from "./PlantCard.vue";
 export default {
   name: "plant-detail",
-  components: { EditPlant, NoteForm },
+  components: { EditPlant, NoteForm, PlantCard },
   data() {
     return {
       note: {},
@@ -470,24 +373,8 @@ export default {
         (treatment) => treatment.careType != "watered"
       );
     },
-    name() {
-      return this.$store.state.profile.displayName === undefined ||
-        this.$store.state.profile.displayName === null
-        ? this.$store.state.user.username
-        : this.$store.state.profile.displayName;
-    },
   },
   methods: {
-    useCloudinary(event, item) {
-      photoService.myWidget.open();
-      this.$store.commit("SET_CLOUDINARY_SOURCE", event.target.id);
-      this.$store.commit("SET_OBJECT", item);
-    },
-    selectPlantImg(plantImg) {
-      return plantImg === null
-        ? require("@/assets/CandaceStone_Pixabay.png")
-        : plantImg;
-    },
     selectImg(careType) {
       return careType === "misted"
         ? require("@/assets/spray-bottle.png")
@@ -500,14 +387,6 @@ export default {
     formatDateDay(date) {
       const options = {
         weekday: "long",
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      };
-      return new Date(date).toLocaleDateString("en-US", options);
-    },
-    formatDate(date) {
-      const options = {
         year: "numeric",
         month: "long",
         day: "numeric",
@@ -543,7 +422,8 @@ export default {
             "bv::toggle::collapse",
             "collapse-edit-note-form",
             (object.note = this.savedNote),
-            (this.showNoteForm = false))
+            (this.showNoteForm = false)
+          )
         : event.target.id === "cancelEditForm"
         ? this.$root.$emit(
             "bv::toggle::collapse",
@@ -552,7 +432,7 @@ export default {
             (object.plantName = this.savedName),
             (object.infoUrl = this.savedUrl),
             (object.indoor = this.savedLocation))
-        )
+          )
         : alert(event.target.id);
     },
     editPlant() {
@@ -592,6 +472,11 @@ export default {
               });
           }
         });
+    },
+    useCloudinary(event, item) {
+      photoService.myWidget.open();
+      this.$store.commit("SET_CLOUDINARY_SOURCE", event.target.id);
+      this.$store.commit("SET_OBJECT", item);
     },
     editNote(editedNote) {
       if (editedNote.note != this.savedNote) {
@@ -664,27 +549,29 @@ export default {
       .catch((err) => {
         alert(err + " problem getting treatments!");
       });
-    plantNoteService.getNotes().then((response) => {
-      if (response.status == 200) {
-      this.$store.commit("SET_NOTES", response.data);
-      }
-    })
-    .catch((err) => {
-      alert(err + " problem getting notes!");
-    });
+    plantNoteService
+      .getNotes()
+      .then((response) => {
+        if (response.status == 200) {
+          this.$store.commit("SET_NOTES", response.data);
+        }
+      })
+      .catch((err) => {
+        alert(err + " problem getting notes!");
+      });
   },
-    mounted() {
-      this.$root.$on('bv::collapse::state', (collapseId, isJustShown) => {
-      if (collapseId == 'collapse-note-edit-form' && isJustShown) {
+  mounted() {
+    this.$root.$on("bv::collapse::state", (collapseId, isJustShown) => {
+      if (collapseId == "collapse-note-edit-form" && isJustShown) {
         this.isEditingNote = true;
-      } else if (collapseId == 'collapse-edit-form' && isJustShown) {
+      } else if (collapseId == "collapse-edit-form" && isJustShown) {
         this.isEditingPlant = true;
       } else {
         this.isEditingNote = false;
         this.isEditingPlant = false;
       }
-    })
-  }
+    });
+  },
 };
 </script>
 
