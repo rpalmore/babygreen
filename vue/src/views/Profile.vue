@@ -7,168 +7,62 @@
       </p>
     </b-row>
 
-    <!-- Profile card -->
-    <b-row class="plant-card" align-h="center">
-      <b-card no-body class="overflow-hidden" style="max-width: 540px">
-        <b-row no-gutters align-v="center">
-          <b-col md="6">
-            <b-card-img
-              fluid-grow
-              id="b-card-img"
-              :src="selectImg"
-              alt="Plant image"
-              class="rounded-0"
-            ></b-card-img>
-          </b-col>
-          <b-col md="6">
-            <b-list-group flush>
-              <b-list-group-item>
-                <span>My favorite plant: {{ profile.favePlant }}</span>
-              </b-list-group-item>
-              <b-list-group-item>
-                <span>My skill level: {{ profile.skillLevel }}</span>
-              </b-list-group-item>
-              <b-list-group-item>
-                <span
-                  >I am tracking
-                  <span class="profileData"
-                    ><router-link :to="{ name: 'plants' }">{{
-                      numPlants
-                    }}</router-link></span
-                  >!
-                </span>
-              </b-list-group-item>
-              <b-list-group-item v-if="treatments.length > 0">
-                <span
-                  >I most recently
-                  {{ latestTreatment.careType }}
-                  {{ latestTreatment.numPlants }}
-                  {{
-                    latestTreatment.numPlants == 1
-                      ? " plant on "
-                      : "plants on "
-                  }}<router-link :to="{ name: 'care' }">
-                    <span class="profileData">{{
-                      formatDateMonth(
-                        latestTreatment.careDate.replace(/-/g, "\/")
-                      )
-                    }}</span></router-link
-                  >
-                </span>
-              </b-list-group-item>
-            </b-list-group>
-          </b-col>
-        </b-row>
-        <b-card-footer>
-          <b-row class="card-footer-row">
-            <b-col class="text-center">
-              <b-button
-                id="profile"
-                class="card-footer-btn"
-                size="sm"
-                @click="useCloudinary($event)"
-                >{{ !!profile.profileImg ? "Swap photo" : "Add a photo" }}
-                <b-avatar
-                  size="sm"
-                  icon="camera-fill"
-                  class="avatar-icon-camera"
-                ></b-avatar
-              ></b-button>
-            </b-col>
-            <b-col class="text-center middle">
-              <b-button
-                class="card-footer-btn"
-                size="sm"
-                :disabled="isEditing"
-                @click="toggleForm()"
-                v-b-toggle.collapse-edit-form
-                >{{
-                  profile.favePlant === undefined
-                    ? "Create profile"
-                    : "Edit profile"
-                }}
-                <b-avatar
-                  size="sm"
-                  icon="pencil-fill"
-                  class="avatar-icon-pencil"
-                ></b-avatar
-              ></b-button>
-            </b-col>
-            <b-col>
-              <b-button
-                class="card-footer-btn delete-profile"
-                size="sm"
-                @click="deleteProfile(profile.userId)"
-              >
-                Delete
-                <b-avatar
-                  size="sm"
-                  icon="trash-fill"
-                  class="avatar-icon-trash delete-profile"
-                ></b-avatar>
-              </b-button>
-            </b-col>
-          </b-row>
-        </b-card-footer>
-      </b-card>
-    </b-row>
-    <!-- End profile card -->
+    <ProfileCard
+      v-bind:profile="profile"
+      v-bind:isEditing="isEditing"
+      @toggle="toggleForm()"
+      @delete="deleteProfile(profile.userId)"
+    />
 
     <!-- Edit profile -->
     <b-collapse id="collapse-edit-form" class="mt-2">
       <b-row align-h="center">
-      <b-form @submit.prevent="saveProfile()" id="profile-form">
-        <b-form-group
-          id="input-group-1"
-          label="Display name:"
-          label-for="input-1"
-        >
-          <b-form-input
-            required
-            type="text"
-            id="input-1"
-            placeholder="Enter display name"
-            v-model="newProfile.displayName"
-          ></b-form-input>
-        </b-form-group>
-        <b-form-group
-          id="input-group-2"
-          label="Favorite plant:"
-          label-for="input-2"
-        >
-          <b-form-input
-            required
-            type="text"
-            id="input-2"
-            placeholder="Your favorite plant"
-            v-model="newProfile.favePlant"
-          ></b-form-input>
-        </b-form-group>
-        <b-form-group
-          id="input-group-3"
-          label="Skill level:"
-          label-for="input-3"
-        >
-          <b-form-select
-            id="input-3"
-            v-model="newProfile.skillLevel"
-            :options="skill"
-            required
-          ></b-form-select>
-        </b-form-group>
-        <b-button
-          size="sm"
-          id="cancel"
-          @click="cancel"
-          class="default"
-          >Cancel</b-button
-        >
-        <b-button size="sm" type="submit" class="default">{{
-                  profile.favePlant === undefined
-                    ? "Save"
-                    : "Update"
-                }}</b-button>
-      </b-form>
+        <b-form @submit.prevent="saveProfile()" id="profile-form">
+          <b-form-group
+            id="input-group-1"
+            label="Display name:"
+            label-for="input-1"
+          >
+            <b-form-input
+              required
+              type="text"
+              id="input-1"
+              placeholder="Enter display name"
+              v-model="newProfile.displayName"
+            ></b-form-input>
+          </b-form-group>
+          <b-form-group
+            id="input-group-2"
+            label="Favorite plant:"
+            label-for="input-2"
+          >
+            <b-form-input
+              required
+              type="text"
+              id="input-2"
+              placeholder="Your favorite plant"
+              v-model="newProfile.favePlant"
+            ></b-form-input>
+          </b-form-group>
+          <b-form-group
+            id="input-group-3"
+            label="Skill level:"
+            label-for="input-3"
+          >
+            <b-form-select
+              id="input-3"
+              v-model="newProfile.skillLevel"
+              :options="skill"
+              required
+            ></b-form-select>
+          </b-form-group>
+          <b-button size="sm" id="cancel" @click="cancel" class="default"
+            >Cancel</b-button
+          >
+          <b-button size="sm" type="submit" class="default">{{
+            profile.favePlant === undefined ? "Save" : "Update"
+          }}</b-button>
+        </b-form>
       </b-row>
     </b-collapse>
     <!-- End edit profile -->
@@ -178,9 +72,10 @@
 <script>
 import profileService from "../services/ProfileService";
 import treatmentService from "../services/TreatmentService";
-import photoService from "../services/PhotoService.js";
+import ProfileCard from "../components/ProfileCard.vue";
 export default {
   name: "profile",
+  components: { ProfileCard },
   data() {
     return {
       greeting: [
@@ -211,34 +106,13 @@ export default {
         ? this.$store.state.user.username
         : this.profile.displayName;
     },
-    numPlants() {
-      return this.$store.state.plants.length === 1
-        ? this.$store.state.plants.length + " plant"
-        : this.$store.state.plants.length + " plants";
-    },
     profile() {
       return this.$store.state.profile;
-    },
-    selectImg() {
-      return this.profile.profileImg === undefined ||
-        this.profile.profileImg === null
-        ? require("@/assets/CandaceStone_Pixabay.png")
-        : this.profile.profileImg;
-    },
-    treatments() {
-      return this.$store.state.treatments;
-    },
-    latestTreatment() {
-      return this.$store.state.latestTreatment;
     },
   },
   methods: {
     selectGreeting() {
       return this.greeting[Math.floor(Math.random() * this.greeting.length)];
-    },
-    useCloudinary(event) {
-      photoService.myWidget.open();
-      this.$store.commit("SET_CLOUDINARY_SOURCE", event.target.id);
     },
     toggleForm() {
       this.newProfile.profileImg = this.profile.profileImg;
@@ -249,15 +123,6 @@ export default {
       this.savedName = this.profile.displayName;
       this.savedFavePlant = this.profile.favePlant;
       this.savedSkillLevel = this.profile.skillLevel;
-    },
-    formatDateMonth(date) {
-      if (date) {
-        const options = {
-          month: "long",
-          day: "numeric",
-        };
-        return new Date(date).toLocaleDateString("en-US", options);
-      }
     },
     cancel() {
       this.newProfile = {
@@ -270,7 +135,7 @@ export default {
         this.profile.favePlant = this.savedFavePlant;
         this.profile.skillLevel = this.savedSkillLevel;
       }
-    this.$root.$emit("bv::toggle::collapse", "collapse-edit-form");
+      this.$root.$emit("bv::toggle::collapse", "collapse-edit-form");
     },
     saveProfile() {
       if (
@@ -317,7 +182,10 @@ export default {
               .then((response) => {
                 if (response.status == 204) {
                   this.$store.commit("DELETE_PROFILE");
-                  this.$root.$emit("bv::toggle::collapse", "collapse-edit-form");
+                  this.$root.$emit(
+                    "bv::toggle::collapse",
+                    "collapse-edit-form"
+                  );
                   this.newProfile = {
                     userId: this.$store.state.user.id,
                   };
@@ -354,7 +222,7 @@ export default {
   },
   mounted() {
     this.$root.$on("bv::collapse::state", (collapseId, isJustShown) => {
-      if (collapseId == 'collapse-edit-form' && isJustShown) {
+      if (collapseId == "collapse-edit-form" && isJustShown) {
         this.isEditing = true;
       } else {
         this.isEditing = false;
@@ -380,7 +248,7 @@ export default {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  align-items: center
+  align-items: center;
 }
 .avatar-icon-trash.delete-profile {
   margin: 3px;

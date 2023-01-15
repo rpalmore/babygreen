@@ -97,7 +97,7 @@
               title="Delete this plant"
               class="card-footer-btn"
               size="sm"
-              @click="deletePlant()"
+              @click="$emit('deletePlant')"
             >
               Delete
               <b-avatar
@@ -120,7 +120,6 @@ export default {
   props: ["plantId", "isEditingPlant"],
   data() {
     return {
-      savedDate: "",
     };
   },
   computed: {

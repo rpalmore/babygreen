@@ -12,6 +12,7 @@
       @cancelDateForm="cancelForm($event, plant)"
       @toggleDate="toggleDateForm(plant)"
       @toggleEdit="toggleEditForm(plant)"
+      @deletePlant="deletePlant()"
     />
 
     <b-collapse id="collapse-edit-form" class="mt-2">
