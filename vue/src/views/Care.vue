@@ -135,18 +135,22 @@
 
 <script>
 import treatmentService from "../services/TreatmentService";
+// import VBTooltip from 'bootstrap-vue';
+// import ModalPlugin from 'bootstrap-vue';
 export default {
   name: "care",
   components: {},
-  computed: {
-    treatments() {
-      return this.$store.state.treatments;
-    },
-  },
+  // directives: { VBTooltip },
+  // componentPlugins: { ModalPlugin },
   data() {
     return {
       modal: "",
     };
+  },
+  computed: {
+    treatments() {
+      return this.$store.state.treatments;
+    },
   },
   methods: {
     formatTreatment() {
@@ -243,6 +247,9 @@ export default {
 .treatmentDetails {
   width: 90%;
 }
+#deleteTreatment {
+  background-color: var(--orange);
+}
 #deleteTreatmentByDate {
   background-color: var(--grey);
   border: 1px solid var(--orange);
@@ -256,5 +263,21 @@ export default {
 .collapsed .when-open,
 .not-collapsed .when-closed {
   display: none;
+}
+.avatar-custom#misted {
+  background-color: var(--light);
+  border: 1px solid var(--orange);
+}
+.avatar-custom#pest-treated {
+  background-color: var(--orange);
+  border: 1px solid var(--green);
+}
+.avatar-custom#fertilized {
+  background-color: var(--yellow);
+  border: 1px solid var(--green);
+}
+.avatar-custom#repotted {
+  background-color: var(--platinum);
+  border: 1px solid var(--green);
 }
 </style>

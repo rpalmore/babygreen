@@ -134,8 +134,12 @@
 
 <script>
 import authService from "../services/AuthService";
+// import VBTooltip from 'bootstrap-vue';
+import ModalPlugin from 'bootstrap-vue';
 export default {
   name: "settings",
+  // directives: { VBTooltip },
+  componentPlugins: { ModalPlugin },
   data() {
     return {
       modal: "",
@@ -250,5 +254,11 @@ export default {
 }
 #password-placeholder {
   color: var(--grey);
+}
+.card-footer-btn {
+  width: auto !important;
+}
+.btn#cancel {
+  background-color: gray;
 }
 </style>

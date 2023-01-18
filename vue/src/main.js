@@ -9,7 +9,7 @@ import { AvatarPlugin,
   ButtonPlugin, 
   CardPlugin, 
   CollapsePlugin, 
-  DropdownPlugin, 
+  //DropdownPlugin, 
   FormPlugin, 
   FormCheckboxPlugin, 
   FormGroupPlugin, 
@@ -25,7 +25,7 @@ import { AvatarPlugin,
   NavPlugin, 
   VBToggle, 
   VBTooltip, 
-  BTable, 
+  //BTable, 
   BIconCameraFill, 
   BIconTrashFill, 
   BIconPencilFill, 
@@ -46,7 +46,7 @@ Vue.use(BadgePlugin)
 Vue.use(ButtonPlugin)
 Vue.use(CardPlugin)
 Vue.use(CollapsePlugin)
-Vue.use(DropdownPlugin)
+//Vue.use(DropdownPlugin)
 Vue.use(FormPlugin)
 Vue.use(FormCheckboxPlugin)
 Vue.use(FormGroupPlugin)
@@ -62,7 +62,7 @@ Vue.use(ModalPlugin)
 Vue.use(NavPlugin)
 Vue.directive('b-tooltip', VBTooltip)
 Vue.directive('b-toggle', VBToggle)
-Vue.component('b-table', BTable)
+//Vue.component('b-table', BTable)
 Vue.component('BIconCameraFill', BIconCameraFill)
 Vue.component('BIconTrashFill', BIconTrashFill)
 Vue.component('BIconPencilFill', BIconPencilFill)

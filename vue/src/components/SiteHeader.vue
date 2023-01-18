@@ -40,7 +40,7 @@ export default {
 #btnLogin {
   min-width: 88px;
 }
-h1, .lead {
+.lead {
   color: var(--dark);
 }
 </style>

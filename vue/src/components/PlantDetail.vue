@@ -329,9 +329,14 @@ import photoService from "../services/PhotoService";
 import EditPlant from "./EditPlant.vue";
 import NoteForm from "./NoteForm.vue";
 import PlantCard from "./PlantCard.vue";
+// import VBTooltip from 'bootstrap-vue';
+// import VBModal from 'bootstrap-vue';
+//import BVModalPlugin from 'bootstrap-vue';
 export default {
-  name: "plant-detail",
   components: { EditPlant, NoteForm, PlantCard },
+  name: "plant-detail",
+  // directives: { VBModal },
+  //componentPlugins: { ModalPlugin },
   data() {
     return {
       note: {},
@@ -595,6 +600,22 @@ export default {
   font-size: 1rem;
   min-width: 142px;
 }
+.avatar-custom#misted {
+  background-color: var(--light);
+  border: 1px solid var(--orange);
+}
+.avatar-custom#pest-treated {
+  background-color: var(--orange);
+  border: 1px solid var(--green);
+}
+.avatar-custom#fertilized {
+  background-color: var(--yellow);
+  border: 1px solid var(--green);
+}
+.avatar-custom#repotted {
+  background-color: var(--platinum);
+  border: 1px solid var(--green);
+}
 #deleteTreatment {
   background-color: var(--orange);
 }
@@ -606,6 +627,20 @@ export default {
   margin-left: 0.3rem;
   background-color: var(--green);
   border: 1px solid var(--orange);
+}
+.avatar-icon-camera {
+  background-color: var(--yellow);
+  border: 1px solid var(--orange);
+  color: var(--dark);
+}
+.avatar-icon-pencil {
+  border: 1px solid var(--orange);
+  background-color: var(--platinum);
+  color: var(--dark);
+}
+.avatar-icon-trash {
+  border: 1px solid var(--platinum);
+  background-color: var(--orange);
 }
 .card#note-card {
   margin-bottom: 1rem;

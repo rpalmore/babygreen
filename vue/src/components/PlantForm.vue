@@ -99,7 +99,7 @@ export default {
 }
 #cancel-plant {
   margin-right: 1%;
-  background-color: var(--gray);
+  background-color: gray;
 }
 #btn-group {
   width: 100%;

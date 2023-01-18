@@ -266,4 +266,8 @@ export default {
   border-top: 1px solid var(--orange);
   border-bottom: 1px solid var(--orange);
 }
+.btn#cancel {
+  background-color: gray;
+  margin-right: 1%;
+} 
 </style>

@@ -12,8 +12,8 @@
 </template>
 
 <script>
-import SiteNavigation from "./components/SiteNavigation.vue";
-import SiteHeader from "./components/SiteHeader.vue";
+const SiteNavigation = () => import ("./components/SiteNavigation.vue");
+const SiteHeader = ()  => import ("./components/SiteHeader.vue");
 import SiteFooter from "./components/SiteFooter.vue";
 
 export default {
@@ -55,7 +55,6 @@ export default {
   border-top: 5px solid var(--dark);
   padding-bottom: 3rem;
 }
-h2,
 a {
   color: var(--dark);
 }
@@ -69,16 +68,12 @@ a:hover {
   border-left: 3px solid var(--orange);
   color: var(--platinum);
 }
-.btn.delete {
+/* .btn.delete {
   background-color: var(--orange);
   border-right: 3px solid var(--dark);
   border-left: 3px solid var(--dark);
   color: var(--dark);
-}
-.btn#cancel {
-  background-color: var(--gray);
-  margin-right: 1%;
-}
+} */
 .card {
   border: 1px solid var(--gray);
 }
@@ -100,9 +95,6 @@ a:hover {
   border: 1px solid var(--green);
   color: var(--dark);
 }
-/* .card-footer .btn {
-  width: 100%;
-} */
 .card-footer-btn.disabled {
   border: 1px solid var(--dark);
 }
@@ -112,42 +104,9 @@ a:hover {
   opacity: .65;
   color: #fff;
 }
-#deleteTreatment {
-  background-color: var(--orange);
-}
 .delete {
   display: flex;
   justify-content: end;
-}
-.avatar-icon-camera {
-  background-color: var(--yellow);
-  border: 1px solid var(--orange);
-  color: var(--dark);
-}
-.avatar-icon-pencil {
-  border: 1px solid var(--orange);
-  background-color: var(--platinum);
-  color: var(--dark);
-}
-.avatar-icon-trash {
-  border: 1px solid var(--platinum);
-  background-color: var(--orange);
-}
-.avatar-custom#misted {
-  background-color: var(--light);
-  border: 1px solid var(--orange);
-}
-.avatar-custom#pest-treated {
-  background-color: var(--orange);
-  border: 1px solid var(--green);
-}
-.avatar-custom#fertilized {
-  background-color: var(--yellow);
-  border: 1px solid var(--green);
-}
-.avatar-custom#repotted {
-  background-color: var(--platinum);
-  border: 1px solid var(--green);
 }
 .default-message {
   margin-top: 1rem;

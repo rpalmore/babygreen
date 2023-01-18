@@ -115,8 +115,10 @@
 
 <script>
 import photoService from "../services/PhotoService";
+// import VBTooltip from 'bootstrap-vue';
 export default {
   name: "plant-card",
+  // directives: { VBTooltip },
   props: ["plantId", "isEditingPlant"],
   data() {
     return {

@@ -148,4 +148,18 @@ export default {
 </script>
 
 <style>
+.avatar-icon-camera {
+  background-color: var(--yellow);
+  border: 1px solid var(--orange);
+  color: var(--dark);
+}
+.avatar-icon-pencil {
+  border: 1px solid var(--orange);
+  background-color: var(--platinum);
+  color: var(--dark);
+}
+.avatar-icon-trash {
+  border: 1px solid var(--platinum);
+  background-color: var(--orange);
+}
 </style>

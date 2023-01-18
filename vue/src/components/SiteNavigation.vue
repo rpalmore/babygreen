@@ -74,8 +74,10 @@
 </template>
 
 <script>
+import { DropdownPlugin } from 'bootstrap-vue'; 
 export default {
   name: "site-header",
+  componentPlugins: { DropdownPlugin },
   computed: {
     plants() {
       return this.$store.state.plants;
@@ -99,9 +101,6 @@ export default {
   background-color: var(--platinum);
   opacity: 0.9;
 }
-/* a:hover {
-  color: var(--orange);
-} */
 .nav-pills .nav-link.active,
 .nav-pills .show > .nav-link,
 .dropdown-item.active,
