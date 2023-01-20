@@ -81,10 +81,8 @@ import plantService from "../services/PlantService";
 import treatmentService from "../services/TreatmentService";
 import profileService from "../services/ProfileService";
 import { BTable } from 'bootstrap-vue';
-// import ModalPlugin from 'bootstrap-vue';
 export default {
   components: { AddPlant, LogCare, BTable},
-  // componentPlugins: { ModalPlugin },
   name: "plants",
   data() {
     return {

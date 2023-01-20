@@ -135,13 +135,9 @@
 
 <script>
 import treatmentService from "../services/TreatmentService";
-// import VBTooltip from 'bootstrap-vue';
-// import ModalPlugin from 'bootstrap-vue';
 export default {
   name: "care",
   components: {},
-  // directives: { VBTooltip },
-  // componentPlugins: { ModalPlugin },
   data() {
     return {
       modal: "",

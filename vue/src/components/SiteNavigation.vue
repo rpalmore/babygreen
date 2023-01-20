@@ -74,10 +74,8 @@
 </template>
 
 <script>
-import { DropdownPlugin } from 'bootstrap-vue'; 
 export default {
   name: "site-header",
-  componentPlugins: { DropdownPlugin },
   computed: {
     plants() {
       return this.$store.state.plants;

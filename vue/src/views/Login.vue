@@ -46,11 +46,11 @@
 
 <script>
 import authService from "../services/AuthService";
-// import treatmentService from "../services/TreatmentService";
 import About from "./About.vue";
+import { BSpinner } from 'bootstrap-vue';
 export default {
   name: "login",
-  components: { About },
+  components: { About, BSpinner },
   data() {
     return {
       user: {

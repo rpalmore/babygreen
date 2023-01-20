@@ -9,7 +9,6 @@ import { AvatarPlugin,
   ButtonPlugin, 
   CardPlugin, 
   CollapsePlugin, 
-  //DropdownPlugin, 
   FormPlugin, 
   FormCheckboxPlugin, 
   FormGroupPlugin, 
@@ -25,14 +24,12 @@ import { AvatarPlugin,
   NavPlugin, 
   VBToggle, 
   VBTooltip, 
-  //BTable, 
   BIconCameraFill, 
   BIconTrashFill, 
   BIconPencilFill, 
   BIconLink45deg, 
   BIconFilePost, 
-  BIconGithub, 
-  BSpinner } from 'bootstrap-vue'
+  BIconGithub } from 'bootstrap-vue'
 
 // Import Bootstrap and BootstrapVue CSS files (order is important)
 import 'bootstrap/dist/css/bootstrap.css'
@@ -46,7 +43,6 @@ Vue.use(BadgePlugin)
 Vue.use(ButtonPlugin)
 Vue.use(CardPlugin)
 Vue.use(CollapsePlugin)
-//Vue.use(DropdownPlugin)
 Vue.use(FormPlugin)
 Vue.use(FormCheckboxPlugin)
 Vue.use(FormGroupPlugin)
@@ -62,14 +58,12 @@ Vue.use(ModalPlugin)
 Vue.use(NavPlugin)
 Vue.directive('b-tooltip', VBTooltip)
 Vue.directive('b-toggle', VBToggle)
-//Vue.component('b-table', BTable)
 Vue.component('BIconCameraFill', BIconCameraFill)
 Vue.component('BIconTrashFill', BIconTrashFill)
 Vue.component('BIconPencilFill', BIconPencilFill)
 Vue.component('BIconGithub', BIconGithub)
 Vue.component('BIconLink45deg', BIconLink45deg)
 Vue.component('BIconFilePost', BIconFilePost)
-Vue.component('b-spinner', BSpinner)
 
 const eventsHub = new Vue()
  
