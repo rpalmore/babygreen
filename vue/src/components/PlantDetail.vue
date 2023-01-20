@@ -219,7 +219,6 @@
 import plantNoteService from "../services/PlantNoteService";
 import plantService from "../services/PlantService";
 import treatmentService from "../services/TreatmentService";
-// import EditNote from "./EditNote.vue";
 import EditPlant from "./EditPlant.vue";
 import NoteForm from "./NoteForm.vue";
 import PlantCard from "./PlantCard.vue";
@@ -434,6 +433,10 @@ export default {
   border: 1px solid var(--orange);
   font-size: 1rem;
   min-width: 142px;
+}
+.avatar-custom {
+  background-color: var(--green);
+  border: 1px solid var(--orange);
 }
 .avatar-custom#misted {
   background-color: var(--light);
