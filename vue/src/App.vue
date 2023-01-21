@@ -14,7 +14,7 @@
 <script>
 const SiteNavigation = () => import ("./components/SiteNavigation.vue");
 const SiteHeader = ()  => import ("./components/SiteHeader.vue");
-import SiteFooter from "./components/SiteFooter.vue";
+const SiteFooter = () => import("./components/SiteFooter.vue");
 
 export default {
   components: { SiteNavigation, SiteHeader, SiteFooter },

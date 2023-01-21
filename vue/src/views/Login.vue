@@ -32,10 +32,10 @@
       >
       </b-form-input>
       <b-button class="default mb-2 mr-sm-2 mb-sm-0" type="submit">Submit</b-button>
-      <!-- <router-link
+      <router-link
         :to="{
           name: 'password-reset'
-        }"><div class="forgot-password mb-2 mr-sm-2 mb-sm-0">Forgot password</div></router-link> -->
+        }"><div class="forgot-password mb-2 mr-sm-2 mb-sm-0">Forgot password</div></router-link>
     </b-form>
     <div v-if="clicked" class="spinner">
       <b-spinner label="Loading..."></b-spinner>
