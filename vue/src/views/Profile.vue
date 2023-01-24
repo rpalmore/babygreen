@@ -14,7 +14,7 @@
       @delete="deleteProfile(profile.userId)"
     />
 
-    <!-- Edit profile -->
+    <!-- Edit or create profile -->
     <b-collapse id="collapse-edit-form" class="mt-2">
       <b-row align-h="center">
         <b-form @submit.prevent="saveProfile()" id="profile-form">

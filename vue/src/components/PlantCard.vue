@@ -22,6 +22,15 @@
                 @click="$emit('toggleDate', plant)"
                 >{{ formatDate(plant.plantAge.replace(/-/g, "\/")) }}</a
               >.
+              <p class="plant-preference">
+                I like to be watered every
+                {{
+                  plant.plantSchedule != 0 ? plant.plantSchedule : "--"
+                }}
+                {{
+                  plant.plantSchedule != 0 && plant.plantSchedule > 1 ? "days" : "day"
+                }}.
+              </p>
             </b-card-text>
             <!-- FORM: edit plantAge -->
             <b-collapse id="collapse-date-form" class="mt-2">
@@ -119,8 +128,7 @@ export default {
   name: "plant-card",
   props: ["plantId", "isEditingPlant"],
   data() {
-    return {
-    };
+    return {};
   },
   computed: {
     plants() {
@@ -160,4 +168,7 @@ export default {
 </script>
 
 <style>
+.plant-preference {
+  margin-top: 1rem;
+}
 </style>

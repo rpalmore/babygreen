@@ -13,6 +13,8 @@
         ></b-avatar
       ></b-button>
     </p> -->
+    {{ formatDateDay(Date.now()) }}
+    {{ formatWithinWeek(Date.now()) }}
     <b-collapse id="collapse-form" class="mt-2">
       <AddPlant />
     </b-collapse>
@@ -54,10 +56,13 @@
       </template>
       <template #cell(careDate)="data">
         {{
-          !!data.item.careDate
+          data.item.careDate
             ? formatDateDay(data.item.careDate.replace(/-/g, "\/"))
             : ""
         }}
+      </template>
+      <template #cell(plantSchedule)="data">
+        {{ data.item.plantSchedule != 0 ? nextWatering(data.item) : "--" }}
       </template>
       <template #cell(plantImg)="data">
         <b-avatar
@@ -80,9 +85,9 @@ import LogCare from "../components/LogCare.vue";
 import plantService from "../services/PlantService";
 import treatmentService from "../services/TreatmentService";
 import profileService from "../services/ProfileService";
-import { BTable } from 'bootstrap-vue';
+import { BTable } from "bootstrap-vue";
 export default {
-  components: { AddPlant, LogCare, BTable},
+  components: { AddPlant, LogCare, BTable },
   name: "plants",
   data() {
     return {
@@ -103,6 +108,11 @@ export default {
         {
           key: "careDate",
           label: "Last Watered",
+          sortable: true,
+        },
+        {
+          key: "plantSchedule",
+          label: "Water me on ...",
           sortable: true,
         },
         {
@@ -138,9 +148,19 @@ export default {
         }
         return obj;
       });
-    }
+    },
   },
   methods: {
+    nextWatering(plant) {
+      let date = this.latestWatering.find((w) => w.plantId === plant.plantId);
+      if (date != undefined) {
+        let target = new Date(date.careDate);
+        target.setDate(target.getUTCDate() + plant.plantSchedule);
+        return this.formatDateDay(target);
+      }
+
+      return "--";
+    },
     selectImg(plantImg) {
       return plantImg === null ? require("@/assets/leaf.png") : plantImg;
     },
@@ -156,7 +176,9 @@ export default {
     selectAll() {
       if (this.checkAll === true) {
         for (let i = 0; i < this.combinedDataTables.length; i++) {
-          if (!this.selectedPlantIds.includes(this.combinedDataTables[i].plantId)) {
+          if (
+            !this.selectedPlantIds.includes(this.combinedDataTables[i].plantId)
+          ) {
             this.selectedPlantIds.push(this.combinedDataTables[i].plantId);
           }
         }
@@ -169,10 +191,15 @@ export default {
       this.newPlant = plant;
       this.showForm === true ? (this.showForm = false) : (this.showForm = true);
     },
+    formatWithinWeek(date) {
+      const options = {
+        weekday: "long",
+      };
+      return new Date(date).toLocaleString("en-US", options);
+    },
     formatDateDay(date) {
       const options = {
         weekday: "long",
-        //year: "numeric",
         month: "long",
         day: "numeric",
       };

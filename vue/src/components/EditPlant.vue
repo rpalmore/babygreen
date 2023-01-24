@@ -2,7 +2,7 @@
   <b-row align-h="center">
     <b-form @submit.prevent="editPlant(plant)" id="edit-plant-form">
       <b-form-group>
-        <label class="sr-only" for="plantName">New Plant Name:</label>
+        <label for="plantName">Plant name:</label>
         <b-form-input
           id="plantName"
           class="mb-2 mr-sm-2 mb-sm-0"
@@ -13,11 +13,22 @@
         ></b-form-input>
       </b-form-group>
       <b-form-group>
-        <label class="sr-only" for="plantName">Plant cared for since: </label>
+        <label for="plantName">Plant cared for since: </label>
         <b-form-input type="date" v-model="plant.plantAge"></b-form-input>
       </b-form-group>
       <b-form-group>
-        <label class="sr-only" for="infoUrl">Link to external site:</label>
+        <label for="plantName">I like to be watered every: </label>
+        <b-row id="schedule">
+          <b-col>
+        <b-form-input type="number" min="1" max="30" v-model="selectedNum" placeholder="Select number"></b-form-input>
+        </b-col>
+        <b-col>
+        <b-form-select :options="frequency" v-model="selectedFrequency"></b-form-select>
+        </b-col>
+        </b-row>
+      </b-form-group>
+      <b-form-group>
+        <label for="infoUrl">Link to external site:</label>
         <b-form-input
           id="infoUrl"
           class="mb-2 mr-sm-2 mb-sm-0"
@@ -30,7 +41,7 @@
       <b-form-radio-group
         required
         v-model="plant.indoor"
-        :options="options"
+        :options="location"
         :aria-describedby="ariaDescribedby"
         name="radio-inline"
       ></b-form-radio-group>
@@ -53,9 +64,15 @@ export default {
   name: "edit-plant",
   data() {
     return {
-      options: [
+      location: [
         { text: "Indoor", value: true },
         { text: "Outdoor", value: false },
+      ],
+      frequency: [
+        { text: "Select value", value: null },
+        { text: "Days", value: 1 },
+        { text: "Week", value: 7 },
+        { text: "Month", value: 30.4 }
       ],
     };
   },
@@ -72,6 +89,7 @@ export default {
   },
   methods: {
     editPlant(plant) {
+      plant.plantSchedule = (this.selectedNum * this.selectedFrequency);
       if (plant.plantAge === null) {
         let today = new Date();
         const dd = String(today.getDate()).padStart(2, "0");
