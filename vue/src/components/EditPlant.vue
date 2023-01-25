@@ -20,11 +20,20 @@
         <label for="plantName">I like to be watered every: </label>
         <b-row id="schedule">
           <b-col>
-        <b-form-input type="number" min="1" max="30" v-model="selectedNum" placeholder="Select number"></b-form-input>
-        </b-col>
-        <b-col>
-        <b-form-select :options="frequency" v-model="selectedFrequency"></b-form-select>
-        </b-col>
+            <b-form-input
+              type="number"
+              min="1"
+              max="30"
+              v-model="selectedNum"
+              placeholder="Select number"
+            ></b-form-input>
+          </b-col>
+          <b-col>
+            <b-form-select
+              :options="frequency"
+              v-model="selectedFrequency"
+            ></b-form-select>
+          </b-col>
         </b-row>
       </b-form-group>
       <b-form-group>
@@ -38,13 +47,13 @@
         ></b-form-input>
       </b-form-group>
       <b-form-group>
-      <b-form-radio-group
-        required
-        v-model="plant.indoor"
-        :options="location"
-        :aria-describedby="ariaDescribedby"
-        name="radio-inline"
-      ></b-form-radio-group>
+        <b-form-radio-group
+          required
+          v-model="plant.indoor"
+          :options="location"
+          :aria-describedby="ariaDescribedby"
+          name="radio-inline"
+        ></b-form-radio-group>
       </b-form-group>
       <b-button
         size="sm"
@@ -72,7 +81,7 @@ export default {
         { text: "Select value", value: null },
         { text: "Days", value: 1 },
         { text: "Week", value: 7 },
-        { text: "Month", value: 30.4 }
+        { text: "Month", value: 30 },
       ],
     };
   },
@@ -86,10 +95,30 @@ export default {
     plant() {
       return this.plants.find((p) => p.plantId == this.plantId);
     },
+    // selectedNum() {
+    //   return this.plant.plantSchedule % 30 === 0 
+    //   ? this.plant.plantSchedule / 30 : this.plant.plantSchedule % 7 === 0 
+    //   ? this.plant.plantSchedule / 7 : this.plant.plantSchedule;
+    // },
+    // selectedFrequency() {
+    //   return this.plant.plantSchedule % 30 === 0 
+    //   ? "months" : this.plant.plantSchedule % 7 === 0 
+    //   ? "weeks" : "days";
+    // },
+    numDays() {
+      return this.selectedNum * this.selectedFrequency;
+    }
+    // selectedNum() {
+    //   return this.plant.plantSchedule % 30 === 0
+    //     ? this.plant.plantSchedule / 30
+    //     : this.plant.plantSchedule % 7 === 0
+    //     ? this.plant.plantSchedule / 7 :
+    //     this.plant.plantSchedule;
+    // },
   },
   methods: {
     editPlant(plant) {
-      plant.plantSchedule = (this.selectedNum * this.selectedFrequency);
+      plant.plantSchedule = this.numDays;
       if (plant.plantAge === null) {
         let today = new Date();
         const dd = String(today.getDate()).padStart(2, "0");

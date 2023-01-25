@@ -211,7 +211,6 @@
       v-bind:isEditingNote="isEditingNote"
       @toggleNoteEdit="toggleNoteForm()"
     />
-
   </b-container>
 </template>
 
@@ -228,7 +227,6 @@ export default {
   name: "plant-detail",
   data() {
     return {
-      // note: {},
       savedNote: "",
       savedDate: "",
       savedName: "",
@@ -239,6 +237,12 @@ export default {
       isEditingPlant: false,
       modal: "",
     };
+  },
+  watch: {
+    $route() {
+      this.$root.$emit("bv::toggle::collapse", "collapse-edit-form");
+      this.toggleEditForm(this.plant);
+    },
   },
   computed: {
     plants() {
@@ -295,6 +299,7 @@ export default {
       this.savedDate = plant.plantAge;
     },
     toggleEditForm(plant) {
+      // add values here for plant schedule
       this.savedDate = plant.plantAge;
       this.savedName = plant.plantName;
       this.savedUrl = plant.infoUrl;
@@ -325,7 +330,6 @@ export default {
           if (response.status == 200) {
             this.$store.commit("EDIT_PLANT", this.plant);
             this.showInfoForm = false;
-            // Close the 'edit date form' after updating:
             this.$root.$emit("bv::toggle::collapse", "collapse-date-form");
           }
         })

@@ -23,13 +23,13 @@
                 >{{ formatDate(plant.plantAge.replace(/-/g, "\/")) }}</a
               >.
               <p class="plant-preference">
-                I like to be watered every
                 {{
-                  plant.plantSchedule != 0 ? plant.plantSchedule : "--"
+                  !!plant.plantSchedule
+                    ? "I like to be watered every " +
+                      determineSchedule(plant) +
+                      "."
+                    : "Add my watering schedule."
                 }}
-                {{
-                  plant.plantSchedule != 0 && plant.plantSchedule > 1 ? "days" : "day"
-                }}.
               </p>
             </b-card-text>
             <!-- FORM: edit plantAge -->
@@ -128,7 +128,8 @@ export default {
   name: "plant-card",
   props: ["plantId", "isEditingPlant"],
   data() {
-    return {};
+    return {
+    };
   },
   computed: {
     plants() {
@@ -145,6 +146,21 @@ export default {
     },
   },
   methods: {
+    determineSchedule(plant) {
+      let result = "";
+      plant.plantSchedule % 30 === 0 && plant.plantSchedule / 30 > 1
+        ? (result = plant.plantSchedule / 30 + " months")
+        : plant.plantSchedule % 30 === 0 && plant.plantSchedule / 30 === 1
+        ? (result = " month")
+        : plant.plantSchedule % 7 === 0 && plant.plantSchedule / 7 > 1
+        ? (result = plant.plantSchedule / 7 + " weeks")
+        : plant.plantSchedule % 7 === 0 && plant.plantSchedule / 7 === 1
+        ? (result = " week")
+        : plant.plantSchedule > 1
+        ? (result = plant.plantSchedule + " days")
+        : result = " day";
+      return result;
+    },
     formatDate(date) {
       const options = {
         year: "numeric",

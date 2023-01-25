@@ -112,7 +112,7 @@ export default {
         },
         {
           key: "plantSchedule",
-          label: "Water me on ...",
+          label: "Next Watering",
           sortable: true,
         },
         {
@@ -155,12 +155,16 @@ export default {
       let date = this.latestWatering.find((w) => w.plantId === plant.plantId);
       if (date != undefined) {
         let target = new Date(date.careDate);
-        target.setDate(target.getUTCDate() + plant.plantSchedule);
-        return this.formatDateDay(target);
+        target.setDate(target.getDate() + 1 + plant.plantSchedule);
+        let schedule =
+          this.formatDateDay(target) === this.formatDateDay(Date.now())
+            ? "Today!"
+            : this.formatDateDay(target);
+        return schedule;
       }
-
       return "--";
     },
+
     selectImg(plantImg) {
       return plantImg === null ? require("@/assets/leaf.png") : plantImg;
     },
