@@ -42,6 +42,7 @@ CREATE TABLE plants (
     indoor BOOLEAN NOT NULL,
     info_url varchar(500),
     plant_age date NOT NULL,
+    plant_schedule int,
     CONSTRAINT PK_plant PRIMARY KEY(plant_id),
     CONSTRAINT FK_user FOREIGN KEY(user_id)
     REFERENCES users(user_id)

@@ -25,7 +25,7 @@ public class JdbcPlantDao implements PlantDao {
 
         List<Plant> plantList = new ArrayList<>();
 
-        String sql = "SELECT plant_id, plant_img, plant_name, indoor, info_url, plant_age " +
+        String sql = "SELECT plant_id, plant_img, plant_name, indoor, info_url, plant_age, plant_schedule " +
                 "FROM plants WHERE user_id = ? " +
                 "ORDER BY plant_id DESC";
         SqlRowSet results = template.queryForRowSet(sql, userId);
@@ -39,6 +39,7 @@ public class JdbcPlantDao implements PlantDao {
             plant.setIndoor(results.getBoolean("indoor"));
             plant.setInfoUrl(results.getString("info_url"));
             plant.setPlantAge(results.getDate("plant_age").toLocalDate());
+            plant.setPlantSchedule(results.getInt("plant_schedule"));
 
             plantList.add(plant);
         }
@@ -50,7 +51,7 @@ public class JdbcPlantDao implements PlantDao {
     @Override
     public Plant getSinglePlant(int plantId) {
 
-        String sql = "SELECT plant_id, user_id, plant_img, plant_name, indoor, info_url, plant_age " +
+        String sql = "SELECT plant_id, user_id, plant_img, plant_name, indoor, info_url, plant_age, plant_schedule " +
                 "FROM plants WHERE plant_id = ?";
         SqlRowSet result = template.queryForRowSet(sql, plantId);
 
@@ -64,6 +65,7 @@ public class JdbcPlantDao implements PlantDao {
             selectedPlant.setIndoor(result.getBoolean("indoor"));
             selectedPlant.setInfoUrl(result.getString("info_url"));
             selectedPlant.setPlantAge(result.getDate("plant_age").toLocalDate());
+            selectedPlant.setPlantSchedule(result.getInt("plant_schedule"));
         }
 
         return selectedPlant;
@@ -85,10 +87,10 @@ public class JdbcPlantDao implements PlantDao {
     public void editPlant(Plant updatedPlant) {
 
         String sql = "UPDATE plants " +
-                "SET plant_img = ?, plant_name = ?, indoor = ?, info_url = ?, plant_age = ? " +
+                "SET plant_img = ?, plant_name = ?, indoor = ?, info_url = ?, plant_age = ?, plant_schedule = ? " +
                 "WHERE plant_id = ?";
         template.update(sql, updatedPlant.getPlantImg(), updatedPlant.getPlantName(),
-                updatedPlant.getIndoor(), updatedPlant.getInfoUrl(), updatedPlant.getPlantAge(), updatedPlant.getPlantId());
+                updatedPlant.getIndoor(), updatedPlant.getInfoUrl(), updatedPlant.getPlantAge(), updatedPlant.getPlantSchedule(), updatedPlant.getPlantId());
     }
 
     @Override

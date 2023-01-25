@@ -12,6 +12,7 @@ public class Plant {
     private Boolean indoor;
     private String infoUrl;
     private LocalDate plantAge;
+    private int plantSchedule;
 
     public int getPlantId() {
         return plantId;
@@ -67,5 +68,13 @@ public class Plant {
 
     public void setPlantAge(LocalDate plantAge) {
         this.plantAge = plantAge;
+    }
+
+    public int getPlantSchedule() {
+        return plantSchedule;
+    }
+
+    public void setPlantSchedule(int plantSchedule) {
+        this.plantSchedule = plantSchedule;
     }
 }
