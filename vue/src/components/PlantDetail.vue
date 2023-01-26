@@ -240,8 +240,10 @@ export default {
   },
   watch: {
     $route() {
+      if (this.isEditingPlant) {
       this.$root.$emit("bv::toggle::collapse", "collapse-edit-form");
       this.toggleEditForm(this.plant);
+      }
     },
   },
   computed: {
@@ -299,7 +301,6 @@ export default {
       this.savedDate = plant.plantAge;
     },
     toggleEditForm(plant) {
-      // add values here for plant schedule
       this.savedDate = plant.plantAge;
       this.savedName = plant.plantName;
       this.savedUrl = plant.infoUrl;

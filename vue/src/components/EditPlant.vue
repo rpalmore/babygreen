@@ -78,12 +78,20 @@ export default {
         { text: "Outdoor", value: false },
       ],
       frequency: [
-        { text: "Select value", value: null },
+        { text: "Select frequency", value: null },
         { text: "Days", value: 1 },
         { text: "Week", value: 7 },
         { text: "Month", value: 30 },
       ],
+      selectedFrequency: null,
+      selectedNum: null
     };
+  },
+    watch: {
+    $route() {
+      this.selectedFrequency = null;
+      this.selectedNum = null;
+    },
   },
   computed: {
     plants() {
@@ -95,26 +103,35 @@ export default {
     plant() {
       return this.plants.find((p) => p.plantId == this.plantId);
     },
-    // selectedNum() {
-    //   return this.plant.plantSchedule % 30 === 0 
-    //   ? this.plant.plantSchedule / 30 : this.plant.plantSchedule % 7 === 0 
-    //   ? this.plant.plantSchedule / 7 : this.plant.plantSchedule;
+    // selectedNum1() {
+    //   let result = null;
+    //   this.plant.plantSchedule != 0 && this.plant.plantSchedule % 30 === 0
+    //     ? (result = this.plant.plantSchedule / 30)
+    //     : this.plant.plantSchedule != 0 && this.plant.plantSchedule % 7 === 0
+    //     ? (result = this.plant.plantSchedule / 7)
+    //     : this.plant.plantSchedule == 0
+    //     ? (result = this.selectedNum)
+    //     : (result = this.plant.plantSchedule);
+    //     // eslint-disable-next-line no-console
+    //     console.log("selectedNum1 ", result)
+    //   return result;
     // },
-    // selectedFrequency() {
-    //   return this.plant.plantSchedule % 30 === 0 
-    //   ? "months" : this.plant.plantSchedule % 7 === 0 
-    //   ? "weeks" : "days";
+    // selectedFrequency1() {
+    //   let result = null;
+    //   this.plant.plantSchedule != 0 && this.plant.plantSchedule % 30 === 0
+    //     ? (result = 30)
+    //     : this.plant.plantSchedule != 0 && this.plant.plantSchedule % 7 === 0
+    //     ? (result = 7)
+    //     : this.plant.plantSchedule == 0
+    //     ? (result = this.selectedNum)
+    //     : (result = 1);
+    //         // eslint-disable-next-line no-console
+    //     console.log("selectedFre1 ", result)
+    //   return result;
     // },
     numDays() {
       return this.selectedNum * this.selectedFrequency;
-    }
-    // selectedNum() {
-    //   return this.plant.plantSchedule % 30 === 0
-    //     ? this.plant.plantSchedule / 30
-    //     : this.plant.plantSchedule % 7 === 0
-    //     ? this.plant.plantSchedule / 7 :
-    //     this.plant.plantSchedule;
-    // },
+    },
   },
   methods: {
     editPlant(plant) {
