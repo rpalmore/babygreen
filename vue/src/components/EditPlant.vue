@@ -22,9 +22,9 @@
           <b-col>
             <b-form-input
               type="number"
-              min="1"
+              min="0"
               max="30"
-              v-model="selectedNum"
+              v-model="plant.plantSchedule"
               placeholder="Select number"
             ></b-form-input>
           </b-col>
@@ -83,15 +83,8 @@ export default {
         { text: "Week", value: 7 },
         { text: "Month", value: 30 },
       ],
-      selectedFrequency: null,
-      selectedNum: null
+      selectedFrequency: 1,
     };
-  },
-    watch: {
-    $route() {
-      this.selectedFrequency = null;
-      this.selectedNum = null;
-    },
   },
   computed: {
     plants() {
@@ -103,34 +96,12 @@ export default {
     plant() {
       return this.plants.find((p) => p.plantId == this.plantId);
     },
-    // selectedNum1() {
-    //   let result = null;
-    //   this.plant.plantSchedule != 0 && this.plant.plantSchedule % 30 === 0
-    //     ? (result = this.plant.plantSchedule / 30)
-    //     : this.plant.plantSchedule != 0 && this.plant.plantSchedule % 7 === 0
-    //     ? (result = this.plant.plantSchedule / 7)
-    //     : this.plant.plantSchedule == 0
-    //     ? (result = this.selectedNum)
-    //     : (result = this.plant.plantSchedule);
-    //     // eslint-disable-next-line no-console
-    //     console.log("selectedNum1 ", result)
-    //   return result;
-    // },
-    // selectedFrequency1() {
-    //   let result = null;
-    //   this.plant.plantSchedule != 0 && this.plant.plantSchedule % 30 === 0
-    //     ? (result = 30)
-    //     : this.plant.plantSchedule != 0 && this.plant.plantSchedule % 7 === 0
-    //     ? (result = 7)
-    //     : this.plant.plantSchedule == 0
-    //     ? (result = this.selectedNum)
-    //     : (result = 1);
-    //         // eslint-disable-next-line no-console
-    //     console.log("selectedFre1 ", result)
-    //   return result;
-    // },
     numDays() {
-      return this.selectedNum * this.selectedFrequency;
+      let result = null;
+      this.selectedFrequency != null ? 
+      result = this.plant.plantSchedule * this.selectedFrequency 
+      : result = this.plant.plantSchedule;
+      return result;
     },
   },
   methods: {
@@ -150,6 +121,7 @@ export default {
           if (response.status == 200) {
             this.$store.commit("EDIT_PLANT", plant);
             this.$root.$emit("bv::toggle::collapse", "collapse-edit-form");
+            this.selectedFrequency = 1;
           }
         })
         .catch((err) => {

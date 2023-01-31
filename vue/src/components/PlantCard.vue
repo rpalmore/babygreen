@@ -18,22 +18,28 @@
               <a
                 v-b-tooltip.hover
                 title="Edit date"
-                v-b-toggle.collapse-date-form
-                @click="$emit('toggleDate', plant)"
+                v-b-toggle.collapse-edit-form
+                @click="$emit('toggleEdit', plant)"
                 >{{ formatDate(plant.plantAge.replace(/-/g, "\/")) }}</a
               >.
-              <p class="plant-preference">
+              <p class="plant-preference" v-if="!!plant.plantSchedule">
                 {{
-                  !!plant.plantSchedule
-                    ? "I like to be watered every " +
-                      determineSchedule(plant) +
-                      "."
-                    : "Add my watering schedule."
+                  "I like to be watered every " + determineSchedule(plant) + "."
                 }}
+              </p>
+
+              <p class="plant-preference" v-else>
+                <a
+                  v-b-tooltip.hover
+                  title="Add schedule"
+                  @click="$emit('toggleEdit', plant)"
+                  v-b-toggle.collapse-edit-form
+                  >{{ "Add a custom watering schedule" }}</a
+                >.
               </p>
             </b-card-text>
             <!-- FORM: edit plantAge -->
-            <b-collapse id="collapse-date-form" class="mt-2">
+            <!-- <b-collapse id="collapse-date-form" class="mt-2">
               <b-form @submit.prevent="editPlant()">
                 <label class="sr-only" for="plantAge"
                   >Plant cared for since:
@@ -55,7 +61,7 @@
                   >
                 </b-row>
               </b-form>
-            </b-collapse>
+            </b-collapse> -->
             <!-- end plant age edit form -->
             <b-card-text v-if="plant.infoUrl != null">
               <b-link target="_blank" :href="plant.infoUrl"
@@ -128,8 +134,7 @@ export default {
   name: "plant-card",
   props: ["plantId", "isEditingPlant"],
   data() {
-    return {
-    };
+    return {};
   },
   computed: {
     plants() {
@@ -146,19 +151,24 @@ export default {
     },
   },
   methods: {
+    addSchedule() {
+      return "Add a custom schedule.";
+    },
     determineSchedule(plant) {
       let result = "";
-      plant.plantSchedule % 30 === 0 && plant.plantSchedule / 30 > 1
-        ? (result = plant.plantSchedule / 30 + " months")
-        : plant.plantSchedule % 30 === 0 && plant.plantSchedule / 30 === 1
-        ? (result = " month")
-        : plant.plantSchedule % 7 === 0 && plant.plantSchedule / 7 > 1
-        ? (result = plant.plantSchedule / 7 + " weeks")
-        : plant.plantSchedule % 7 === 0 && plant.plantSchedule / 7 === 1
-        ? (result = " week")
-        : plant.plantSchedule > 1
-        ? (result = plant.plantSchedule + " days")
-        : result = " day";
+      if (plant.plantSchedule % 30 === 0) {
+        plant.plantSchedule / 30 > 1
+          ? (result = plant.plantSchedule / 30 + " months")
+          : (result = " month");
+      } else if (plant.plantSchedule % 7 === 0) {
+        plant.plantSchedule / 7 > 1
+          ? (result = plant.plantSchedule / 7 + " weeks")
+          : (result = " week");
+      } else if (plant.plantSchedule > 1) {
+        result = plant.plantSchedule + " days";
+      } else {
+        result = " day";
+      }
       return result;
     },
     formatDate(date) {

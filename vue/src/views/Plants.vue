@@ -13,8 +13,6 @@
         ></b-avatar
       ></b-button>
     </p> -->
-    {{ formatDateDay(Date.now()) }}
-    {{ formatWithinWeek(Date.now()) }}
     <b-collapse id="collapse-form" class="mt-2">
       <AddPlant />
     </b-collapse>
@@ -61,8 +59,15 @@
             : ""
         }}
       </template>
-      <template #cell(plantSchedule)="data">
-        {{ data.item.plantSchedule != 0 ? nextWatering(data.item) : "--" }}
+      <template #cell(nextWatering)="data">
+        {{
+          data.item.nextWatering == null
+            ? "--"
+            : formatDateDay(data.item.nextWatering) ==
+              formatDateDay(new Date(Date.now()))
+            ? "Today!"
+            : formatDateDay(data.item.nextWatering)
+        }}
       </template>
       <template #cell(plantImg)="data">
         <b-avatar
@@ -101,18 +106,18 @@ export default {
           sortable: true,
         },
         {
-          key: "indoor",
-          label: "Location",
-          sortable: true,
-        },
-        {
           key: "careDate",
           label: "Last Watered",
           sortable: true,
         },
         {
-          key: "plantSchedule",
+          key: "nextWatering",
           label: "Next Watering",
+          sortable: true,
+        },
+        {
+          key: "indoor",
+          label: "Location",
           sortable: true,
         },
         {
@@ -145,26 +150,15 @@ export default {
         let item = this.latestWatering.find((w) => w.plantId === obj.plantId);
         if (item) {
           Object.assign(obj, item);
+          let target = new Date(obj.careDate);
+          target.setDate(target.getDate() + 1 + obj.plantSchedule);
+          Object.assign(obj, { nextWatering: target });
         }
         return obj;
       });
     },
   },
   methods: {
-    nextWatering(plant) {
-      let date = this.latestWatering.find((w) => w.plantId === plant.plantId);
-      if (date != undefined) {
-        let target = new Date(date.careDate);
-        target.setDate(target.getDate() + 1 + plant.plantSchedule);
-        let schedule =
-          this.formatDateDay(target) === this.formatDateDay(Date.now())
-            ? "Today!"
-            : this.formatDateDay(target);
-        return schedule;
-      }
-      return "--";
-    },
-
     selectImg(plantImg) {
       return plantImg === null ? require("@/assets/leaf.png") : plantImg;
     },
