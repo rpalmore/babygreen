@@ -192,4 +192,7 @@ export default {
 </script>
 
 <style>
+#notePhoto {
+  padding: 1.25rem;
+}
 </style>

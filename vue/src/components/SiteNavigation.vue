@@ -20,10 +20,19 @@
           exact-active-class="active"
           >All plants</b-dropdown-item
         >
+        <b-dropdown-form>
+          <b-form-input
+            id="nav-search"
+            size="sm"
+            placeholder="Search plants"
+            type="text"
+            v-model="search"
+          ></b-form-input>
+        </b-dropdown-form>
         <b-dropdown-divider></b-dropdown-divider>
         <b-dropdown-item
           v-bind:plant="plant"
-          v-for="plant in plants"
+          v-for="plant in filteredList"
           v-bind:key="plant.plantId"
           :to="{ name: 'plant-detail', params: { plantId: plant.plantId } }"
           exact
@@ -76,9 +85,26 @@
 <script>
 export default {
   name: "site-header",
+  data() {
+    return {
+      search: "",
+    };
+  },
   computed: {
     plants() {
       return this.$store.state.plants;
+    },
+    filteredList() {
+      return this.plants.length > 0 ? this.plants.filter((p) => {
+        return p.plantName.toLowerCase().includes(this.search.toLowerCase());
+      }) : null
+    }
+  },
+  watch: {
+    $route() {
+      if (this.search.length > 0) {
+        this.search = "";
+      }
     },
   },
 };

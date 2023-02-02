@@ -24,8 +24,11 @@
       responsive
       outlined
       sort-icon-left
+      :sort-by.sync="sortBy"
+      :sort-desc.sync="sortDesc"
       :items="combinedDataTables"
       :fields="fields"
+      :tbody-tr-class="rowClass"
     >
       <template #head(selectAll)="data">
         <b-form-checkbox
@@ -62,7 +65,7 @@
       <template #cell(nextWatering)="data">
         {{
           data.item.nextWatering == null
-            ? "--"
+            ? '--'
             : formatDateDay(data.item.nextWatering) ==
               formatDateDay(new Date(Date.now()))
             ? "Today!"
@@ -125,10 +128,13 @@ export default {
           label: "",
         },
       ],
+      sortBy: 'careDate',
+      sortDesc: true,
       showForm: false,
       selectedPlantIds: [],
       checkAll: false,
       modal: "",
+      isToday: false,
     };
   },
   computed: {
@@ -159,6 +165,20 @@ export default {
     },
   },
   methods: {
+    rowClass(item, type) {
+      if (item && type === "row") {
+        if (
+          this.formatDateDay(item.nextWatering) ==
+          this.formatDateDay(new Date(Date.now()))
+        ) {
+          return "row-highlight";
+        } else {
+          return "";
+        }
+      } else {
+        return null;
+      }
+    },
     selectImg(plantImg) {
       return plantImg === null ? require("@/assets/leaf.png") : plantImg;
     },
@@ -275,5 +295,9 @@ export default {
 }
 .table td {
   vertical-align: middle;
+}
+.row-highlight {
+  border: 2px solid var(--green);
+  box-shadow: inset 0px 0px 0px 11px var(--light-shade1);
 }
 </style>
