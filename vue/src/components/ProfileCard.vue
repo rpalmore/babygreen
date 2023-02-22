@@ -105,7 +105,7 @@
 <script>
 import photoService from "../services/PhotoService";
 import Vue from 'vue';
-import { CollapsePlugin, CardPlugin, VBToggle } from 'bootstrap-vue';
+import { CollapsePlugin, CardPlugin } from 'bootstrap-vue';
 export default {
   name: "profile-card",
   props: ["profile", "isEditing"],
@@ -149,7 +149,6 @@ export default {
   created() {
     Vue.use(CollapsePlugin);
     Vue.use(CardPlugin);
-    // Vue.directive('b-toggle', VBToggle);
   }
 };
 </script>
