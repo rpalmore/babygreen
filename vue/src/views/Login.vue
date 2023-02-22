@@ -31,11 +31,11 @@
         required
       >
       </b-form-input>
-      <b-button class="default mb-2 mr-sm-2 mb-sm-0" type="submit">Submit</b-button>
-    </b-form>
-    <div v-if="clicked" class="spinner">
+      <b-button v-if="!loggingIn" class="default mb-2 mr-sm-2 mb-sm-0" type="submit">Submit</b-button>
+      <div v-if="loggingIn" class="spinner">
       <b-spinner label="Loading..."></b-spinner>
     </div>
+    </b-form>
     <About />
   </b-container>
 </template>
@@ -53,13 +53,13 @@ export default {
         username: "",
         password: "",
       },
-      clicked: false,
+      loggingIn: false,
       invalidCredentials: false,
     };
   },
   methods: {
     login() {
-      this.clicked = true;
+      this.loggingIn = true;
       authService
         .login(this.user)
         .then((response) => {
@@ -67,14 +67,14 @@ export default {
             this.$store.commit("SET_AUTH_TOKEN", response.data.token);
             this.$store.commit("SET_USER", response.data.user);
             this.$router.push("/plants");
-            this.clicked = false;
+            this.loggingIn = false;
           }
         })
         .catch((error) => {
           const response = error.response;
           if (response.status === 401) {
             this.invalidCredentials = true;
-            this.clicked = false;
+            this.loggingIn = false;
           }
         });
     },
@@ -83,11 +83,6 @@ export default {
 </script>
 
 <style scoped>
-.spinner {
-  display: flex;
-  margin-top: 2rem;
-  justify-content: center;
-}
 .forgot-password {
   font-weight: 300;
   color: var(--dark);
@@ -97,5 +92,8 @@ export default {
   color: var(--dark);
   background-color: var(--green);
   border-radius: 0.25rem;
+}
+.spinner {
+  padding-left: 2%;
 }
 </style>

@@ -125,7 +125,9 @@ export default {
           }
         })
         .catch((err) => {
-          alert(err + " problem editing plant!");
+          /* eslint no-console: ["error", { allow: ["error"] }] */
+          console.error(err + " problem editing plant!");
+          this.$router.push("/oops");
         });
     },
   },

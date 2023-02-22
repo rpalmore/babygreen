@@ -43,10 +43,10 @@
           </b-col>
           <b-col class="delete">
             <b-avatar
-              v-b-tooltip.hover
-              title="Delete this treatment"
               icon="trash-fill"
               id="deleteTreatment"
+              v-b-tooltip
+              title="Delete this treatment"
               size="sm"
               v-on:click="deleteTreatment(treatment)"
               href="#"
@@ -86,10 +86,10 @@
             </b-col>
             <b-col class="delete">
               <b-avatar
-                v-b-tooltip.hover
-                title="Delete this treatment"
                 icon="trash-fill"
                 id="deleteTreatment"
+                v-b-tooltip
+                title="Delete this treatment"
                 size="sm"
                 v-on:click="deleteTreatment(treatment)"
                 href="#"
@@ -125,10 +125,10 @@
           </b-col>
           <b-col class="delete">
             <b-avatar
-              v-b-tooltip.hover
-              title="Delete this treatment"
               icon="trash-fill"
               id="deleteTreatment"
+              v-b-tooltip
+              title="Delete this treatment"
               size="sm"
               v-on:click="deleteTreatment(treatment)"
               href="#"
@@ -169,10 +169,10 @@
             </b-col>
             <b-col class="delete">
               <b-avatar
-                v-b-tooltip.hover
-                title="Delete this treatment"
                 icon="trash-fill"
                 id="deleteTreatment"
+                v-b-tooltip
+                title="Delete this treatment"
                 size="sm"
                 v-on:click="deleteTreatment(treatment)"
                 href="#"
@@ -222,6 +222,8 @@ import EditPlant from "./EditPlant.vue";
 import NoteForm from "./NoteForm.vue";
 import PlantCard from "./PlantCard.vue";
 import NoteCard from "./NoteCard.vue";
+import Vue from 'vue';
+import { BadgePlugin, CollapsePlugin, ModalPlugin, VBTooltip } from 'bootstrap-vue';
 export default {
   components: { EditPlant, NoteForm, PlantCard, NoteCard },
   name: "plant-detail",
@@ -254,13 +256,13 @@ export default {
       return this.$route.params.plantId;
     },
     plant() {
-      return this.plants.find((p) => p.plantId == this.plantId);
+      return this.plants?.find((p) => p.plantId == this.plantId);
     },
-    notes() {
-      return this.$store.state.notes.filter((n) => n.plantId == this.plantId);
+    notes() {     
+      return this.$store.state.notes?.filter((n) => n.plantId == this.plantId);
     },
     treatments() {
-      return this.$store.state.treatments.filter(
+      return this.$store.state.treatments?.filter(
         (t) => t.plantId == this.plantId
       );
     },
@@ -335,7 +337,9 @@ export default {
           }
         })
         .catch((err) => {
-          alert(err + " problem editing plant!");
+          /* eslint no-console: ["error", { allow: ["error"] }] */
+          console.error(err + " problem editing plant!");
+          this.$router.push("/oops");
         });
     },
     deletePlant() {
@@ -356,7 +360,9 @@ export default {
                 }
               })
               .catch((err) => {
-                alert(err + " problem deleting plant!");
+                /* eslint no-console: ["error", { allow: ["error"] }] */
+                console.error(err + " problem deleting plant!");
+                this.$router.push("/oops");
               });
           }
         });
@@ -377,13 +383,19 @@ export default {
                 }
               })
               .catch((err) => {
-                alert(err + " problem deleting treatment!");
+                /* eslint no-console: ["error", { allow: ["error"] }] */
+                console.error(err + " problem deleting treatment!");
+                this.$router.push("/oops");
               });
           }
         });
     },
   },
   created() {
+    Vue.use(BadgePlugin);
+    Vue.use(CollapsePlugin);
+    Vue.use(ModalPlugin);
+    Vue.directive('b-tooltip', VBTooltip);
     treatmentService
       .getAllTreatments()
       .then((response) => {
@@ -392,7 +404,9 @@ export default {
         }
       })
       .catch((err) => {
-        alert(err + " problem getting treatments!");
+        /* eslint no-console: ["error", { allow: ["error"] }] */
+        console.error(err + " problem getting treatments!");
+        this.$router.push("/oops");
       });
     plantNoteService
       .getNotes()
@@ -402,7 +416,9 @@ export default {
         }
       })
       .catch((err) => {
-        alert(err + " problem getting notes!");
+        /* eslint no-console: ["error", { allow: ["error"] }] */
+        console.error(err + " problem getting notes!");
+        this.$router.push("/oops");
       });
   },
   mounted() {

@@ -3,19 +3,6 @@
     <b-row align-h="center">
       <p class="section-header">{{ name }}&#8217;s plants</p>
     </b-row>
-    <!-- <p>
-      <b-button id="toggleFormBtn" size="sm" v-b-toggle.collapse-form
-        ><span class="when-open">Close form</span
-        ><span class="when-closed">Add a plant</span>
-        <b-avatar
-          class="avatar-add-plant"
-          :src="require('@/assets/leaf.png')"
-        ></b-avatar
-      ></b-button>
-    </p> -->
-    <b-collapse id="collapse-form" class="mt-2">
-      <AddPlant />
-    </b-collapse>
 
     <!-- plants table -->
     <b-table
@@ -88,14 +75,14 @@
 </template>
 
 <script>
-import AddPlant from "../components/PlantForm.vue";
 import LogCare from "../components/LogCare.vue";
 import plantService from "../services/PlantService";
 import treatmentService from "../services/TreatmentService";
 import profileService from "../services/ProfileService";
-import { BTable } from "bootstrap-vue";
+import { BTable, ModalPlugin } from "bootstrap-vue";
+import Vue from 'vue';
 export default {
-  components: { AddPlant, LogCare, BTable },
+  components: { LogCare, BTable },
   name: "plants",
   data() {
     return {
@@ -157,8 +144,10 @@ export default {
         if (item) {
           Object.assign(obj, item);
           let target = new Date(obj.careDate);
+          if (obj.plantSchedule != 0) {
           target.setDate(target.getDate() + 1 + obj.plantSchedule);
           Object.assign(obj, { nextWatering: target });
+          }
         }
         return obj;
       });
@@ -225,25 +214,28 @@ export default {
     },
   },
   created() {
-    treatmentService
-      .getLatestWaterings()
+    Vue.use(ModalPlugin);
+    treatmentService.getLatestWaterings()
       .then((response) => {
         if (response.status == 200) {
           this.$store.commit("SET_LATEST_WATERING", response.data);
         }
       })
       .catch((err) => {
-        alert(err + " problem getting latest waterings!");
+        /* eslint no-console: ["error", { allow: ["error"] }] */
+        console.error(err + " problem getting latest waterings!");
+        this.$router.push("/oops");
       });
-    treatmentService
-      .getAllTreatments()
+    treatmentService.getAllTreatments()
       .then((response) => {
         if (response.status == 200) {
           this.$store.commit("SET_TREATMENTS", response.data);
         }
       })
       .catch((err) => {
-        alert(err + " problem getting treatments!");
+        /* eslint no-console: ["error", { allow: ["error"] }] */
+        console.error(err + " problem getting treatments!");
+        this.$router.push("/oops");
       });
     plantService
       .getAllPlants()
@@ -253,7 +245,9 @@ export default {
         }
       })
       .catch((err) => {
-        alert(err + " problem getting plants!");
+        /* eslint no-console: ["error", { allow: ["error"] }] */
+        console.error(err + " problem getting plants!");
+        this.$router.push("/oops");
       });
     profileService
       .getProfile()
@@ -263,7 +257,9 @@ export default {
         }
       })
       .catch((err) => {
-        alert(err + " problem getting profile!");
+        /* eslint no-console: ["error", { allow: ["error"] }] */
+        console.error(err + " problem getting profile!");
+        this.$router.push("/oops");
       });
   },
 };
@@ -276,10 +272,6 @@ export default {
   border: 1px solid var(--orange);
   font-size: 1rem;
   min-width: 142px;
-}
-.collapsed > .when-open,
-.not-collapsed > .when-closed {
-  display: none;
 }
 .avatar-custom {
   background-color: var(--green);
@@ -298,6 +290,9 @@ export default {
 }
 .row-highlight {
   border: 2px solid var(--green);
+  /* -moz-box-shadow: inset 0px 0px 0px 11px var(--light-shade1);
+  -webkit-box-shadow: inset 0px 0px 0px 11px var(--light-shade1); */
+  -webkit-appearance: none;
   box-shadow: inset 0px 0px 0px 11px var(--light-shade1);
 }
 </style>

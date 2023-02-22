@@ -26,7 +26,7 @@ export default {
 
 <style scoped>
 .jumbotron {
-  background: url(../assets/scott-webb-unsplash-3.webp) center center;
+  background: url(../assets/scott-webb-unsplash-3.jpg) center center;
   background-size: cover;
   height: 100%;
 }

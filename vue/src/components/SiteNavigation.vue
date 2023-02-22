@@ -83,6 +83,8 @@
 </template>
 
 <script>
+import Vue from 'vue';
+import { NavPlugin, CardPlugin } from 'bootstrap-vue';
 export default {
   name: "site-header",
   data() {
@@ -107,13 +109,17 @@ export default {
       }
     },
   },
+  created() {
+    Vue.use(NavPlugin);
+    Vue.use(CardPlugin);
+  }
 };
 </script>
 
 <style>
 #site-nav.card-header {
   display: flex;
-  background: url(../assets/avinash-kumar-1-unsplash-nav.webp) center center;
+  background: url(../assets/avinash-kumar-1-unsplash-nav.jpg) center center;
   background-size: cover;
   border-bottom: 2px solid var(--orange);
   justify-content: space-between;

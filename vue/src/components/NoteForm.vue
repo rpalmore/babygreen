@@ -69,7 +69,9 @@ export default {
           );
         })
         .catch((err) => {
-          alert(err + " problem creating note!");
+          /* eslint no-console: ["error", { allow: ["error"] }] */
+          console.error(err + " problem creating note!");
+          this.$router.push("/oops");
         });
     },
   },

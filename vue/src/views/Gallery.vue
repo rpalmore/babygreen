@@ -27,6 +27,8 @@
 </template>
 
 <script>
+import Vue from 'vue';
+import { CardPlugin } from 'bootstrap-vue';
 export default {
   name: "gallery",
   computed: {
@@ -42,10 +44,13 @@ export default {
     },
     selectPlantImg(plantImg) {
       return plantImg === null
-        ? require("@/assets/CandaceStone_Pixabay.png")
+        ? require("@/assets/CandaceStone_Pixabay400.png")
         : plantImg;
     },
   },
+  created() {
+    Vue.use(CardPlugin);
+  }
 };
 </script>
 

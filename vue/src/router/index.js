@@ -12,6 +12,7 @@ const About = () => import('../views/About.vue')
 const Gallery = () => import('../views/Gallery.vue')
 const Reset = () => import('../views/Reset.vue')
 const Settings = () => import('../views/Settings.vue')
+const ErrorPage = () => import('../components/ErrorPage.vue')
 import store from '../store/index'
 
 Vue.use(Router)
@@ -129,6 +130,14 @@ const router = new Router({
       path: "/gallery",
       name: "gallery",
       component: Gallery,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: "/oops",
+      name: "error-page",
+      component: ErrorPage,
       meta: {
         requiresAuth: true
       }

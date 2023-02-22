@@ -4,11 +4,7 @@ import IdleVue from 'idle-vue'
 import router from './router/index'
 import store from './store/index'
 import axios from 'axios'
-import { AvatarPlugin, 
-  BadgePlugin, 
-  ButtonPlugin, 
-  CardPlugin, 
-  CollapsePlugin, 
+import { ButtonPlugin, 
   FormPlugin, 
   FormCheckboxPlugin, 
   FormGroupPlugin, 
@@ -18,12 +14,8 @@ import { AvatarPlugin,
   FormTextareaPlugin, 
   JumbotronPlugin, 
   LayoutPlugin, 
-  LinkPlugin, 
   ListGroupPlugin, 
-  ModalPlugin, 
-  NavPlugin, 
   VBToggle, 
-  VBTooltip, 
   BIconCameraFill, 
   BIconTrashFill, 
   BIconPencilFill, 
@@ -35,14 +27,10 @@ import { AvatarPlugin,
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
-import "core-js/modules/es.promise";
-import "core-js/modules/es.array.iterator";
+// import "core-js/modules/es.promise";
+// import "core-js/modules/es.array.iterator";
 
-Vue.use(AvatarPlugin)
-Vue.use(BadgePlugin)
 Vue.use(ButtonPlugin)
-Vue.use(CardPlugin)
-Vue.use(CollapsePlugin)
 Vue.use(FormPlugin)
 Vue.use(FormCheckboxPlugin)
 Vue.use(FormGroupPlugin)
@@ -52,11 +40,7 @@ Vue.use(FormSelectPlugin)
 Vue.use(FormTextareaPlugin)
 Vue.use(JumbotronPlugin)
 Vue.use(LayoutPlugin)
-Vue.use(LinkPlugin)
 Vue.use(ListGroupPlugin)
-Vue.use(ModalPlugin)
-Vue.use(NavPlugin)
-Vue.directive('b-tooltip', VBTooltip)
 Vue.directive('b-toggle', VBToggle)
 Vue.component('BIconCameraFill', BIconCameraFill)
 Vue.component('BIconTrashFill', BIconTrashFill)

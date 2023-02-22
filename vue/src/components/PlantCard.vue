@@ -16,7 +16,8 @@
               I am an {{ plant.indoor == true ? "indoor" : "outdoor" }} plant
               and have been in {{ name }}&#8217;s care since
               <a
-                v-b-tooltip.hover
+                id="editDate"
+                v-b-tooltip
                 title="Edit date"
                 v-b-toggle.collapse-edit-form
                 @click="$emit('toggleEdit', plant)"
@@ -30,7 +31,8 @@
 
               <p class="plant-preference" v-else>
                 <a
-                  v-b-tooltip.hover
+                  id="addSchedule"
+                  v-b-tooltip
                   title="Add schedule"
                   @click="$emit('toggleEdit', plant)"
                   v-b-toggle.collapse-edit-form
@@ -38,31 +40,7 @@
                 >.
               </p>
             </b-card-text>
-            <!-- FORM: edit plantAge -->
-            <!-- <b-collapse id="collapse-date-form" class="mt-2">
-              <b-form @submit.prevent="editPlant()">
-                <label class="sr-only" for="plantAge"
-                  >Plant cared for since:
-                </label>
-                <b-form-input
-                  type="date"
-                  v-model="plant.plantAge"
-                ></b-form-input>
-                <b-row id="dateFormBtnGroup" no-gutters>
-                  <b-button
-                    size="sm"
-                    id="cancelDateForm"
-                    @click="$emit('cancelDateForm', $event, plant)"
-                    class="default"
-                    >Cancel</b-button
-                  >
-                  <b-button size="sm" type="submit" class="default"
-                    >Update</b-button
-                  >
-                </b-row>
-              </b-form>
-            </b-collapse> -->
-            <!-- end plant age edit form -->
+
             <b-card-text v-if="plant.infoUrl != null">
               <b-link target="_blank" :href="plant.infoUrl"
                 >Learn more about me here.<b-avatar
@@ -108,9 +86,10 @@
           </b-col>
           <b-col>
             <b-button
-              v-b-tooltip.hover
-              title="Delete this plant"
+              id="deletePlant"
               class="card-footer-btn"
+              v-b-tooltip
+              title="Delete this plant"
               size="sm"
               @click="$emit('deletePlant')"
             >
@@ -130,6 +109,8 @@
 
 <script>
 import photoService from "../services/PhotoService";
+import Vue from 'vue';
+import { CollapsePlugin, VBTooltip, CardPlugin, LinkPlugin } from 'bootstrap-vue';
 export default {
   name: "plant-card",
   props: ["plantId", "isEditingPlant"],
@@ -186,10 +167,16 @@ export default {
     },
     selectPlantImg(plantImg) {
       return plantImg === null
-        ? require("@/assets/CandaceStone_Pixabay.png")
+        ? require("@/assets/CandaceStone_Pixabay400.png")
         : plantImg;
     },
   },
+  created() {
+    Vue.use(CollapsePlugin);
+    Vue.use(CardPlugin);
+    Vue.use(LinkPlugin);
+    Vue.directive('b-tooltip', VBTooltip);
+  }
 };
 </script>
 

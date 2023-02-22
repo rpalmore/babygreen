@@ -5,7 +5,7 @@
     <b-card-group deck>
       <b-card
         title="list"
-        :img-src="require('../assets/severin-candrian-unsplash-300.webp')"
+        :img-src="require('../assets/severin-candrian-unsplash-300.jpg')"
         img-alt="(Photo by Severin Candrian / Unsplash)"
         img-top
       >
@@ -17,7 +17,7 @@
       <b-card
         title="log"
         :img-src="
-          require('../assets/severin-candrian-watering-unsplash-300.webp')
+          require('../assets/severin-candrian-watering-unsplash-300.jpg')
         "
         img-alt="(Photo by Severin Candrian / Unsplash)"
         img-top
@@ -31,7 +31,7 @@
 
       <b-card
         title="love"
-        :img-src="require('../assets/ranurte-unsplash-300.webp')"
+        :img-src="require('../assets/ranurte-unsplash-300.jpg')"
         img-alt="(Photo by Ranurte / Unsplash)"
         img-top
       >
@@ -45,8 +45,13 @@
 </template>
 
 <script>
+import Vue from 'vue';
+import { CardPlugin } from 'bootstrap-vue';
 export default {
   name: "about",
+  created() {
+    Vue.use(CardPlugin);
+  }
 };
 </script>
 

@@ -104,6 +104,8 @@
 
 <script>
 import photoService from "../services/PhotoService";
+import Vue from 'vue';
+import { CollapsePlugin, CardPlugin, VBToggle } from 'bootstrap-vue';
 export default {
   name: "profile-card",
   props: ["profile", "isEditing"],
@@ -114,7 +116,7 @@ export default {
     selectImg() {
       return this.profile.profileImg === undefined ||
         this.profile.profileImg === null
-        ? require("@/assets/CandaceStone_Pixabay.png")
+        ? require("@/assets/CandaceStone_Pixabay400.png")
         : this.profile.profileImg;
     },
     treatments() {
@@ -144,6 +146,11 @@ export default {
       }
     },
   },
+  created() {
+    Vue.use(CollapsePlugin);
+    Vue.use(CardPlugin);
+    // Vue.directive('b-toggle', VBToggle);
+  }
 };
 </script>
 

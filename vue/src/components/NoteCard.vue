@@ -110,6 +110,8 @@
 <script>
 import photoService from "../services/PhotoService";
 import plantNoteService from "../services/PlantNoteService";
+import Vue from 'vue';
+import { CollapsePlugin, ModalPlugin, CardPlugin } from 'bootstrap-vue';
 export default {
   name: "note-card",
   props: ["notes", "isEditingNote"],
@@ -147,7 +149,9 @@ export default {
             }
           })
           .catch((err) => {
-            alert(err + " problem updating note!");
+            /* eslint no-console: ["error", { allow: ["error"] }] */
+            console.error(err + " problem updating note!");
+            this.$router.push("/oops");
           });
       } else {
         this.showNoteForm = false;
@@ -182,12 +186,19 @@ export default {
                 }
               })
               .catch((err) => {
-                alert(err + " problem deleting note!");
+                /* eslint no-console: ["error", { allow: ["error"] }] */
+                console.error(err + " problem deleting note!");
+                this.$router.push("/oops");
               });
           }
         });
     },
   },
+  created() {
+    Vue.use(CollapsePlugin);
+    Vue.use(ModalPlugin);
+    Vue.use(CardPlugin);
+  }
 };
 </script>
 

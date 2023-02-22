@@ -68,8 +68,7 @@ export default {
     logCare() {
       this.treatment.plantId = this.selectedPlantIds;
       this.$emit("form-sent");
-      treatmentService
-        .createTreatment(this.treatment)
+      treatmentService.createTreatment(this.treatment)
         .then((response) => {
           if (response.status == 201) {
             this.$store.commit("ADD_TREATMENT", response.data);
@@ -103,7 +102,9 @@ export default {
           }
         })
         .catch((err) => {
-          alert(err + " problem creating treatment!");
+          /* eslint no-console: ["error", { allow: ["error"] }] */
+          console.error(err + " problem creating treatment!");
+          this.$router.push("/oops");
         });
     },
   },

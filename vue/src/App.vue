@@ -68,12 +68,6 @@ a:hover {
   border-left: 3px solid var(--orange);
   color: var(--platinum);
 }
-/* .btn.delete {
-  background-color: var(--orange);
-  border-right: 3px solid var(--dark);
-  border-left: 3px solid var(--dark);
-  color: var(--dark);
-} */
 .card {
   border: 1px solid var(--gray);
 }

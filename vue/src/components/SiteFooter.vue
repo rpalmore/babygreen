@@ -8,8 +8,14 @@
 </template>
 
 <script>
+import { AvatarPlugin, LinkPlugin } from 'bootstrap-vue';
+import Vue from 'vue'
 export default {
-  name: "site-footer"
+  name: "site-footer",
+  created() {
+    Vue.use(AvatarPlugin);
+    Vue.use(LinkPlugin);
+  }
 };
 </script>
 

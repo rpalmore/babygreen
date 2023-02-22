@@ -54,7 +54,9 @@ const myWidget = window.cloudinary.createUploadWidget(
                             }
                         })
                         .catch((err) => {
-                            alert(err + " problem creating profile!");
+                            /* eslint no-console: ["error", { allow: ["error"] }] */
+                            console.error(err + " problem creating profile!");
+                            this.$router.push("/oops");
                         });
                 } else {
                     profile.profileImg = result.info.secure_url;
@@ -66,7 +68,9 @@ const myWidget = window.cloudinary.createUploadWidget(
                             }
                         })
                         .catch((err) => {
-                            alert(err + " problem updating profile!");
+                            /* eslint no-console: ["error", { allow: ["error"] }] */
+                            console.error(err + " problem updating profile!");
+                            this.$router.push("/oops");
                         });
                 }
             } else if (store.state.cloudinarySource === 'plant') {
@@ -77,7 +81,9 @@ const myWidget = window.cloudinary.createUploadWidget(
                         store.commit("EDIT_PLANT", plant);
                     }
                 }).catch((err) => {
-                    alert(err + " problem updating plant!");
+                    /* eslint no-console: ["error", { allow: ["error"] }] */
+                    console.error(err + " problem updating plant!");
+                    this.$router.push("/oops");
                 });
             } else if (store.state.cloudinarySource === 'note') {
                 let note = store.state.object;
@@ -87,7 +93,9 @@ const myWidget = window.cloudinary.createUploadWidget(
                         store.commit("EDIT_NOTE", note);
                     }
                 }).catch((err) => {
-                    alert(err + " problem updating note!");
+                    /* eslint no-console: ["error", { allow: ["error"] }] */
+                    console.error(err + " problem updating note!");
+                    this.$router.push("/oops");
                 })
             }
         }

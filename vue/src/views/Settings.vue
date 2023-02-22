@@ -59,7 +59,7 @@
     <b-container class="list-container">
       <b-list-group>
         <b-list-group-item class="settings-list">
-          <span v-b-tooltip.hover title="Username cannot be changed">{{
+          <span v-b-tooltip title="Username cannot be changed">{{
             user.username
           }}</span>
         </b-list-group-item>
@@ -73,9 +73,9 @@
         <b-list-group-item v-if="!this.isClickedPWForm" class="settings-list">
           <span
             class="list-data"
-            v-b-tooltip.hover
-            title="Not for display"
             id="password-placeholder"
+            v-b-tooltip 
+            title="Not for display"
             >&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;</span
           >
           <b-button
@@ -134,12 +134,11 @@
 
 <script>
 import authService from "../services/AuthService";
-// import VBTooltip from 'bootstrap-vue';
-import ModalPlugin from 'bootstrap-vue';
+import Vue from 'vue';
+import { ModalPlugin, VBTooltip } from 'bootstrap-vue';
 export default {
   name: "settings",
-  // directives: { VBTooltip },
-  componentPlugins: { ModalPlugin },
+  components: {},
   data() {
     return {
       modal: "",
@@ -205,7 +204,9 @@ export default {
           }
         })
         .catch((err) => {
-          alert(err + " problem updating " + event + ".");
+          /* eslint no-console: ["error", { allow: ["error"] }] */
+          console.error(err + " problem updating " + event + ".");
+          //this.$router.push("/oops"); DO WE NEED TO REROUTE?
           this.toggleForm(event);
         });
     },
@@ -235,6 +236,10 @@ export default {
       }
     },
   },
+  created() {
+    Vue.use(ModalPlugin);
+    Vue.directive('b-tooltip', VBTooltip);
+  }
 };
 </script>
 
@@ -250,7 +255,6 @@ export default {
 #email-reset,
 #password-reset {
   gap: 0.3rem;
-  /* justify-content: space-around; */
 }
 #password-placeholder {
   color: var(--grey);

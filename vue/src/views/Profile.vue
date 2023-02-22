@@ -73,6 +73,8 @@
 import profileService from "../services/ProfileService";
 import treatmentService from "../services/TreatmentService";
 import ProfileCard from "../components/ProfileCard.vue";
+import Vue from 'vue';
+import { CollapsePlugin, ModalPlugin } from 'bootstrap-vue';
 export default {
   name: "profile",
   components: { ProfileCard },
@@ -154,7 +156,9 @@ export default {
             };
           })
           .catch((err) => {
-            alert(err + " problem creating profile!");
+            /* eslint no-console: ["error", { allow: ["error"] }] */
+            console.error(err + " problem creating profile!");
+            this.$router.push("/oops");
           });
       } else {
         profileService
@@ -166,7 +170,9 @@ export default {
             }
           })
           .catch((err) => {
-            alert(err + " problem updating profile!");
+            /* eslint no-console: ["error", { allow: ["error"] }] */
+            console.error(err + " problem updating profile!");
+            this.$router.push("/oops");
           });
       }
     },
@@ -192,13 +198,17 @@ export default {
                 }
               })
               .catch((err) => {
-                alert(err + " problem deleting profile!");
+                /* eslint no-console: ["error", { allow: ["error"] }] */
+                console.error(err + " problem deleting profile!");
+                this.$router.push("/oops");
               });
           }
         });
     },
   },
   created() {
+    Vue.use(CollapsePlugin);
+    Vue.use(ModalPlugin);
     profileService
       .getProfile()
       .then((response) => {
@@ -207,7 +217,9 @@ export default {
         }
       })
       .catch((err) => {
-        alert(err + " problem getting profile!");
+        /* eslint no-console: ["error", { allow: ["error"] }] */
+        console.error(err + " problem getting profile!");
+        this.$router.push("/oops");
       });
     treatmentService
       .getLatestTreatment()
@@ -217,7 +229,9 @@ export default {
         }
       })
       .catch((err) => {
-        alert(err + " problem getting latest treatment!");
+        /* eslint no-console: ["error", { allow: ["error"] }] */
+        console.error(err + " problem getting latest treatment!");
+        this.$router.push("/oops");
       });
   },
   mounted() {
@@ -237,7 +251,6 @@ export default {
   margin-top: 1rem;
 }
 .card-footer-row {
-  /* align-items: flex-end; */
   height: 100%;
 }
 .text-center.middle.col {

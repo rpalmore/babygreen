@@ -75,7 +75,9 @@ export default {
           }
         })
         .catch((err) => {
-          alert(err + " problem creating plant!");
+          /* eslint no-console: ["error", { allow: ["error"] }] */
+          console.error(err + " problem creating plant!");
+          this.$router.push("/oops");
         });
     },
     cancel() {

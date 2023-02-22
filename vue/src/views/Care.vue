@@ -48,10 +48,10 @@
             <b-col class="delete">
               <b-avatar
                 button
-                v-b-tooltip.hover
-                title="Delete treatment"
                 icon="trash-fill"
                 id="deleteTreatment"
+                v-b-tooltip
+                title="Delete treatment"
                 size="sm"
                 @click="deleteTreatment(treatment)"
               ></b-avatar>
@@ -77,10 +77,10 @@
         {{ formatDateDay(uniqueDate.replace(/-/g, "\/")) }}
               <b-avatar
                 button
-                v-b-tooltip.hover
-                title="Delete all treatments by date"
                 icon="trash-fill"
                 id="deleteTreatmentByDate"
+                v-b-tooltip
+                title="Delete all treatments by date"
                 size="sm"
                 @click="deleteTreatmentByDate(uniqueDate)"
               ></b-avatar>
@@ -118,7 +118,7 @@
             <b-col class="delete">
              <b-avatar
                 button
-                v-b-tooltip.hover
+                v-b-tooltip
                 title="Delete treatment"
                 icon="trash-fill"
                 id="deleteTreatment"
@@ -135,6 +135,8 @@
 
 <script>
 import treatmentService from "../services/TreatmentService";
+import Vue from 'vue';
+import { BadgePlugin, CollapsePlugin, ModalPlugin, VBTooltip, LinkPlugin } from 'bootstrap-vue';
 export default {
   name: "care",
   components: {},
@@ -193,7 +195,9 @@ export default {
                 }
               })
               .catch((err) => {
-                alert(err + " problem deleting treatment!");
+                /* eslint no-console: ["error", { allow: ["error"] }] */
+                console.error(err + " problem deleting treatment!");
+                this.$router.push("/oops");
               });
           }
         });
@@ -215,13 +219,20 @@ export default {
                 }
               })
               .catch((err) => {
-                alert(err + " problem deleting treatment!");
+                /* eslint no-console: ["error", { allow: ["error"] }] */
+                console.error(err + " problem deleting treatment!");
+                this.$router.push("/oops");
               });
           }
         });
     },
   },
   created() {
+    Vue.use(BadgePlugin);
+    Vue.use(CollapsePlugin);
+    Vue.use(ModalPlugin);
+    Vue.use(LinkPlugin);
+    Vue.directive('b-tooltip', VBTooltip);
     treatmentService
       .getAllTreatments()
       .then((response) => {
@@ -230,7 +241,9 @@ export default {
         }
       })
       .catch((err) => {
-        alert(err + " problem getting treatments!");
+        /* eslint no-console: ["error", { allow: ["error"] }] */
+        console.error(err + " problem deleting treatment!");
+        this.$router.push("/oops");
       });
   },
 };
