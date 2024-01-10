@@ -1,12 +1,12 @@
 package com.techelevator.dao;
 
-import com.techelevator.model.Treatment;
 import com.techelevator.model.TreatmentDetails;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +21,6 @@ public class JdbcTreatmentDetailsDao implements TreatmentDetailsDao {
 
     @Override
     public List<TreatmentDetails> getAllTreatments(int userId) {
-
         List<TreatmentDetails> treatmentDetails = new ArrayList<>();
 
         String sql = "SELECT care_date, care_type, plant_name, plants.plant_id, treatments.care_id " +
@@ -40,7 +39,25 @@ public class JdbcTreatmentDetailsDao implements TreatmentDetailsDao {
             details.setPlantId(results.getInt("plant_id"));
             details.setCareId(results.getInt("care_id"));
 
-            treatmentDetails.add(details);
+            LocalDate today = LocalDate.now();
+            LocalDate fourMonthsAgo = today.minusMonths(4);
+
+            if ("watered".equals(details.getCareType()) && details.getCareDate().compareTo(fourMonthsAgo) < 1) {
+                String sql1 = "DELETE FROM plants_treatments " +
+                        "WHERE plant_id = ? AND care_id = ?";
+                template.update(sql1, details.getPlantId(), details.getCareId());
+                String sql2 = "SELECT count(care_id) FROM plants_treatments " +
+                        "WHERE care_id = ?";
+                int results1 = template.queryForObject(sql2, Integer.class, details.getCareId());
+                if (results1 == 0) {
+                    String sql3 = "DELETE FROM treatments " +
+                            "WHERE care_id = ?";
+                    template.update(sql3, details.getCareId());
+                }
+            } else {
+                treatmentDetails.add(details);
+            }
+
         }
 
         return treatmentDetails;
