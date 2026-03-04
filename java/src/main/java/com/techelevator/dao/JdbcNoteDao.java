@@ -28,7 +28,7 @@ public class JdbcNoteDao implements NoteDao {
                 "FROM notes " +
                 "JOIN plants on plants.plant_id = notes.plant_id " +
                 "WHERE plants.user_id = ? " +
-                "ORDER BY created_on DESC";
+                "\nORDER BY created_on DESC";
         SqlRowSet results = template.queryForRowSet(sql, userId);
 
         while (results.next()) {
