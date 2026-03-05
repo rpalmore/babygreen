@@ -41,10 +41,13 @@ public class JdbcLatestTreatmentDao implements LatestTreatmentDao {
 
         if (latest != null) {
 
-            String sql2 = "SELECT count(care_id) FROM plants_treatments " +
-                    "WHERE care_id = ?";
+            String sql2 = "SELECT count(plants_treatments.care_id) FROM plants_treatments WHERE plants_treatments.care_id IN " +
+                    "(SELECT treatments.care_id FROM treatments JOIN plants_treatments " +
+                    "ON plants_treatments.care_id = treatments.care_id " +
+                    "JOIN plants on plants.plant_id = plants_treatments.plant_id " +
+                    "WHERE care_type = ? AND care_date = ? AND user_id = ?)";
 
-            int plants = template.queryForObject(sql2, Integer.class, latest.getCareId());
+            int plants = template.queryForObject(sql2, Integer.class, latest.getCareType(), latest.getCareDate(), userId);
 
             latest.setNumPlants(plants);
         }
