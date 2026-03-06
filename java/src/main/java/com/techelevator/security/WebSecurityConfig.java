@@ -92,6 +92,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         CorsConfiguration config = new CorsConfiguration();
         // Must include the port number for localhost!
         config.setAllowedOrigins(Arrays.asList(
+                "http://localhost:8080",
                 "http://localhost:8081",
                 "https://babygreen.netlify.app"
         ));
