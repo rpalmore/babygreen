@@ -51,8 +51,6 @@ export default {
       this.formatDate();
       this.plant.plantAge = this.today;
       this.plant.indoor = false;
-      // eslint-disable-next-line no-console
-      console.log('xxx_plant', this.plant);
       plantService
         .createPlant(this.plant)
         .then((response) => {

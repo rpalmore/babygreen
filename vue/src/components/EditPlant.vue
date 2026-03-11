@@ -82,7 +82,6 @@ export default {
   methods: {
     editPlant(plant) {
       plant.plantSchedule = this.numDays;
-      plant.indoor = false;
       if (plant.plantAge === null) {
         let today = new Date();
         const dd = String(today.getDate()).padStart(2, "0");
@@ -91,8 +90,6 @@ export default {
         today = yyyy + "-" + mm + "-" + dd;
         plant.plantAge = today;
       }
-      // eslint-disable-next-line no-console
-      console.log('xxx_plant', plant);
       plantService
         .editPlant(plant)
         .then((response) => {

@@ -3,10 +3,10 @@
     <b-row align-h="center">
       <p class="section-header">{{ name }}&#8217;s plants</p>
     </b-row>
-    <LogCare v-bind:selectedPlantIds="selectedPlantIds" @form-sent="updateSelectedIds" />
+    <LogCare v-bind:selectedPlantIds="selectedPlantIds" @form-sent="updateSelectedIds" @type-changed="filterTypes" />
     <!-- plants table -->
     <b-table id="plant-table" hover responsive outlined sort-icon-left :sort-by.sync="sortBy" :sort-desc.sync="sortDesc"
-      :items="combinedDataTables" :fields="fields" :tbody-tr-class="rowClass">
+      :items="filteredData" :fields="fields" :tbody-tr-class="rowClass">
       <template #head(selectAll)="data">
         <b-form-checkbox v-bind:value="data.checkAll" v-model="checkAll" v-on:change="selectAll">
         </b-form-checkbox>
@@ -82,11 +82,6 @@ export default {
           label: "Last Watered",
           sortable: true
         },
-        // {
-        //   key: "indoor",
-        //   label: "Location",
-        //   sortable: true,
-        // },
         {
           key: "plantImg",
           label: "Photo",
@@ -100,7 +95,8 @@ export default {
       modal: "",
       isToday: false,
       futureDateA: new Date(2099, 0, 1, 0, 0, 0), // Jan 1, 2099
-      futureDateB: new Date(2099, 1, 1, 0, 0, 0) // Feb 1, 2099
+      futureDateB: new Date(2099, 1, 1, 0, 0, 0), // Feb 1, 2099
+      selected: 'all'
     };
   },
   computed: {
@@ -143,6 +139,9 @@ export default {
         return obj;
       });
     },
+    filteredData() {
+      return this.selected === 'all' ? this.combinedDataTables : this.combinedDataTables.filter(a => a.locationType === this.selected);
+    }
   },
   methods: {
     rowClass(item, type) {
@@ -190,6 +189,9 @@ export default {
     updateSelectedIds() {
       this.checkAll = false;
       this.selectedPlantIds = [];
+    },
+    filterTypes(value) {
+      this.selected = value;
     },
     selectAll() {
       if (this.checkAll === true) {

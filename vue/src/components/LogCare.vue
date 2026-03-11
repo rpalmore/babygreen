@@ -1,15 +1,26 @@
 <template>
   <b-container fluid id="log-care-container">
-    <b-form inline id="log-care-form" @submit.prevent="logCare">
-      <label class="log-details">Select a treatment:</label>
-      <b-form-radio-group required v-model="treatment.careType" :options="options" :aria-describedby="ariaDescribedby"
-        name="radio-inline">
-      </b-form-radio-group>
-      <label class="sr-only" for="careDate">Date</label>
-      <b-form-input required class="log-details" name="careDate" id="careDate" type="date" v-model="myDate">
-      </b-form-input>
-      <b-button size="sm" v-bind:disabled="btnDisabled" id="logCare" class="default" type="submit">Log</b-button>
-    </b-form>
+    <b-row>
+      <b-col>
+        <b-form class="log-care-form" @submit.prevent="logCare">
+          <label>Select a treatment:</label>
+          <b-form-radio-group stacked required v-model="treatment.careType" :options="options"
+            :aria-describedby="ariaDescribedby" name="radio-inline">
+          </b-form-radio-group>
+          <label class="sr-only" for="careDate">Date</label>
+          <b-form-input required class="form-gap" name="careDate" id="careDate" type="date" v-model="myDate">
+          </b-form-input>
+          <b-button size="sm" v-bind:disabled="btnDisabled" id="logCareBtn" class="default" type="submit">Log</b-button>
+        </b-form>
+      </b-col>
+      <b-col>
+        <b-form class="log-care-form">
+          <label>Show:</label>
+          <b-form-radio-group stacked v-model="selected" :options="types"
+            @change="handleRadioChange"></b-form-radio-group>
+        </b-form>
+      </b-col>
+    </b-row>
     <ErrorModal />
   </b-container>
 </template>
@@ -32,6 +43,13 @@ export default {
         { text: "Repotted", value: "repotted" },
         { text: "Pest-treated", value: "pest-treated" },
         { text: "Fertilized", value: "fertilized" },
+      ],
+      selected: 'all',
+      types: [
+        { text: "All plants", value: "all" },
+        { text: "Indoor plants", value: "indoor" },
+        { text: "Outdoor plants", value: "outdoor" },
+        { text: "Landscape plants", value: "landscape" }
       ],
       myDate: new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 10)
     };
@@ -125,6 +143,9 @@ export default {
       }
       this.treatment = {};
     },
+    handleRadioChange(value) {
+      this.$emit("type-changed", value);
+    }
   },
 };
 </script>
@@ -136,12 +157,12 @@ export default {
   border-left: 5px solid var(--green);
 }
 
-#log-care-form {
+.log-care-form {
   padding: 15px 0 15px 0;
-  gap: 0.3rem;
 }
 
-.log-details {
-  margin-right: 1rem;
+#logCareBtn,
+.form-gap {
+  margin-top: 0.5rem;
 }
 </style>
