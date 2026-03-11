@@ -1,8 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-const Login = () => import('../views/Login.vue')
 const Logout = () => import('../views/Logout.vue')
-const Register = () => import('../views/Register.vue')
 const Profile = () => import('../views/Profile.vue')
 const AddPlant = () => import('../views/AddPlant.vue')
 const Plants = () => import('../views/Plants.vue')
@@ -33,7 +31,7 @@ const router = new Router({
     {
       path: "/login",
       name: "login",
-      component: Login,
+      component: About,
       meta: {
         requiresAuth: false
       }
@@ -49,7 +47,7 @@ const router = new Router({
     {
       path: "/register",
       name: "register",
-      component: Register,
+      component: About,
       meta: {
         requiresAuth: false
       }

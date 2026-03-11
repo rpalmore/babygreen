@@ -103,6 +103,7 @@ a:hover {
   justify-content: end;
 }
 .default-message {
+  text-align: center;
   margin-top: 1rem;
 }
 .subsection-header {

@@ -7,22 +7,10 @@
       </b-form-group>
       <b-form-group>
         <label for="createdOn">Date:</label>
-        <b-form-input
-              required
-              name="createdOn"
-              id="createdOn"
-              type="date"
-              v-model="note.createdOn"
-            >
-            </b-form-input>
+        <b-form-input required name="createdOn" id="createdOn" type="date" v-model="myDate">
+        </b-form-input>
       </b-form-group>
-      <b-button
-        size="sm"
-        id="cancelNote"
-        @click="cancelForm()"
-        class="default"
-        >Cancel</b-button
-      >
+      <b-button size="sm" id="cancelNote" @click="cancelForm()" class="default">Cancel</b-button>
       <b-button size="sm" type="submit" class="default">Save</b-button>
     </b-form>
   </b-container>
@@ -37,7 +25,8 @@ export default {
   components: {},
   data() {
     return {
-      note: {}
+      note: {},
+      myDate: new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 10)
     };
   },
   methods: {
@@ -49,6 +38,7 @@ export default {
       );
     },
     saveNote(note) {
+      this.note.createdOn = this.myDate;
       this.note = {
         plantId: this.plantId,
         note: note.note,
@@ -69,9 +59,9 @@ export default {
           );
         })
         .catch((err) => {
+          this.$bvModal.show('error-modal');
           /* eslint no-console: ["error", { allow: ["error"] }] */
           console.error(err + " problem creating note!");
-          this.$router.push("/oops");
         });
     },
   },

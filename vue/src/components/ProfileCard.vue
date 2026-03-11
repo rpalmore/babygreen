@@ -35,7 +35,7 @@
                 {{ latestTreatment.careType }}
                 {{ latestTreatment.numPlants }}
                 {{ latestTreatment.numPlants == 1 ? " plant on " : "plants on "
-                }}<router-link :to="{ name: 'care' }">
+                }}<router-link :to=" latestTreatment.careType == 'watered' ? '/plants' : '/plant-care' ">
                   <span class="profileData">{{
                     formatDateMonth(
                       latestTreatment.careDate.replace(/-/g, "\/")
@@ -99,18 +99,34 @@
         </b-row>
       </b-card-footer>
     </b-card>
+    <b-collapse id="collapse-note-form" class="mt-2">
+      <NoteForm />
+    </b-collapse>
+    <NoteCard v-bind:isEditingNote="isEditingNote" />
   </b-row>
+
+    <!-- <NoteCard
+      v-bind:notes="notes"
+      v-bind:isEditingNote="isEditingNote"
+      @toggleNoteEdit="toggleNoteForm()"
+    /> -->
 </template>
 
 <script>
 import photoService from "../services/PhotoService";
 import Vue from 'vue';
 import { CollapsePlugin, CardPlugin } from 'bootstrap-vue';
+import NoteForm from "./NoteForm.vue";
+import NoteCard from "./NoteCard.vue";
 export default {
+  components: { NoteForm, NoteCard },
   name: "profile-card",
   props: ["profile", "isEditing"],
   data() {
-    return {};
+    return {
+      isEditingNote: true,
+      modal: "",
+    };
   },
   computed: {
     selectImg() {
@@ -134,7 +150,7 @@ export default {
   methods: {
     useCloudinary(event) {
       photoService.myWidget.open();
-      this.$store.commit("SET_CLOUDINARY_SOURCE", event.target.id);
+      this.$store.commit("SET_CLOUDINARY_SOURCE", event.currentTarget.id);
     },
     formatDateMonth(date) {
       if (date) {
@@ -149,7 +165,16 @@ export default {
   created() {
     Vue.use(CollapsePlugin);
     Vue.use(CardPlugin);
-  }
+  },
+    mounted() {
+    this.$root.$on("bv::collapse::state", (collapseId, isJustShown) => {
+      if (collapseId == "collapse-note-edit-form" && isJustShown) {
+        this.isEditingNote = true;
+      } else {
+        this.isEditingNote = false;
+      }
+    });
+  },
 };
 </script>
 

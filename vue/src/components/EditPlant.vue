@@ -3,14 +3,8 @@
     <b-form @submit.prevent="editPlant(plant)" id="edit-plant-form">
       <b-form-group>
         <label for="plantName">Plant name:</label>
-        <b-form-input
-          id="plantName"
-          class="mb-2 mr-sm-2 mb-sm-0"
-          placeholder="Plant name"
-          type="text"
-          v-model="plant.plantName"
-          required
-        ></b-form-input>
+        <b-form-input id="plantName" class="mb-2 mr-sm-2 mb-sm-0" placeholder="Plant name" type="text"
+          v-model="plant.plantName" required></b-form-input>
       </b-form-group>
       <b-form-group>
         <label for="plantName">Plant cared for since: </label>
@@ -20,57 +14,37 @@
         <label for="plantName">I like to be watered every: </label>
         <b-row id="schedule">
           <b-col>
-            <b-form-input
-              type="number"
-              min="0"
-              max="30"
-              v-model="plant.plantSchedule"
-              placeholder="Select number"
-            ></b-form-input>
+            <b-form-input type="number" min="0" max="30" v-model="plant.plantSchedule"
+              placeholder="Select number"></b-form-input>
           </b-col>
           <b-col>
-            <b-form-select
-              :options="frequency"
-              v-model="selectedFrequency"
-            ></b-form-select>
+            <b-form-select :options="frequency" v-model="selectedFrequency"></b-form-select>
           </b-col>
         </b-row>
       </b-form-group>
       <b-form-group>
         <label for="infoUrl">Link to external site:</label>
-        <b-form-input
-          id="infoUrl"
-          class="mb-2 mr-sm-2 mb-sm-0"
-          placeholder="Add a link to an external site: https://www.thespruce.com/my-plant"
-          type="text"
-          v-model="plant.infoUrl"
-        ></b-form-input>
+        <b-form-input id="infoUrl" class="mb-2 mr-sm-2 mb-sm-0"
+          placeholder="Add a link to an external site: https://www.thespruce.com/my-plant" type="text"
+          v-model="plant.infoUrl"></b-form-input>
       </b-form-group>
       <b-form-group>
-        <b-form-radio-group
-          required
-          v-model="plant.indoor"
-          :options="location"
-          :aria-describedby="ariaDescribedby"
-          name="radio-inline"
-        ></b-form-radio-group>
+        <b-form-radio-group required v-model="plant.indoor" :options="location" :aria-describedby="ariaDescribedby"
+          name="radio-inline"></b-form-radio-group>
       </b-form-group>
-      <b-button
-        size="sm"
-        id="cancelEditForm"
-        @click="$emit('cancelEditForm', $event)"
-        class="default"
-        >Cancel</b-button
-      >
+      <b-button size="sm" id="cancelEditForm" @click="$emit('cancelEditForm', $event)" class="default">Cancel</b-button>
       <b-button size="sm" type="submit" class="default">Update</b-button>
     </b-form>
+    <ErrorModal />
   </b-row>
 </template>
 
 <script>
 import plantService from "../services/PlantService";
+import ErrorModal from "./ErrorModal.vue";
 export default {
   name: "edit-plant",
+  components: { ErrorModal },
   data() {
     return {
       location: [
@@ -98,9 +72,9 @@ export default {
     },
     numDays() {
       let result = null;
-      this.selectedFrequency != null ? 
-      result = this.plant.plantSchedule * this.selectedFrequency 
-      : result = this.plant.plantSchedule;
+      this.selectedFrequency != null ?
+        result = this.plant.plantSchedule * this.selectedFrequency
+        : result = this.plant.plantSchedule;
       return result;
     },
   },
@@ -125,9 +99,9 @@ export default {
           }
         })
         .catch((err) => {
+          this.$bvModal.show('error-modal');
           /* eslint no-console: ["error", { allow: ["error"] }] */
           console.error(err + " problem editing plant!");
-          this.$router.push("/oops");
         });
     },
   },

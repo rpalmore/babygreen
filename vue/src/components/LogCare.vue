@@ -1,49 +1,25 @@
 <template>
-  <b-container id="log-care">
-    <b-form @submit.prevent="logCare">
-      <b-form-group label="Select a treatment:" v-slot="{ ariaDescribedby }">
-        <b-form-radio-group
-          required
-          v-bind:disabled="btnDisabled"
-          v-model="treatment.careType"
-          :options="options"
-          :aria-describedby="ariaDescribedby"
-          name="radio-inline"
-        ></b-form-radio-group>
-      </b-form-group>
-      <b-form-group label="Date of care:">
-        <b-row align-v="center">
-          <b-col>
-            <b-form-input
-              v-bind:disabled="btnDisabled"
-              required
-              name="careDate"
-              id="careDate"
-              type="date"
-              v-model="treatment.careDate"
-            >
-            </b-form-input>
-          </b-col>
-          <b-col>
-            <b-button
-              size="sm"
-              v-bind:disabled="btnDisabled"
-              id="logCare"
-              class="default"
-              type="submit"
-              >Log</b-button
-            >
-          </b-col>
-        </b-row>
-      </b-form-group>
+  <b-container fluid id="log-care-container">
+    <b-form inline id="log-care-form" @submit.prevent="logCare">
+      <label class="log-details">Select a treatment:</label>
+      <b-form-radio-group required v-model="treatment.careType" :options="options" :aria-describedby="ariaDescribedby"
+        name="radio-inline">
+      </b-form-radio-group>
+      <label class="sr-only" for="careDate">Date</label>
+      <b-form-input required class="log-details" name="careDate" id="careDate" type="date" v-model="myDate">
+      </b-form-input>
+      <b-button size="sm" v-bind:disabled="btnDisabled" id="logCare" class="default" type="submit">Log</b-button>
     </b-form>
+    <ErrorModal />
   </b-container>
 </template>
 
 <script>
 import treatmentService from "../services/TreatmentService";
+import ErrorModal from "./ErrorModal.vue";
 export default {
   name: "log-care",
+  components: { ErrorModal },
   props: ["selectedPlantIds"],
   data() {
     return {
@@ -57,6 +33,7 @@ export default {
         { text: "Pest-treated", value: "pest-treated" },
         { text: "Fertilized", value: "fertilized" },
       ],
+      myDate: new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 10)
     };
   },
   computed: {
@@ -65,54 +42,106 @@ export default {
     },
   },
   methods: {
+    formatDateDay(date) {
+      const options = {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      };
+      return new Date(date).toLocaleDateString("en-US", options);
+    },
+    checkForDuplicates() {
+      const dateAndType = this.$store.state.treatments.filter(x => x.careDate === this.treatment.careDate && x.careType === this.treatment.careType);
+      if (dateAndType.length > 0) {
+        let indexesToCut = [];
+        for (let i = 0; i < this.treatment.plantId.length; i++) {
+          const duplicate = dateAndType.find(x => x.plantId === this.treatment.plantId[i]);
+          if (duplicate) {
+            const index = this.treatment.plantId.indexOf(duplicate.plantId);
+            indexesToCut.push(index);
+          }
+        }
+        return this.treatment.plantId = this.treatment.plantId.filter((value, index) => !indexesToCut.includes(index));
+      }
+    },
     logCare() {
+      this.treatment.careDate = this.myDate;
       this.treatment.plantId = this.selectedPlantIds;
       this.$emit("form-sent");
-      treatmentService.createTreatment(this.treatment)
-        .then((response) => {
-          if (response.status == 201) {
-            this.$store.commit("ADD_TREATMENT", response.data);
-            let addedTreatment = response.data;
-            if (addedTreatment.careType === "watered") {
-              for (let i = 0; i < addedTreatment.plantId.length; i++) {
-                let payload = [
-                  {
-                    careDate: addedTreatment.careDate,
-                    careType: "watered",
-                    plantId: addedTreatment.plantId[i],
-                  },
-                ];
-                let idExists = this.$store.state.latestWatering.some(
-                  (plant) => plant.plantId == addedTreatment.plantId[i]
-                );
-                if (idExists) {
-                  let existingPlant= this.$store.state.latestWatering.find(
-                  (e) => e.plantId == addedTreatment.plantId[i]
-                );
-                let dateValid = existingPlant.careDate < addedTreatment.careDate;
-                  if (dateValid) {
-                  this.$store.commit("UPDATE_LATEST_WATERING", payload[0]);
+      this.checkForDuplicates(this.treatment);
+      if (this.treatment.plantId.length > 0) {
+        treatmentService
+          .createTreatment(this.treatment)
+          .then((response) => {
+            if (response.status == 201) {
+              let newTreatment = response.data;
+              for (let i = 0; i < newTreatment.plantId.length; i++) {
+                let payload =
+                {
+                  careDate: newTreatment.careDate,
+                  careType: newTreatment.careType,
+                  careId: newTreatment.careId,
+                  plantId: newTreatment.plantId[i],
+
+                };
+                this.$store.commit("ADD_TREATMENT", payload);
+              }
+              let addedTreatment = response.data;
+              if (addedTreatment.careType === "watered") {
+                for (let i = 0; i < addedTreatment.plantId.length; i++) {
+                  let payload = [
+                    {
+                      careDate: addedTreatment.careDate,
+                      careType: "watered",
+                      plantId: addedTreatment.plantId[i],
+                    },
+                  ];
+                  let idExists = this.$store.state.latestWatering.some(
+                    (plant) => plant.plantId == addedTreatment.plantId[i]
+                  );
+                  if (idExists) {
+                    let existingPlant = this.$store.state.latestWatering.find(
+                      (e) => e.plantId == addedTreatment.plantId[i]
+                    );
+                    let dateValid =
+                      existingPlant.careDate < addedTreatment.careDate;
+                    if (dateValid) {
+                      this.$store.commit("UPDATE_LATEST_WATERING", payload[0]);
+                    }
+                  } else {
+                    this.$store.commit("ADD_LATEST_WATERING", payload[0]);
                   }
-                } else {
-                  this.$store.commit("ADD_LATEST_WATERING", payload[0]);
                 }
               }
+              this.treatment = {};
             }
-            this.treatment = {};
-          }
-        })
-        .catch((err) => {
-          /* eslint no-console: ["error", { allow: ["error"] }] */
-          console.error(err + " problem creating treatment!");
-          this.$router.push("/oops");
-        });
+          })
+          .catch((err) => {
+            this.$bvModal.show('error-modal');
+            /* eslint no-console: ["error", { allow: ["error"] }] */
+            console.error(err + " problem creating treatment!");
+          });
+      }
+      this.treatment = {};
     },
   },
 };
 </script>
 
 <style>
-#log-care {
-  margin-top: 1.5rem;
+#log-care-container {
+  margin: 1rem 0;
+  background-color: var(--light-shade1);
+  border-left: 5px solid var(--green);
+}
+
+#log-care-form {
+  padding: 15px 0 15px 0;
+  gap: 0.3rem;
+}
+
+.log-details {
+  margin-right: 1rem;
 }
 </style>

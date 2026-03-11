@@ -10,7 +10,11 @@
         <b-button id="btnRegister" class="default" :to="{ name: 'register' }"
           >Register</b-button
         >
-        <b-button id="btnLogin" class="default" :to="{ name: 'login' }"
+        <b-button
+          id="btnLogin"
+          class="default"
+          @click="wake"
+          :to="{ name: 'login' }"
           >Sign In</b-button
         >
       </b-row>
@@ -19,8 +23,19 @@
 </template>
 
 <script>
+import wakeService from "../services/WakeService";
 export default {
-  name: "site-header"
+  name: "site-header",
+  methods: {
+    wake() {
+      if (this.$store.state.active != true) {
+        wakeService.wakeUp().catch((err) => {
+          /* eslint no-console: ["error", { allow: ["error"] }] */
+          console.error(err + " problem waking backend!");
+        });
+      }
+    },
+  },
 };
 </script>
 

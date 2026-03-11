@@ -8,49 +8,19 @@
     </p>
     <b-container class="list-container">
       <b-list-group>
-        <b-list-group-item
-          v-if="!this.isClickedEmailForm"
-          class="settings-list"
-        >
+        <b-list-group-item v-if="!this.isClickedEmailForm" class="settings-list">
           <span class="list-data">{{ this.user.email }}</span>
-          <b-button
-            class="card-footer-btn"
-            size="sm"
-            @click="toggleForm('email')"
-            >Edit email
-            <b-avatar
-              size="sm"
-              icon="pencil-fill"
-              class="avatar-icon-pencil"
-            ></b-avatar
-          ></b-button>
+          <b-button class="card-footer-btn" size="sm" @click="toggleForm('email')">Edit email
+            <b-avatar size="sm" icon="pencil-fill" class="avatar-icon-pencil"></b-avatar></b-button>
         </b-list-group-item>
         <b-list-group-item v-if="this.isClickedEmailForm" class="settings-list">
-          <b-form
-            id="email-reset"
-            inline
-            @submit.prevent="updateUserInfo('email')"
-            v-if="this.isClickedEmailForm"
-          >
+          <b-form id="email-reset" inline @submit.prevent="updateUserInfo('email')" v-if="this.isClickedEmailForm">
             <label class="sr-only" for="email">Email</label>
-            <b-form-input
-              v-model="email"
-              id="email"
-              class="mb-2 mr-sm-2 mb-sm-0"
-              placeholder="Updated email"
-              type="email"
-              required
-            ></b-form-input>
-            <b-button class="default mb-2 mr-sm-2 mb-sm-0" type="submit"
-              >Update</b-button
-            >
-            <b-button
-              class="default mb-2 mr-sm-2 mb-sm-0"
-              type="cancel"
-              id="cancel"
-              @click="toggleForm('email')"
-              >Cancel</b-button
-            >
+            <b-form-input v-model="email" id="email" class="mb-2 mr-sm-2 mb-sm-0" placeholder="Updated email"
+              type="email" required></b-form-input>
+            <b-button class="default mb-2 mr-sm-2 mb-sm-0" type="submit">Update</b-button>
+            <b-button class="default mb-2 mr-sm-2 mb-sm-0" type="cancel" id="cancel"
+              @click="toggleForm('email')">Cancel</b-button>
           </b-form>
         </b-list-group-item>
       </b-list-group>
@@ -60,8 +30,8 @@
       <b-list-group>
         <b-list-group-item class="settings-list">
           <span v-b-tooltip title="Username cannot be changed">{{
-            user.username
-          }}</span>
+        user.username
+      }}</span>
         </b-list-group-item>
       </b-list-group>
     </b-container>
@@ -71,74 +41,38 @@
     <b-container class="list-container">
       <b-list-group>
         <b-list-group-item v-if="!this.isClickedPWForm" class="settings-list">
-          <span
-            class="list-data"
-            id="password-placeholder"
-            v-b-tooltip 
-            title="Not for display"
-            >&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;</span
-          >
-          <b-button
-            class="card-footer-btn"
-            size="sm"
-            @click="toggleForm('password')"
-            >Update password
-            <b-avatar
-              size="sm"
-              icon="pencil-fill"
-              class="avatar-icon-pencil"
-            ></b-avatar
-          ></b-button>
+          <span class="list-data" id="password-placeholder" v-b-tooltip
+            title="Not for display">&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;</span>
+          <b-button class="card-footer-btn" size="sm" @click="toggleForm('password')">Update password
+            <b-avatar size="sm" icon="pencil-fill" class="avatar-icon-pencil"></b-avatar></b-button>
         </b-list-group-item>
         <b-list-group-item v-if="this.isClickedPWForm" class="settings-list">
-          <b-form
-            id="password-reset"
-            inline
-            @submit.prevent="updateUserInfo('password')"
-            v-if="this.isClickedPWForm"
-          >
+          <b-form id="password-reset" inline @submit.prevent="updateUserInfo('password')" v-if="this.isClickedPWForm">
             <label class="sr-only" for="password">Password</label>
-            <b-form-input
-              v-model="password"
-              id="password"
-              class="mb-2 mr-sm-2 mb-sm-0"
-              placeholder="Password"
-              type="password"
-              required
-            ></b-form-input>
+            <b-form-input v-model="password" id="password" class="mb-2 mr-sm-2 mb-sm-0" placeholder="Password"
+              type="password" required></b-form-input>
             <label class="sr-only" for="email">Confirm password</label>
-            <b-form-input
-              v-model="confirmPassword"
-              id="confirmPassword"
-              class="mb-2 mr-sm-2 mb-sm-0"
-              placeholder="Confirm password"
-              type="password"
-              required
-            ></b-form-input>
-            <b-button class="default mb-2 mr-sm-2 mb-sm-0" type="submit"
-              >Update</b-button
-            >
-            <b-button
-              class="default mb-2 mr-sm-2 mb-sm-0"
-              type="cancel"
-              id="cancel"
-              @click="toggleForm('password')"
-              >Cancel</b-button
-            >
+            <b-form-input v-model="confirmPassword" id="confirmPassword" class="mb-2 mr-sm-2 mb-sm-0"
+              placeholder="Confirm password" type="password" required></b-form-input>
+            <b-button class="default mb-2 mr-sm-2 mb-sm-0" type="submit">Update</b-button>
+            <b-button class="default mb-2 mr-sm-2 mb-sm-0" type="cancel" id="cancel"
+              @click="toggleForm('password')">Cancel</b-button>
           </b-form>
         </b-list-group-item>
       </b-list-group>
     </b-container>
+    <ErrorModal />
   </b-container>
 </template>
 
 <script>
 import authService from "../services/AuthService";
+import ErrorModal from "../components/ErrorModal.vue";
 import Vue from 'vue';
 import { ModalPlugin, VBTooltip } from 'bootstrap-vue';
 export default {
   name: "settings",
-  components: {},
+  components: { ErrorModal },
   data() {
     return {
       modal: "",
@@ -204,9 +138,9 @@ export default {
           }
         })
         .catch((err) => {
+          this.$bvModal.show('error-modal');
           /* eslint no-console: ["error", { allow: ["error"] }] */
           console.error(err + " problem updating " + event + ".");
-          //this.$router.push("/oops"); DO WE NEED TO REROUTE?
           this.toggleForm(event);
         });
     },
@@ -249,19 +183,24 @@ export default {
   justify-content: space-between;
   align-items: center;
 }
+
 .list-data {
   margin-right: 1rem;
 }
+
 #email-reset,
 #password-reset {
   gap: 0.3rem;
 }
+
 #password-placeholder {
   color: var(--grey);
 }
+
 .card-footer-btn {
   width: auto !important;
 }
+
 .btn#cancel {
   background-color: gray;
 }

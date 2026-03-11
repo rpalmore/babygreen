@@ -1,156 +1,130 @@
 <template>
   <b-container fluid id="plant-care">
     <b-row align-h="center">
-      <p class="section-header">Recent treatments</p>
+      <p class="section-header">Other treatments</p>
     </b-row>
 
-    <p class="default-message" v-if="this.$store.state.treatments.length == 0">
-      You have not logged any treatments. Start by adding a plant!
+    <p class="default-message">{{ displayMessage() }}
     </p>
 
-    <b-list-group
-      v-for="uniqueDate in formatTreatment().slice(0,5)"
-      v-bind:key="uniqueDate.itemId"
-    >
+    <b-list-group v-for="uniqueDate in formatTreatment().slice(0, 5)" v-bind:key="uniqueDate.itemId">
       <p class="subsection-header">
         {{ formatDateDay(uniqueDate.replace(/-/g, "\/")) }}
       </p>
       <b-container class="list-container">
-        <b-list-group
-          v-bind:treatment="treatment"
-          v-for="treatment in treatments"
-          v-bind:key="treatment.treatmentId"
-        >
+        <b-list-group v-bind:treatment="treatment" v-for="treatment in treatments" v-bind:key="treatment.treatmentId">
           <b-list-group-item v-if="uniqueDate == treatment.careDate" class="d-flex align-items-center">
             <b-col>
-              <b-avatar
-                class="avatar-custom"
-                v-bind:id="treatment.careType"
-                v-bind:src="selectImg(treatment.careType)"
-              ></b-avatar>
+              <b-avatar class="avatar-custom" v-bind:id="treatment.careType"
+                v-bind:src="selectImg(treatment.careType)"></b-avatar>
             </b-col>
             <b-col>
               {{
-                treatment.careType.substring(0, 1).toUpperCase() +
-                treatment.careType.substring(1)
-              }}
-              <b-link
-                :to="{
-                  name: 'plant-detail',
-                  params: { plantId: treatment.plantId },
-                }"
-              >
+      treatment.careType.substring(0, 1).toUpperCase() +
+      treatment.careType.substring(1)
+    }}
+              <b-link :to="{
+        name: 'plant-detail',
+        params: { plantId: treatment.plantId },
+      }">
                 {{
-                  treatment.plantName
-                }}
+      treatment.plantName
+    }}
               </b-link>
             </b-col>
             <b-col class="delete">
-              <b-avatar
-                button
-                icon="trash-fill"
-                id="deleteTreatment"
-                v-b-tooltip
-                title="Delete treatment"
-                size="sm"
-                @click="deleteTreatment(treatment)"
-              ></b-avatar>
+              <b-avatar button icon="trash-fill" id="deleteTreatment" v-b-tooltip title="Delete treatment" size="sm"
+                @click="deleteTreatment(treatment)"></b-avatar>
             </b-col>
           </b-list-group-item>
         </b-list-group>
       </b-container>
     </b-list-group>
-     <a v-b-toggle href="#treatment-dates" @click.prevent>
+    <a v-b-toggle href="#treatment-dates" @click.prevent>
       <p class="subsection-header" v-if="formatTreatment().length > 5">
         <span class="when-closed">See </span>
         <span class="when-open">Hide </span>
-        <b-badge id="treatmentDateCount">{{ formatTreatment().length - 5 }}</b-badge> 
+        <b-badge id="treatmentDateCount">{{ formatTreatment().length - 5 }}</b-badge>
         more treatment dates and details.
       </p>
-     </a>
+    </a>
     <b-collapse id="treatment-dates" class="mt-2">
-      <b-list-group
-      v-for="uniqueDate in formatTreatment().slice(5)"
-      v-bind:key="uniqueDate.itemId"
-    >
-      <p class="subsection-header additional-treatments">
-        {{ formatDateDay(uniqueDate.replace(/-/g, "\/")) }}
-              <b-avatar
-                button
-                icon="trash-fill"
-                id="deleteTreatmentByDate"
-                v-b-tooltip
-                title="Delete all treatments by date"
-                size="sm"
-                @click="deleteTreatmentByDate(uniqueDate)"
-              ></b-avatar>
-      </p>
-      <b-container class="list-container">
-        <b-list-group
-          v-bind:treatment="treatment"
-          v-for="treatment in treatments"
-          v-bind:key="treatment.treatmentId"
-        >
-          <b-list-group-item v-if="uniqueDate == treatment.careDate" class="d-flex align-items-center">
-            <b-col>
-              <b-avatar
-                class="avatar-custom"
-                v-bind:id="treatment.careType"
-                v-bind:src="selectImg(treatment.careType)"
-              ></b-avatar>
-            </b-col>
-            <b-col>
-              {{
-                treatment.careType.substring(0, 1).toUpperCase() +
-                treatment.careType.substring(1)
-              }}
-              <router-link
-                :to="{
-                  name: 'plant-detail',
-                  params: { plantId: treatment.plantId },
-                }"
-              >
+      <b-list-group v-for="uniqueDate in formatTreatment().slice(5)" v-bind:key="uniqueDate.itemId">
+        <p class="subsection-header additional-treatments">
+          {{ formatDateDay(uniqueDate.replace(/-/g, "\/")) }}
+          <b-avatar button icon="trash-fill" id="deleteTreatmentByDate" v-b-tooltip
+            title="Delete all treatments by date" size="sm" @click="deleteTreatmentByDate(uniqueDate)"></b-avatar>
+        </p>
+        <b-container class="list-container">
+          <b-list-group v-bind:treatment="treatment" v-for="treatment in treatments" v-bind:key="treatment.treatmentId">
+            <b-list-group-item v-if="uniqueDate == treatment.careDate" class="d-flex align-items-center">
+              <b-col>
+                <b-avatar class="avatar-custom" v-bind:id="treatment.careType"
+                  v-bind:src="selectImg(treatment.careType)"></b-avatar>
+              </b-col>
+              <b-col>
                 {{
-                  treatment.plantName
-                }}
-              </router-link>
-            </b-col>
-            <b-col class="delete">
-             <b-avatar
-                button
-                v-b-tooltip
-                title="Delete treatment"
-                icon="trash-fill"
-                id="deleteTreatment"
-                size="sm"
-                @click="deleteTreatment(treatment)"
-              ></b-avatar>
-            </b-col>
-          </b-list-group-item>
-        </b-list-group>
-      </b-container>
+      treatment.careType.substring(0, 1).toUpperCase() +
+      treatment.careType.substring(1)
+    }}
+                <router-link :to="{
+        name: 'plant-detail',
+        params: { plantId: treatment.plantId },
+      }">
+                  {{
+      treatment.plantName
+                  }}
+                </router-link>
+              </b-col>
+              <b-col class="delete">
+                <b-avatar button v-b-tooltip title="Delete treatment" icon="trash-fill" id="deleteTreatment" size="sm"
+                  @click="deleteTreatment(treatment)"></b-avatar>
+              </b-col>
+            </b-list-group-item>
+          </b-list-group>
+        </b-container>
     </b-collapse>
+    <ErrorModal />
   </b-container>
 </template>
 
 <script>
 import treatmentService from "../services/TreatmentService";
-import Vue from 'vue';
-import { BadgePlugin, CollapsePlugin, ModalPlugin, VBTooltip, LinkPlugin } from 'bootstrap-vue';
+import ErrorModal from "../components/ErrorModal.vue";
+import Vue from "vue";
+import {
+  BadgePlugin,
+  CollapsePlugin,
+  ModalPlugin,
+  VBTooltip,
+  LinkPlugin,
+} from "bootstrap-vue";
 export default {
   name: "care",
-  components: {},
+  components: { ErrorModal },
   data() {
     return {
       modal: "",
+      message: false,
     };
   },
   computed: {
     treatments() {
-      return this.$store.state.treatments;
+      let filteredCare = [];
+      for (let i = 0; i < this.$store.state.treatments.length; i++) {
+        if (this.$store.state.treatments[i].careType != "watered") {
+          filteredCare.push(this.$store.state.treatments[i]);
+        }
+      }
+      return filteredCare;
     },
   },
   methods: {
+    displayMessage() {
+      if (this.treatments.length == 0) {
+        return "You have not logged any treatments. Go to your Water Log to get started."
+      }
+    },
     formatTreatment() {
       let uniqueDates = [];
       for (let i = 0; i < this.treatments.length; i++) {
@@ -173,12 +147,12 @@ export default {
       return careType === "watered"
         ? require("@/assets/watering-can.png")
         : careType === "misted"
-        ? require("@/assets/spray-bottle.png")
-        : careType === "repotted"
-        ? require("@/assets/plant-pot.png")
-        : careType === "fertilized"
-        ? require("@/assets/eyedropper.png")
-        : require("@/assets/bug.png");
+          ? require("@/assets/spray-bottle.png")
+          : careType === "repotted"
+            ? require("@/assets/plant-pot.png")
+            : careType === "fertilized"
+              ? require("@/assets/eyedropper.png")
+              : require("@/assets/bug.png");
     },
     deleteTreatment(treatment) {
       this.modal = "";
@@ -195,9 +169,9 @@ export default {
                 }
               })
               .catch((err) => {
+                this.$bvModal.show('error-modal')
                 /* eslint no-console: ["error", { allow: ["error"] }] */
                 console.error(err + " problem deleting treatment!");
-                this.$router.push("/oops");
               });
           }
         });
@@ -219,9 +193,9 @@ export default {
                 }
               })
               .catch((err) => {
+                this.$bvModal.show('error-modal')
                 /* eslint no-console: ["error", { allow: ["error"] }] */
                 console.error(err + " problem deleting treatment!");
-                this.$router.push("/oops");
               });
           }
         });
@@ -232,19 +206,7 @@ export default {
     Vue.use(CollapsePlugin);
     Vue.use(ModalPlugin);
     Vue.use(LinkPlugin);
-    Vue.directive('b-tooltip', VBTooltip);
-    treatmentService
-      .getAllTreatments()
-      .then((response) => {
-        if (response.status == 200) {
-          this.$store.commit("SET_TREATMENTS", response.data);
-        }
-      })
-      .catch((err) => {
-        /* eslint no-console: ["error", { allow: ["error"] }] */
-        console.error(err + " problem deleting treatment!");
-        this.$router.push("/oops");
-      });
+    Vue.directive("b-tooltip", VBTooltip);
   },
 };
 </script>
@@ -253,38 +215,47 @@ export default {
 #treatmentDateCount {
   background-color: var(--orange);
 }
+
 .treatmentDetails {
   width: 90%;
 }
+
 #deleteTreatment {
   background-color: var(--orange);
 }
+
 #deleteTreatmentByDate {
   background-color: var(--grey);
   border: 1px solid var(--orange);
   margin-right: 2%;
 }
+
 .additional-treatments {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
+
 .collapsed .when-open,
 .not-collapsed .when-closed {
   display: none;
 }
+
 .avatar-custom#misted {
   background-color: var(--light);
   border: 1px solid var(--orange);
 }
+
 .avatar-custom#pest-treated {
   background-color: var(--orange);
   border: 1px solid var(--green);
 }
+
 .avatar-custom#fertilized {
   background-color: var(--yellow);
   border: 1px solid var(--green);
 }
+
 .avatar-custom#repotted {
   background-color: var(--platinum);
   border: 1px solid var(--green);

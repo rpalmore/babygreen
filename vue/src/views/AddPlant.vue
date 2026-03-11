@@ -1,5 +1,5 @@
 <template>
-  <b-container id="add-plant">
+  <b-container fluid id="add-plant">
     <b-row align-h="center">
       <p class="section-header">Add a plant</p>
     </b-row>

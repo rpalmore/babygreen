@@ -7,64 +7,32 @@
       </p>
     </b-row>
 
-    <ProfileCard
-      v-bind:profile="profile"
-      v-bind:isEditing="isEditing"
-      @toggle="toggleForm()"
-      @delete="deleteProfile(profile.userId)"
-    />
+    <ProfileCard v-bind:profile="profile" v-bind:isEditing="isEditing" @toggle="toggleForm()"
+      @delete="deleteProfile(profile.userId)" />
 
     <!-- Edit or create profile -->
     <b-collapse id="collapse-edit-form" class="mt-2">
       <b-row align-h="center">
         <b-form @submit.prevent="saveProfile()" id="profile-form">
-          <b-form-group
-            id="input-group-1"
-            label="Display name:"
-            label-for="input-1"
-          >
-            <b-form-input
-              required
-              type="text"
-              id="input-1"
-              placeholder="Enter display name"
-              v-model="newProfile.displayName"
-            ></b-form-input>
+          <b-form-group id="input-group-1" label="Display name:" label-for="input-1">
+            <b-form-input required type="text" id="input-1" placeholder="Enter display name"
+              v-model="newProfile.displayName"></b-form-input>
           </b-form-group>
-          <b-form-group
-            id="input-group-2"
-            label="Favorite plant:"
-            label-for="input-2"
-          >
-            <b-form-input
-              required
-              type="text"
-              id="input-2"
-              placeholder="Your favorite plant"
-              v-model="newProfile.favePlant"
-            ></b-form-input>
+          <b-form-group id="input-group-2" label="Favorite plant:" label-for="input-2">
+            <b-form-input required type="text" id="input-2" placeholder="Your favorite plant"
+              v-model="newProfile.favePlant"></b-form-input>
           </b-form-group>
-          <b-form-group
-            id="input-group-3"
-            label="Skill level:"
-            label-for="input-3"
-          >
-            <b-form-select
-              id="input-3"
-              v-model="newProfile.skillLevel"
-              :options="skill"
-              required
-            ></b-form-select>
+          <b-form-group id="input-group-3" label="Skill level:" label-for="input-3">
+            <b-form-select id="input-3" v-model="newProfile.skillLevel" :options="skill" required></b-form-select>
           </b-form-group>
-          <b-button size="sm" id="cancel" @click="cancel" class="default"
-            >Cancel</b-button
-          >
+          <b-button size="sm" id="cancel" @click="cancel" class="default">Cancel</b-button>
           <b-button size="sm" type="submit" class="default">{{
-            profile.favePlant === undefined ? "Save" : "Update"
-          }}</b-button>
+          profile.favePlant === undefined ? "Save" : "Update"
+        }}</b-button>
         </b-form>
       </b-row>
     </b-collapse>
+    <ErrorModal />
     <!-- End edit profile -->
   </b-container>
 </template>
@@ -73,11 +41,12 @@
 import profileService from "../services/ProfileService";
 import treatmentService from "../services/TreatmentService";
 import ProfileCard from "../components/ProfileCard.vue";
+import ErrorModal from "../components/ErrorModal.vue";
 import Vue from 'vue';
 import { CollapsePlugin, ModalPlugin } from 'bootstrap-vue';
 export default {
   name: "profile",
-  components: { ProfileCard },
+  components: { ProfileCard, ErrorModal },
   data() {
     return {
       greeting: [
@@ -156,9 +125,9 @@ export default {
             };
           })
           .catch((err) => {
+            this.$bvModal.show('error-modal');
             /* eslint no-console: ["error", { allow: ["error"] }] */
             console.error(err + " problem creating profile!");
-            this.$router.push("/oops");
           });
       } else {
         profileService
@@ -170,9 +139,9 @@ export default {
             }
           })
           .catch((err) => {
+            this.$bvModal.show('error-modal');
             /* eslint no-console: ["error", { allow: ["error"] }] */
             console.error(err + " problem updating profile!");
-            this.$router.push("/oops");
           });
       }
     },
@@ -198,9 +167,9 @@ export default {
                 }
               })
               .catch((err) => {
+                this.$bvModal.show('error-modal');
                 /* eslint no-console: ["error", { allow: ["error"] }] */
                 console.error(err + " problem deleting profile!");
-                this.$router.push("/oops");
               });
           }
         });
@@ -219,7 +188,6 @@ export default {
       .catch((err) => {
         /* eslint no-console: ["error", { allow: ["error"] }] */
         console.error(err + " problem getting profile!");
-        this.$router.push("/oops");
       });
     treatmentService
       .getLatestTreatment()
@@ -231,7 +199,6 @@ export default {
       .catch((err) => {
         /* eslint no-console: ["error", { allow: ["error"] }] */
         console.error(err + " problem getting latest treatment!");
-        this.$router.push("/oops");
       });
   },
   mounted() {
@@ -250,22 +217,27 @@ export default {
 .plant-card {
   margin-top: 1rem;
 }
+
 .card-footer-row {
   height: 100%;
 }
+
 .text-center.middle.col {
   border-right: 1px solid var(--light);
   border-left: 1px solid var(--light);
 }
+
 .card-footer-btn.delete-profile {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
 }
+
 .avatar-icon-trash.delete-profile {
   margin: 3px;
 }
+
 #profile-form {
   margin-top: 1rem;
   margin-bottom: 1rem;
@@ -274,13 +246,15 @@ export default {
   background-color: var(--light-shade1);
   padding: 0.5rem;
 }
+
 .form-title {
   font-size: 1.3rem;
   border-top: 1px solid var(--orange);
   border-bottom: 1px solid var(--orange);
 }
+
 .btn#cancel {
   background-color: gray;
   margin-right: 1%;
-} 
+}
 </style>

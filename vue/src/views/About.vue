@@ -1,6 +1,9 @@
 <template>
   <b-container id="about" fluid>
-    <p class="section-header-about">How it works ...</p>
+
+    <Login v-show="this.$route.name == 'login'"/>
+    <Register v-show="this.$route.name == 'register'"/>
+    <p class="section-header-about-how">How it works ...</p>
 
     <b-card-group deck>
       <b-card
@@ -10,7 +13,10 @@
         img-top
       >
         <b-card-text>
-          Your site. Your plants. We create a dedicated page for each of them, where you can add photos, notes and keep track of recent waterings and other care. We also keep tabs on each plant’s location&mdash;indoors or outside&mdash;and how long it’s been in your care.
+          Your site. Your plants. We create a dedicated page for each of them,
+          where you can add photos, notes, keep a water log and track other
+          care.
+          <!-- We also keep tabs on each plant’s location&mdash;indoors or outside&mdash;and how long it’s been in your care. -->
         </b-card-text>
       </b-card>
 
@@ -23,9 +29,9 @@
         img-top
       >
         <b-card-text>
-          With the click of a button, you can record every plant treatment, such
-          as watering, misting and feeding, so you never lose track of their
-          care and special needs&mdash;however temperamental they may be.
+          With a quick click, you can record waterings and other treatments,
+          such as repotting and feeding, so you never lose track of their
+          special needs.
         </b-card-text>
       </b-card>
 
@@ -36,8 +42,9 @@
         img-top
       >
         <b-card-text>
-          Congrats&mdash;you’ve just upped your plant-parenting powers! Now you can
-          embrace the benefits of your green space, guilt free, while staying up to date on treatments and growth.
+          Congrats&mdash;you’ve just upped your green game! Now you can embrace
+          the benefits of being a plant parent without fretting over their
+          survival.
         </b-card-text>
       </b-card>
     </b-card-group>
@@ -45,9 +52,12 @@
 </template>
 
 <script>
-import Vue from 'vue';
-import { CardPlugin } from 'bootstrap-vue';
+import Login from "./Login.vue";
+import Register from "./Register.vue";
+import Vue from "vue";
+import { CardPlugin } from "bootstrap-vue";
 export default {
+  components: { Login, Register },
   name: "about",
   created() {
     Vue.use(CardPlugin);
@@ -62,8 +72,8 @@ export default {
   font-weight: 300;
   color: var(--dark);
 }
-
-#about .section-header-about {
+.section-header-about-how {
+  margin-top: 20px;
   font-family: "Lobster", cursive;
   font-size: 2rem;
 }

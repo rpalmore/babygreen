@@ -3,52 +3,31 @@
     <b-card no-body class="overflow-hidden" style="max-width: 640px">
       <b-row no-gutters align-v="center">
         <b-col md="6">
-          <b-card-img
-            id="b-card-img"
-            :src="selectPlantImg(plant.plantImg)"
-            alt="Plant image"
-            class="rounded-0"
-          ></b-card-img>
+          <b-card-img id="b-card-img" :src="selectPlantImg(plant.plantImg)" alt="Plant image"
+            class="rounded-0"></b-card-img>
         </b-col>
         <b-col md="6">
           <b-card-body title="About me">
             <b-card-text>
               I am an {{ plant.indoor == true ? "indoor" : "outdoor" }} plant
               and have been in {{ name }}&#8217;s care since
-              <a
-                id="editDate"
-                v-b-tooltip
-                title="Edit date"
-                v-b-toggle.collapse-edit-form
-                @click="$emit('toggleEdit', plant)"
-                >{{ formatDate(plant.plantAge.replace(/-/g, "\/")) }}</a
-              >.
+              <a id="editDate" v-b-tooltip title="Edit date" v-b-toggle.collapse-edit-form
+                @click="$emit('toggleEdit', plant)">{{ formatDate(plant.plantAge.replace(/-/g, "\/")) }}</a>.
               <p class="plant-preference" v-if="!!plant.plantSchedule">
                 {{
-                  "I like to be watered every " + determineSchedule(plant) + "."
-                }}
+            "I like to be watered every " + determineSchedule(plant) + "."
+          }}
               </p>
 
               <p class="plant-preference" v-else>
-                <a
-                  id="addSchedule"
-                  v-b-tooltip
-                  title="Add schedule"
-                  @click="$emit('toggleEdit', plant)"
-                  v-b-toggle.collapse-edit-form
-                  >{{ "Add a custom watering schedule" }}</a
-                >.
+                <a id="addSchedule" v-b-tooltip title="Add schedule" @click="$emit('toggleEdit', plant)"
+                  v-b-toggle.collapse-edit-form>{{ "Add a custom watering schedule" }}</a>.
               </p>
             </b-card-text>
 
             <b-card-text v-if="plant.infoUrl != null">
-              <b-link target="_blank" :href="plant.infoUrl"
-                >Learn more about me here.<b-avatar
-                  size="sm"
-                  icon="link45deg"
-                  class="avatar-icon-link"
-                ></b-avatar
-              ></b-link>
+              <b-link target="_blank" :href="plant.infoUrl">Learn more about me here.<b-avatar size="sm"
+                  icon="link45deg" class="avatar-icon-link"></b-avatar></b-link>
             </b-card-text>
           </b-card-body>
         </b-col>
@@ -56,49 +35,21 @@
       <b-card-footer>
         <b-row align-v="center">
           <b-col class="text-center">
-            <b-button
-              id="plant"
-              class="card-footer-btn"
-              size="sm"
-              @click="useCloudinary($event, plant)"
-              >{{ plant.plantImg === null ? "Add photo" : "Swap photo" }}
-              <b-avatar
-                size="sm"
-                icon="camera-fill"
-                class="avatar-icon-camera"
-              ></b-avatar
-            ></b-button>
+            <b-button id="plant" class="card-footer-btn" size="sm" @click="useCloudinary($event, plant)"><span
+                class="btn-text">{{
+            plant.plantImg === null ? "Add photo" : "Swap photo"
+          }}</span>
+              <b-avatar id="plant" size="sm" icon="camera-fill" class="avatar-icon-camera"></b-avatar></b-button>
           </b-col>
           <b-col class="text-center middle">
-            <b-button
-              class="card-footer-btn"
-              size="sm"
-              :disabled="isEditingPlant"
-              @click="$emit('toggleEdit', plant)"
-              v-b-toggle.collapse-edit-form
-              >Edit plant
-              <b-avatar
-                size="sm"
-                icon="pencil-fill"
-                class="avatar-icon-pencil"
-              ></b-avatar
-            ></b-button>
+            <b-button class="card-footer-btn" size="sm" :disabled="isEditingPlant" @click="$emit('toggleEdit', plant)"
+              v-b-toggle.collapse-edit-form><span class="btn-text">Edit plant</span>
+              <b-avatar size="sm" icon="pencil-fill" class="avatar-icon-pencil"></b-avatar></b-button>
           </b-col>
           <b-col>
-            <b-button
-              id="deletePlant"
-              class="card-footer-btn"
-              v-b-tooltip
-              title="Delete this plant"
-              size="sm"
-              @click="$emit('deletePlant')"
-            >
-              Delete
-              <b-avatar
-                size="sm"
-                icon="trash-fill"
-                class="avatar-icon-trash"
-              ></b-avatar>
+            <b-button id="deletePlant" class="card-footer-btn" v-b-tooltip title="Delete this plant" size="sm"
+              @click="$emit('deletePlant')"><span class="btn-text"> Delete </span>
+              <b-avatar size="sm" icon="trash-fill" class="avatar-icon-trash"></b-avatar>
             </b-button>
           </b-col>
         </b-row>
@@ -109,8 +60,13 @@
 
 <script>
 import photoService from "../services/PhotoService";
-import Vue from 'vue';
-import { CollapsePlugin, VBTooltip, CardPlugin, LinkPlugin } from 'bootstrap-vue';
+import Vue from "vue";
+import {
+  CollapsePlugin,
+  VBTooltip,
+  CardPlugin,
+  LinkPlugin,
+} from "bootstrap-vue";
 export default {
   name: "plant-card",
   props: ["plantId", "isEditingPlant"],
@@ -161,9 +117,13 @@ export default {
       return new Date(date).toLocaleDateString("en-US", options);
     },
     useCloudinary(event, item) {
-      photoService.myWidget.open();
-      this.$store.commit("SET_CLOUDINARY_SOURCE", event.target.id);
+      this.$store.commit("SET_CLOUDINARY_SOURCE", event.currentTarget.id);
       this.$store.commit("SET_OBJECT", item);
+      if (this.$store.state.user.username !== "guest") {
+        photoService.myWidget.open();
+      } else {
+        alert("This feature is disabled for guests.");
+      }
     },
     selectPlantImg(plantImg) {
       return plantImg === null
@@ -175,13 +135,17 @@ export default {
     Vue.use(CollapsePlugin);
     Vue.use(CardPlugin);
     Vue.use(LinkPlugin);
-    Vue.directive('b-tooltip', VBTooltip);
-  }
+    Vue.directive("b-tooltip", VBTooltip);
+  },
 };
 </script>
 
 <style>
 .plant-preference {
   margin-top: 1rem;
+}
+
+.btn-text {
+  display: block;
 }
 </style>

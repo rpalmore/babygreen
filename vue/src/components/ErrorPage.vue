@@ -6,35 +6,44 @@
       </p>
     </b-row>
     <b-row align-h="center">
-      <p>
-        Something went wrong.
-        <b-link id="logout-link" :to="{ name: 'logout' }"
-          >Please log out</b-link
-        >
-        and log back in. We apologize for the disruption!
+      <p>Your session has expired.</p>
+    </b-row>
+    <b-row align-h="center">
+      <p style="text-align: center">
+        Please sign in again to complete your work. We apologize for the disruption!
       </p>
     </b-row>
     <b-row align-h="center">
-      <img id="plant-flipped" src="@/assets/CandaceStone_Pixabay400.png" alt="" />
+      <img
+        id="plant-flipped"
+        src="@/assets/CandaceStone_Pixabay400.png"
+        alt=""
+      />
     </b-row>
   </b-container>
 </template>
 
 <script>
-import { LinkPlugin } from 'bootstrap-vue';
-import Vue from 'vue'
+import { LinkPlugin } from "bootstrap-vue";
+import Vue from "vue";
 export default {
   name: "error-page",
   created() {
     Vue.use(LinkPlugin);
-  }
+    setTimeout(() => this.logoutOnDelay(), 2000);
+  },
+  methods: {
+    logoutOnDelay() {
+      this.$store.commit("LOGOUT");
+      if (this.$route != "/") {
+        this.$router.push("/");
+      }
+    },
+  },
 };
 </script>
 
 <style>
-#logout-link:hover {
-  border-bottom: 2px solid var(--orange);
-}
 #plant-flipped {
   -webkit-transform: scaleY(-1);
   transform: scaleY(-1);

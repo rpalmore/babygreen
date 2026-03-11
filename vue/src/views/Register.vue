@@ -1,13 +1,13 @@
 <template>
-  <b-container fluid id="register">
+  <b-container id="register">
     <p class="section-header-about">
-      {{ registrationErrors ? registrationErrorMsg : "Create Account" }}
+      {{ registrationErrors ? registrationErrorMsg : "Create an account:" }}
     </p>
     <b-form inline @submit.prevent="register">
       <label for="username" class="sr-only">Username</label>
       <b-form-input
         type="text"
-        id="username"
+        id="usernameReg"
         class="mb-2 mr-sm-2 mb-sm-0"
         placeholder="Username"
         v-model="user.username"
@@ -25,7 +25,7 @@
       <label for="password" class="sr-only">Password</label>
       <b-form-input
         type="password"
-        id="password"
+        id="passwordReg"
         class="mb-2 mr-sm-2 mb-sm-0"
         placeholder="Password"
         v-model="user.password"
@@ -101,3 +101,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+#register {
+  margin-left: -15px;
+}
+</style>

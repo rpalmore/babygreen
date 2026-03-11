@@ -13,13 +13,6 @@
           exact-active-class="active"
           >Add a plant</b-dropdown-item
         >
-        <b-dropdown-item
-          v-if="this.$store.state.plants.length > 0"
-          :to="{ name: 'gallery' }"
-          exact
-          exact-active-class="active"
-          >All plants</b-dropdown-item
-        >
         <b-dropdown-form>
           <b-form-input
             id="nav-search"
@@ -41,10 +34,13 @@
         >
       </b-nav-item-dropdown>
       <b-nav-item :to="{ name: 'plants' }" exact exact-active-class="active"
-        >Log Care
+        >Water Log
       </b-nav-item>
       <b-nav-item :to="{ name: 'care' }" exact exact-active-class="active"
         >Treatments</b-nav-item
+      >
+      <b-nav-item :to="{ name: 'gallery' }" exact exact-active-class="active"
+        >Photos</b-nav-item
       >
       <b-nav-item-dropdown
         id="nav-dropdown"
