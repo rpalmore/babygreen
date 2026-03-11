@@ -29,8 +29,8 @@
           v-model="plant.infoUrl"></b-form-input>
       </b-form-group>
       <b-form-group>
-        <b-form-radio-group required v-model="plant.indoor" :options="location" :aria-describedby="ariaDescribedby"
-          name="radio-inline"></b-form-radio-group>
+        <b-form-radio-group required v-model="plant.locationType" :options="location"
+          :aria-describedby="ariaDescribedby" name="radio-inline"></b-form-radio-group>
       </b-form-group>
       <b-button size="sm" id="cancelEditForm" @click="$emit('cancelEditForm', $event)" class="default">Cancel</b-button>
       <b-button size="sm" type="submit" class="default">Update</b-button>
@@ -48,8 +48,9 @@ export default {
   data() {
     return {
       location: [
-        { text: "Indoor", value: true },
-        { text: "Outdoor", value: false },
+        { text: "Indoor", value: "indoor" },
+        { text: "Outdoor", value: "outdoor" },
+        { text: "Landscape", value: "landscape" }
       ],
       frequency: [
         { text: "Select frequency", value: null },
@@ -81,6 +82,7 @@ export default {
   methods: {
     editPlant(plant) {
       plant.plantSchedule = this.numDays;
+      plant.indoor = false;
       if (plant.plantAge === null) {
         let today = new Date();
         const dd = String(today.getDate()).padStart(2, "0");
@@ -89,6 +91,8 @@ export default {
         today = yyyy + "-" + mm + "-" + dd;
         plant.plantAge = today;
       }
+      // eslint-disable-next-line no-console
+      console.log('xxx_plant', plant);
       plantService
         .editPlant(plant)
         .then((response) => {

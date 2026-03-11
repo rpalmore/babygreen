@@ -1,7 +1,5 @@
 package com.techelevator.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import java.time.LocalDate;
 
 public class Plant {
@@ -13,6 +11,7 @@ public class Plant {
     private String infoUrl;
     private LocalDate plantAge;
     private int plantSchedule;
+    private String locationType;
 
     public int getPlantId() {
         return plantId;
@@ -77,4 +76,8 @@ public class Plant {
     public void setPlantSchedule(int plantSchedule) {
         this.plantSchedule = plantSchedule;
     }
+
+    public String getLocationType() {return locationType;}
+
+    public void setLocationType(String locationType) {this.locationType = locationType;}
 }

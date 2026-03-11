@@ -9,7 +9,11 @@
         <b-col md="6">
           <b-card-body title="About me">
             <b-card-text>
-              I am an {{ plant.indoor == true ? "indoor" : "outdoor" }} plant
+              I am {{ plant.locationType && plant.locationType == "landscape" ? "a " + plant.locationType :
+            plant.locationType && plant.locationType != "landscape" ? "an " + plant.locationType : plant.indoor ==
+              true ? "an indoor" : "an outdoor"
+              }}
+              plant
               and have been in {{ name }}&#8217;s care since
               <a id="editDate" v-b-tooltip title="Edit date" v-b-toggle.collapse-edit-form
                 @click="$emit('toggleEdit', plant)">{{ formatDate(plant.plantAge.replace(/-/g, "\/")) }}</a>.

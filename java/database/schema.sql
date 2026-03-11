@@ -40,6 +40,7 @@ CREATE TABLE plants (
     plant_img varchar(500),
     plant_name varchar(200),
     indoor BOOLEAN NOT NULL,
+    location_type varchar (20),
     info_url varchar(500),
     plant_age date NOT NULL,
     plant_schedule int,

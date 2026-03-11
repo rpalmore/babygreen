@@ -4,7 +4,7 @@
       <label class="sr-only" for="plantName">Plant Name</label>
       <b-form-input id="plantName" class="mb-2 mr-sm-2 mb-sm-0" placeholder="Plant name" type="text"
         v-model="plant.plantName" required></b-form-input>
-      <b-form-radio-group required v-model="plant.indoor" :options="options" :aria-describedby="ariaDescribedby"
+      <b-form-radio-group required v-model="plant.locationType" :options="options" :aria-describedby="ariaDescribedby"
         name="radio-inline"></b-form-radio-group>
       <b-button size="sm" id="cancel-plant" @click="cancel" class="default">Cancel</b-button>
       <b-button size="sm" type="submit" class="default">Save</b-button>
@@ -26,8 +26,9 @@ export default {
       },
       today: new Date(),
       options: [
-        { text: "Indoor", value: true },
-        { text: "Outdoor", value: false },
+        { text: "Indoor", value: "indoor" },
+        { text: "Outdoor", value: "outdoor" },
+        { text: "Landscape", value: "landscape" }
       ],
     };
   },
@@ -49,6 +50,9 @@ export default {
     addPlant() {
       this.formatDate();
       this.plant.plantAge = this.today;
+      this.plant.indoor = false;
+      // eslint-disable-next-line no-console
+      console.log('xxx_plant', this.plant);
       plantService
         .createPlant(this.plant)
         .then((response) => {
@@ -56,7 +60,7 @@ export default {
             this.$store.commit("ADD_PLANT", response.data);
           }
           this.plant = {
-            userId: this.$store.state.user.id,
+            userId: this.$store.state.user.id
           };
           this.plantId = response.data.plantId;
           // go to plant detail page after creation
